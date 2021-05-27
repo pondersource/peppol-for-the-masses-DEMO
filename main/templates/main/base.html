@@ -1,10 +1,40 @@
-<!DOCTYPE html>
 <html>
+<head>
+  <style type="text/css">
+    .sidenav{
+      background-color: #111;
+    }
 
-<h1>Peppol Python</h1>
+    .sidenav a{
+      padding: 6px 8px 6px 16px;
+      text-decoration: none;
+      font-size: 35px;
+      color: #818181;
+      display: inline;
+    }
+    .main{
+       margin-left: 160px
+       padding: 0px 10px;
+    }
+
+  </style>
+
+</head>
+
+</body>
+
+  <div class="sidenav">
+    <a href="/">Home</a>
+    <a href="/register">SignUp</a>
+    <a href="/login">Login</a>
+    <a href="/admin">Admin</a>
+
+  </div>
+
+  <div id="content", name="content",class='main'>
+      {% block content%}
+      {% endblock %}
+  </div>
 
 </body>
 </html>
-</head>
-Check out <a href="https://pondersource.com/">our startup</a>
-</body>
