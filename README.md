@@ -8,5 +8,6 @@ Assuming you have `python3` installed:
 python3 -m pip install Django
 git clone https://github.com/pondersource/peppol-python-demo
 cd peppol-python-demo
+# add peppolDEMO/settings.py
 python3 manage.py runserver
 ```
