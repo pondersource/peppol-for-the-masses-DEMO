@@ -7,7 +7,7 @@ git clone https://github.com/pondersource/peppol-python-demo
 
 cd peppol-python-demo
 
-# add peppolDEMO/settings.py
+(add peppolDEMO/settings.py)
 
 pip install -r requirements.txt
 
