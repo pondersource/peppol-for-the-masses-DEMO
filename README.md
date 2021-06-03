@@ -11,5 +11,5 @@ cd peppol-python-demo
 
 pip install -r requirements.txt
 
-python3 manage.py runserver
+python manage.py runserver
 
