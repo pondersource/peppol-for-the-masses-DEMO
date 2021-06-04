@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,15 +41,20 @@ INSTALLED_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'crispy_forms'
+    'crispy_forms',
+    'django_countries',
 ]
 
 USER_APPS = [
     'main.apps.MainConfig',
     'register.apps.RegisterConfig',
+    'profileInfo.apps.ProfileinfoConfig',
+    'invoice.apps.InvoiceConfig',
 ]
 
 INSTALLED_APPS += USER_APPS+THIRD_PARTY_APPS
+
+AUTH_USER_MODEL = 'register.User' # changes the bulit-in user model to ours
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -124,9 +130,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
+
 
 STATIC_URL = '/static/'
 
@@ -138,5 +146,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # need for change
-LOGIN_REDIRECT_URL="/"
+LOGIN_REDIRECT_URL="/logged"
 LOGOUT_REDIRECT_URL="/"
