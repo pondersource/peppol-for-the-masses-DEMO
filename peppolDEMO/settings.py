@@ -54,6 +54,8 @@ USER_APPS = [
 
 INSTALLED_APPS += USER_APPS+THIRD_PARTY_APPS
 
+AUTH_USER_MODEL = 'register.User' # changes the bulit-in user model to ours
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
