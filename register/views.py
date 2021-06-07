@@ -5,7 +5,7 @@ from .forms import UserAdminCreationForm
 # Create your views here.
 def register(response):
     if response.method == "POST":
-        form =UserAdminCreationForm(response.POST)
+        form = UserAdminCreationForm(response.POST)
         if form.is_valid():
             form.save()
             return redirect("/login")

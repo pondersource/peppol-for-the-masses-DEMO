@@ -41,7 +41,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
 
     email      = models.EmailField(max_length=255,unique=True)
-    user_name  = models.CharField(max_length=150, unique=True)
+    user_name  = models.CharField(max_length=150)
     first_name = models.CharField(max_length=150, blank=False,null=True)
     last_name  = models.CharField(max_length=150, blank=False,null=True)
     website    = models.CharField(max_length=150, unique=True)
@@ -51,7 +51,7 @@ class User(AbstractBaseUser):
     admin      = models.BooleanField(default=False)
 
     USERNAME_FIELD  = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = [user_name,first_name,last_name,website]
 
     objects = UserManager()
 
