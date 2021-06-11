@@ -17,3 +17,8 @@ python manage.py migrate
 
 python3 manage.py runserver
 
+# Superuser 
+
+To create a superuser first run python manage.py createsuperuser
+
+
