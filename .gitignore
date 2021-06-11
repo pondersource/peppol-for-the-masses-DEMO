@@ -1,3 +1,1 @@
-app/settings.py
-__pycache__
-
+*.pyc
