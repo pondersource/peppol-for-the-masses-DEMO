@@ -74,12 +74,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(CONTENT_DIR, 'tmp/emails')
 DEFAULT_FROM_EMAIL = 'youremail@gmail.com'
 
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'youtrmail@gmail.com'
-EMAIL_HOST_PASSWORD = 'paasword'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-
 
 DATABASES = {
     'default': {
