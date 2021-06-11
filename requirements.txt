@@ -1,6 +1,7 @@
 asgiref==3.3.4
 bootstrap4==0.1.0
 Django==3.2.3
+django-bootstrap4==3.0.1
 django-countries==7.2.1
 django-crispy-forms==1.11.2
 django-heroku==0.3.1
