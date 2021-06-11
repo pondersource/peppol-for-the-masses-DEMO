@@ -10,12 +10,6 @@ A Django-based demo server that shows how to use the peppol-python library
 
 **pip install -r requirements.txt**
 
-**python3 manage.py makemigrations**
-
-**python3 manage.py migrate**
-
-**python3 manage.py runserver**
-
 # Superuser 
 
 To create a superuser first run:
