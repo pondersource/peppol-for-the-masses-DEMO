@@ -14,6 +14,7 @@ urlpatterns = [
     path('language/', ChangeLanguageView.as_view(), name='change_language'),
 
     path('accounts/', include('accounts.urls')),
+    path('invoice/', include('invoice.urls')),
 ]
 
 if settings.DEBUG:
