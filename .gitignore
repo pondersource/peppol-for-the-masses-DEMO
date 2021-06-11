@@ -1,2 +1,2 @@
-app/settings.py
 app/__pycache__
+*.pyc
