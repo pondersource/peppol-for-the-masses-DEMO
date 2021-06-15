@@ -1,6 +1,6 @@
 import os
 import warnings
-import django_heroku
+#import django_heroku
 from django.utils.translation import gettext_lazy as _
 from os.path import dirname
 
@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'main',
     'accounts',
     'content',
-    'invoice',
+    'directMessages',
 ]
 
 MIDDLEWARE = [
@@ -152,4 +152,4 @@ LOCALE_PATHS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Activate Django-Heroku.
-django_heroku.settings(locals())
+#django_heroku.settings(locals())
