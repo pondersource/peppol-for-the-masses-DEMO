@@ -14,7 +14,7 @@ urlpatterns = [
     path('language/', ChangeLanguageView.as_view(), name='change_language'),
 
     path('accounts/', include('accounts.urls')),
-    path('directMessages/', include('directMessages.urls')),
+    path('django_messages/', include('django_messages.urls')),
 ]
 
 if settings.DEBUG:

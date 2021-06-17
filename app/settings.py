@@ -27,13 +27,12 @@ INSTALLED_APPS = [
 
     # Vendor apps
     'bootstrap4',
-    'django_messages',
 
     # Application apps
     'main',
     'accounts',
     'content',
-    'directMessages',
+    'django_messages',
 ]
 
 MIDDLEWARE = [
