@@ -67,7 +67,13 @@
                 <a class="navbar-brand" href="{% url 'accounts:change_password' %}">{% trans 'Update password' %}</a>
                 <a class="navbar-brand" href="{% url 'accounts:change_profile' %}">{% trans 'Update profile' %}</a>
                 <a class="navbar-brand" href="{% url 'accounts:change_email' %}">{% trans 'Update email' %}</a>
+                <a class="navbar-brand" href="{% url 'django_messages:messages_inbox' %}">{% trans 'Inbox' %}</a>
+                <a class="navbar-brand" href="{% url 'django_messages:messages_outbox' %}">{% trans 'Outbox' %}</a>
+                <a class="navbar-brand" href="{% url 'django_messages:messages_compose' %}">{% trans 'Compose' %}</a>
+                <a class="navbar-brand" href="{% url 'django_messages:messages_trash' %}">{% trans 'Trash' %}</a>
                 <a class="navbar-brand" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
+
+    
             {% else %}
                 <a class="navbar-brand" href="{% url 'accounts:log_in' %}">{% trans 'Log in' %}</a>
                 <a class="navbar-brand" href="{% url 'accounts:sign_up' %}">{% trans 'Sign up' %}</a>
