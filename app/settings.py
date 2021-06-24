@@ -69,11 +69,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 #EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(CONTENT_DIR, 'tmp/emails')
-DEFAULT_FROM_EMAIL = 'youremail@gmail.com'
+DEFAULT_FROM_EMAIL = 'demo@pondersource.com'
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
@@ -151,5 +151,5 @@ LOCALE_PATHS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Activate Django-Heroku.
+#Activate Django-Heroku.
 django_heroku.settings(locals())

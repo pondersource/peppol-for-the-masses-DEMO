@@ -10,11 +10,13 @@ A Django-based demo server that shows how to use the peppol-python library
 
 **pip install -r requirements.txt**
 
-**python3 manage.py makemigrations**
+export DATABASE_URL=postgres://...
 
-**python3 manage.py migrate**
+**python manage.py makemigrations** 
 
-**python3 manage.py runserver**
+**python manage.py migrate**
+
+**python manage.py runserver**
 
 # Superuser 
 
