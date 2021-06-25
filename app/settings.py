@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'accounts',
     'content',
     'django_messages',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
