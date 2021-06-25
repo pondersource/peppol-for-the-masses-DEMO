@@ -82,7 +82,7 @@ class Message(models.Model):
         return self.subject
 
     def get_absolute_url(self):
-        return reverse('messages_detail', args=[self.id])
+        return reverse('django_messages:messages_detail', args=[self.id])
 
     def save(self, **kwargs):
         if not self.id:
