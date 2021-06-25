@@ -6,9 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.utils import timezone
 try:
-    from django.core.urlresolvers import reverse
+    from django.core.urlresolvers import reverse_lazy
 except ImportError:
-    from django.urls import reverse
+    from django.urls import reverse_lazy
 from django.conf import settings
 
 from django_messages.models import Message
@@ -89,7 +89,7 @@ def compose(request, recipient=None, form_class=ComposeForm,
             form.save(sender=request.user)
             messages.info(request, _(u"Message successfully sent."))
             if success_url is None:
-                success_url = reverse('messages_inbox')
+                success_url = reverse_lazy('django_messages:messages_inbox')
             if 'next' in request.GET:
                 success_url = request.GET['next']
             return HttpResponseRedirect(success_url)
@@ -126,7 +126,7 @@ def reply(request, message_id, form_class=ComposeForm,
             form.save(sender=request.user, parent_msg=parent)
             messages.info(request, _(u"Message successfully sent."))
             if success_url is None:
-                success_url = reverse('messages_inbox')
+                success_url = reverse_lazy('messages_inbox')
             return HttpResponseRedirect(success_url)
     else:
         form = form_class(initial={
@@ -156,7 +156,7 @@ def delete(request, message_id, success_url=None):
     message = get_object_or_404(Message, id=message_id)
     deleted = False
     if success_url is None:
-         success_url = reverse('messages_inbox')
+         success_url = reverse_lazy('messages_inbox')
     if 'next' in request.GET:
         success_url = request.GET['next']
     if message.sender == user:
@@ -183,7 +183,7 @@ def undelete(request, message_id, success_url=None):
     message = get_object_or_404(Message, id=message_id)
     undeleted = False
     if success_url is None:
-        success_url = reverse('messages_inbox')
+        success_url = reverse_lazy('messages_inbox')
     if 'next' in request.GET:
         success_url = request.GET['next']
     if message.sender == user:

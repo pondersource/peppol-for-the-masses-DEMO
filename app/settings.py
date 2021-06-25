@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     'main',
     'accounts',
     'content',
+    'django_messages',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

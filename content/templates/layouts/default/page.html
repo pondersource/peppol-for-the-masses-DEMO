@@ -48,12 +48,6 @@
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand" href="/">{% trans 'Home' %}</a>
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <div class="sidenav">
@@ -64,10 +58,12 @@
             </button>
 
             {% if request.user.is_authenticated %}
-                <a class="navbar-brand" href="{% url 'accounts:change_password' %}">{% trans 'Update password' %}</a>
-                <a class="navbar-brand" href="{% url 'accounts:change_profile' %}">{% trans 'Update profile' %}</a>
-                <a class="navbar-brand" href="{% url 'accounts:change_email' %}">{% trans 'Update email' %}</a>
+
+                <a class="navbar-brand" href="/profile">{% trans 'Profile' %}</a>
+                  <a class="navbar-brand" href="/messages">{% trans 'Messages' %}</a>
                 <a class="navbar-brand" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
+
+
             {% else %}
                 <a class="navbar-brand" href="{% url 'accounts:log_in' %}">{% trans 'Log in' %}</a>
                 <a class="navbar-brand" href="{% url 'accounts:sign_up' %}">{% trans 'Sign up' %}</a>

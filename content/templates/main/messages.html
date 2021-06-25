@@ -1,0 +1,18 @@
+
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+
+{% block content %}
+
+
+{% if request.user.is_authenticated %}
+
+  <a class="navbar-brand" href="{% url 'django_messages:messages_inbox' %}">{% trans 'Inbox' %}</a>
+  <a class="navbar-brand" href="{% url 'django_messages:messages_outbox' %}">{% trans 'Outbox' %}</a>
+  <a class="navbar-brand" href="{% url 'django_messages:messages_compose' %}">{% trans 'Compose' %}</a>
+  <a class="navbar-brand" href="{% url 'django_messages:messages_trash' %}">{% trans 'Trash' %}</a>
+
+{% endif %}
+
+{% endblock %}
