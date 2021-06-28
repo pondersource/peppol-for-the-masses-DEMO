@@ -5,11 +5,17 @@
 {% block content %}
 
 
+
 {% if request.user.is_authenticated %}
 
-    <a class="navbar-brand" href="{% url 'accounts:change_password' %}">{% trans 'Update password' %}</a>
-    <a class="navbar-brand" href="{% url 'accounts:change_profile' %}">{% trans 'Update profile' %}</a>
-    <a class="navbar-brand" href="{% url 'accounts:change_email' %}">{% trans 'Update email' %}</a>
+  <h2 style="color:green;">Profile info:</h2>
+  <h5>Username: {{ user.username }}</h5>
+  <h5>Email: {{ user.email }}</h5>
+  <h5>Session Started at: {{ user.last_login }}</h5>
+
+  <a class="navbar-brand" href="{% url 'accounts:change_password' %}">{% trans 'Update password' %}</a>
+  <a class="navbar-brand" href="{% url 'accounts:change_profile' %}">{% trans 'Update profile' %}</a>
+  <a class="navbar-brand" href="{% url 'accounts:change_email' %}">{% trans 'Update email' %}</a>
 
 {% endif %}
 

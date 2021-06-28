@@ -50,6 +50,11 @@
     </style>
     </head>
     <body>
+    {% if user.is_authenticated %}
+        <br><h1 style="color:green;">Welcome back, {{ user.get_username }}!</h1>
+    {% else %}
+        <br><h1 style="color:orange;">Welcome, new user. Please log in.</h1>
+    {% endif %}
     <h1>Peppol for the masses!</h1>
         <p>In this project, we extend the popular "<a href="https://peppol.eu/">Peppol</a>" e-invoicing network.
           In Peppol Classic (current Peppol) a four-corner
