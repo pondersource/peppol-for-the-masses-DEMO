@@ -79,11 +79,11 @@ class MessageAdmin(admin.ModelAdmin):
         if notification:
             # Getting the appropriate notice labels for the sender and recipients.
             if obj.parent_msg is None:
-                sender_label = 'messages_sent'
-                recipients_label = 'messages_received'
+                sender_label = 'django_messages:messages_sent'
+                recipients_label = 'django_messages:messages_received'
             else:
-                sender_label = 'messages_replied'
-                recipients_label = 'messages_reply_received'
+                sender_label = 'django_messages:messages_replied'
+                recipients_label = 'django_messages:messages_reply_received'
 
             # Notification for the sender.
             notification.send([obj.sender], sender_label, {'message': obj,})

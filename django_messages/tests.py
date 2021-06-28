@@ -98,7 +98,7 @@ class IntegrationTestCase(TestCase):
 
     def testInboxEmpty(self):
         """ request the empty inbox """
-        response = self.c.get(reverse('messages_inbox'))
+        response = self.c.get(reverse('django_messages:messages_inbox'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.templates[0].name,
                          'django_messages/inbox.html')
@@ -106,7 +106,7 @@ class IntegrationTestCase(TestCase):
 
     def testOutboxEmpty(self):
         """ request the empty outbox """
-        response = self.c.get(reverse('messages_outbox'))
+        response = self.c.get(reverse('django_messages:messages_outbox'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.templates[0].name,
                          'django_messages/outbox.html')
@@ -114,7 +114,7 @@ class IntegrationTestCase(TestCase):
 
     def testTrashEmpty(self):
         """ request the empty trash """
-        response = self.c.get(reverse('messages_trash'))
+        response = self.c.get(reverse('django_messages:messages_trash'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.templates[0].name,
                          'django_messages/trash.html')
@@ -122,12 +122,12 @@ class IntegrationTestCase(TestCase):
 
     def testCompose(self):
         """ compose a message step by step """
-        response = self.c.get(reverse('messages_compose'))
+        response = self.c.get(reverse('django_messages:messages_compose'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.templates[0].name,
                          'django_messages/compose.html')
         response = self.c.post(
-            reverse('messages_compose'),
+            reverse('django_messages:messages_compose'),
             {
                 'recipient': self.T_USER_DATA[1]['username'],
                 'subject': self.T_MESSAGE_DATA[0]['subject'],
@@ -137,12 +137,12 @@ class IntegrationTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         if 'http' in response['Location']:
             self.assertEqual(response['Location'],
-                "http://testserver%s" % reverse('messages_inbox'))
+                "http://testserver%s" % reverse('django_messages:messages_inbox'))
         else:
-            self.assertEqual(response['Location'], reverse('messages_inbox'))
+            self.assertEqual(response['Location'], reverse('django_messages:messages_inbox'))
 
         # make sure the message exists in the outbox after sending
-        response = self.c.get(reverse('messages_outbox'))
+        response = self.c.get(reverse('django_messages:messages_outbox'))
         self.assertEqual(len(response.context['message_list']), 1)
 
     def testReply(self):
@@ -155,14 +155,14 @@ class IntegrationTestCase(TestCase):
         # log the user_2 in and check the inbox
         self.c.login(username=self.T_USER_DATA[1]['username'],
                      password=self.T_USER_DATA[1]['password'])
-        response = self.c.get(reverse('messages_inbox'))
+        response = self.c.get(reverse('django_messages:messages_inbox'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.templates[0].name,
                          'django_messages/inbox.html')
         self.assertEqual(len(response.context['message_list']), 1)
         pk = getattr(response.context['message_list'][0], 'pk')
         # reply to the first message
-        response = self.c.get(reverse('messages_reply',
+        response = self.c.get(reverse('django_messages:messages_reply',
                               kwargs={'message_id': pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.templates[0].name,
@@ -217,13 +217,13 @@ class InboxCountTestCase(TestCase):
         """Test message count for user with empty inbox."""
         r = self.factory.get('/')
         r.user = self.user
-        self.assertEquals(inbox(r), {'messages_inbox_count': 0})
+        self.assertEquals(inbox(r), {'django_messages:messages_inbox_count': 0})
 
     def test_context_processor_user_count(self):
         """Test message count for user with one unread message."""
         r = self.factory.get('/')
         r.user = self.user_2
-        self.assertEquals(inbox(r), {'messages_inbox_count': 1})
+        self.assertEquals(inbox(r), {'django_messages:messages_inbox_count': 1})
 
     def test_template_tag_anon(self):
         """Test message count for anonymous user."""
