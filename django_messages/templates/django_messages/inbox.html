@@ -1,10 +1,12 @@
-{% extends "django_messages/base.html" %}
+{% extends 'main/messages.html' %}
+
 {% load i18n %}
 
 {% block content %}
+
 <h1>{% trans "Inbox" %}</h1>
 {% if message_list %}
-<table class="django_messages">
+<table class="messages">
     <thead>
         <tr><th>{% trans "Sender" %}</th><th>{% trans "Subject" %}</th><th>{% trans "Received" %}</th><th>{% trans "Action" %}</th></tr>
     </thead>
