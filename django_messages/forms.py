@@ -9,6 +9,7 @@ else:
     notification = None
 
 from django_messages.models import Message
+from django_messages.fields import CommaSeparatedUserField
 
 from django_messages.utils import get_user_model, get_username_field
 
@@ -21,13 +22,13 @@ class ComposeForm(forms.Form):
 
     """
 
-    recipient = forms.ModelChoiceField(
+    users = forms.ModelChoiceField(
         queryset = Users,
         initial = 0
         )
-    subject = forms.CharField(label=_(u"Subject"), max_length=140)
-    body = forms.CharField(label=_(u"Body"),
-        widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}))
+    recipient = CommaSeparatedUserField
+    subject = forms.CharField( max_length=140)
+    body = forms.CharField(widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}))
 
 
     def __init__(self, *args, **kwargs):
