@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'content',
     'django_messages',
     'django_extensions',
+    'connection'
 ]
 
 MIDDLEWARE = [
@@ -154,3 +155,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Activate Django-Heroku.
 django_heroku.settings(locals())
+
+#connection

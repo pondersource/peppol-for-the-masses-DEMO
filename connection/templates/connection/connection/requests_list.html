@@ -1,0 +1,7 @@
+<ul>
+{% for connection_request in requests %}
+    <li>{{ connection_request.from_user }} to {{ connection_request.to_user }} <a href="{% url 'connection_requests_detail' connection_request.id %}">view</a></li>
+{% empty %}
+</ul>
+<div>no requests :(</div>
+{% endfor %}

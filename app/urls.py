@@ -17,6 +17,7 @@ urlpatterns = [
 
     path('accounts/', include('accounts.urls')),
     path('django_messages/', include('django_messages.urls'), name="django_messages"),
+    path('connection/', include('connection.urls') , name="connection"),
 ]
 
 if settings.DEBUG:

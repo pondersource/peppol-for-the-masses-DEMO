@@ -1,0 +1,6 @@
+{% block content %}
+{% load connectiontags %}
+<h1>Blocking</h1>
+{% get_by_name connection_context_object_name as var %}
+{% blocking var %}
+{% endblock %}
