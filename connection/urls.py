@@ -1,7 +1,4 @@
-try:
-    from django.conf.urls import url
-except ImportError:
-    from django.conf.urls.defaults import url
+from django.conf.urls import re_path
 from connection.views import (
     all_users,
     block_add,
@@ -23,84 +20,84 @@ from connection.views import (
 )
 
 urlpatterns = [
-    url(regex=r"^users/$", view=all_users, name="connection_view_users"),
-    url(
-        regex=r"^connections/(?P<username>[\w-]+)/$",
+    re_path(r"^users/$", view=all_users, name="connection_view_users"),
+    re_path(
+        r"^connections/(?P<username>[\w-]+)/$",
         view=view_connections,
         name="connection_view_connections",
     ),
-    url(
-        regex=r"^connection/add/(?P<to_username>[\w-]+)/$",
+    re_path(
+        r"^connection/add/(?P<to_username>[\w-]+)/$",
         view=connection_add_connection,
         name="connection_add_connection",
     ),
-    url(
-        regex=r"^connection/accept/(?P<connection_request_id>\d+)/$",
+    re_path(
+        r"^connection/accept/(?P<connection_request_id>\d+)/$",
         view=connection_accept,
         name="connection_accept",
     ),
-    url(
-        regex=r"^connection/reject/(?P<connection_request_id>\d+)/$",
+    re_path(
+        r"^connection/reject/(?P<connection_request_id>\d+)/$",
         view=connection_reject,
         name="connection_reject",
     ),
-    url(
-        regex=r"^connection/cancel/(?P<connection_request_id>\d+)/$",
+    re_path(
+        r"^connection/cancel/(?P<connection_request_id>\d+)/$",
         view=connection_cancel,
         name="connection_cancel",
     ),
-    url(
-        regex=r"^connection/requests/$",
+    re_path(
+        r"^connection/requests/$",
         view=connection_request_list,
         name="connection_request_list",
     ),
-    url(
-        regex=r"^connection/requests/rejected/$",
+    re_path(
+        r"^connection/requests/rejected/$",
         view=connection_request_list_rejected,
         name="connection_requests_rejected",
     ),
-    url(
-        regex=r"^connection/request/(?P<connection_request_id>\d+)/$",
+    re_path(
+        r"^connection/request/(?P<connection_request_id>\d+)/$",
         view=connection_requests_detail,
         name="connection_requests_detail",
     ),
-    url(
-        regex=r"^followers/(?P<username>[\w-]+)/$",
+    re_path(
+        r"^followers/(?P<username>[\w-]+)/$",
         view=followers,
         name="connection_followers",
     ),
-    url(
-        regex=r"^following/(?P<username>[\w-]+)/$",
+    re_path(
+        r"^following/(?P<username>[\w-]+)/$",
         view=following,
         name="connection_following",
     ),
-    url(
-        regex=r"^follower/add/(?P<followee_username>[\w-]+)/$",
+    re_path(
+        r"^follower/add/(?P<followee_username>[\w-]+)/$",
         view=follower_add,
         name="follower_add",
     ),
-    url(
-        regex=r"^follower/remove/(?P<followee_username>[\w-]+)/$",
+    re_path(
+        r"^follower/remove/(?P<followee_username>[\w-]+)/$",
         view=follower_remove,
         name="follower_remove",
     ),
-    url(
-        regex=r"^blockers/(?P<username>[\w-]+)/$",
+    re_path(
+        r"^blockers/(?P<username>[\w-]+)/$",
         view=blockers,
         name="connection_blockers",
     ),
-    url(
-        regex=r"^blocking/(?P<username>[\w-]+)/$",
+    re_path(
+        r"^blocking/(?P<username>[\w-]+)/$",
         view=blocking,
         name="connection_blocking",
     ),
-    url(
-        regex=r"^block/add/(?P<blocked_username>[\w-]+)/$",
+    re_path(
+        r"^block/add/(?P<blocked_username>[\w-]+)/$",
         view=block_add,
         name="block_add",
     ),
-    url(
-        regex=r"^block/remove/(?P<blocked_username>[\w-]+)/$",
+    re_path(
+        r"^block/remove/(?P<blocked_username>[\w-]+)/$",
         view=block_remove,
         name="block_remove",
     ),
