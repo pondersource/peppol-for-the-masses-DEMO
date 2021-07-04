@@ -5,5 +5,5 @@ class AlreadyExistsError(IntegrityError):
     pass
 
 
-class AlreadyFriendsError(IntegrityError):
+class AlreadyContactsError(IntegrityError):
     pass

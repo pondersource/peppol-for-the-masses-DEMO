@@ -1,6 +1,6 @@
 from django import template
 
-from connection.models import Block, Follow, Friend
+from connection.models import Block, Follow, Contact
 
 register = template.Library()
 
@@ -16,7 +16,7 @@ def connections(user):
     """
     Simple tag to grab all connections
     """
-    return {"connections": Friend.objects.connections(user)}
+    return {"connections": Contact.objects.connections(user)}
 
 
 @register.inclusion_tag("connection/templatetags/followers.html")
@@ -56,7 +56,7 @@ def connection_requests(user):
     """
     Inclusion tag to display connection requests
     """
-    return {"connection_requests": Friend.objects.requests(user)}
+    return {"connection_requests": Contact.objects.requests(user)}
 
 
 @register.inclusion_tag("connection/templatetags/connection_request_count.html")
@@ -64,7 +64,7 @@ def connection_request_count(user):
     """
     Inclusion tag to display the count of unread connection requests
     """
-    return {"connection_request_count": Friend.objects.unread_request_count(user)}
+    return {"connection_request_count": Contact.objects.unread_request_count(user)}
 
 
 @register.inclusion_tag("connection/templatetags/connection_count.html")
@@ -72,7 +72,7 @@ def connection_count(user):
     """
     Inclusion tag to display the total count of connections for the given user
     """
-    return {"connection_count": len(Friend.objects.connections(user))}
+    return {"connection_count": len(Contact.objects.connections(user))}
 
 
 @register.inclusion_tag("connection/templatetags/connection_rejected_count.html")
@@ -80,4 +80,4 @@ def connection_rejected_count(user):
     """
     Inclusion tag to display the count of rejected connection requests
     """
-    return {"connection_rejected_count": len(Friend.objects.rejected_requests(user))}
+    return {"connection_rejected_count": len(Contact.objects.rejected_requests(user))}

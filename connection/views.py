@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from connection.exceptions import AlreadyExistsError
-from connection.models import Block, Follow, Friend, FriendshipRequest
+from connection.models import Block, Follow, Contact, ConnectionRequest
 
 try:
     from django.contrib.auth import get_user_model
@@ -13,9 +13,6 @@ except ImportError:
     from django.contrib.auth.models import User
 
     user_model = User
-
-
-
 
 def get_connection_context_object_name():
     return getattr(settings, "CONNECTION_CONTEXT_OBJECT_NAME", "user")
@@ -28,7 +25,7 @@ def get_connection_context_object_list_name():
 def view_connections(request, username, template_name="connection/connection/user_list.html"):
     """ View the connections of a user """
     user = get_object_or_404(user_model, username=username)
-    connections = Friend.objects.connections(user)
+    connections = Contact.objects.connections(user)
     return render(
         request,
         template_name,
@@ -44,14 +41,14 @@ def view_connections(request, username, template_name="connection/connection/use
 def connection_add_connection(
     request, to_username, template_name="connection/connection/add.html"
 ):
-    """ Create a FriendshipRequest """
+    """ Create a ConnectionRequest """
     ctx = {"to_username": to_username}
 
     if request.method == "POST":
         to_user = user_model.objects.get(username=to_username)
         from_user = request.user
         try:
-            Friend.objects.add_connection(from_user, to_user)
+            Contact.objects.add_connection(from_user, to_user)
         except AlreadyExistsError as e:
             ctx["errors"] = ["%s" % e]
         else:
@@ -110,9 +107,9 @@ def connection_request_list(
     request, template_name="connection/connection/requests_list.html"
 ):
     """ View unread and read connection requests """
-    connection_requests = Friend.objects.requests(request.user)
+    connection_requests = Contact.objects.requests(request.user)
     # This shows all connection requests in the database
-    # connection_requests = FriendshipRequest.objects.filter(rejected__isnull=True)
+    # connection_requests = ConnectionRequest.objects.filter(rejected__isnull=True)
 
     return render(request, template_name, {"requests": connection_requests})
 
@@ -122,8 +119,8 @@ def connection_request_list_rejected(
     request, template_name="connection/connection/requests_list.html"
 ):
     """ View rejected connection requests """
-    # connection_requests = Friend.objects.rejected_requests(request.user)
-    connection_requests = FriendshipRequest.objects.filter(rejected__isnull=False)
+    # connection_requests = Contact.objects.rejected_requests(request.user)
+    connection_requests = ConnectionRequest.objects.filter(rejected__isnull=False)
 
     return render(request, template_name, {"requests": connection_requests})
 
@@ -133,7 +130,7 @@ def connection_requests_detail(
     request, connection_request_id, template_name="connection/connection/request.html"
 ):
     """ View a particular connection request """
-    f_request = get_object_or_404(FriendshipRequest, id=connection_request_id)
+    f_request = get_object_or_404(ConnectionRequest, id=connection_request_id)
 
     return render(request, template_name, {"connection_request": f_request})
 

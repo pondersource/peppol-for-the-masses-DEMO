@@ -1,0 +1,21 @@
+
+{% extends 'layouts/default/page.html' %}
+
+{% block content %}
+
+{% load i18n %}
+{% load friendshiptags %}
+
+{% if request.user.is_authenticated %}
+
+{% followers request.user %}
+
+<br><a class="navbar-brand" href="{% url 'connection:connection_request_list' %}">{% trans 'Contact Requests ' %}</a>
+<br><a class="navbar-brand" href="{% url 'connection:connection_requests_rejected' %}">{% trans 'Rejected Contacts' %}</a>
+<br><a class="navbar-brand" href="{% url 'connection:connection_add_connection' %}">{% trans 'Add Contact' %}</a>
+
+
+
+{% endif %}
+
+{% endblock %}

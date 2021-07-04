@@ -12,3 +12,6 @@ class ProfileView(TemplateView):
 
 class MessagesView(TemplateView):
     template_name = 'main/messages.html'
+
+class ConnectionsView(TemplateView):
+    template_name = 'main/connections.html'

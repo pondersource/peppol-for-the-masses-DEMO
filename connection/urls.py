@@ -19,6 +19,8 @@ from connection.views import (
     view_connections,
 )
 
+app_name = 'connection'
+
 urlpatterns = [
     re_path(r"^users/$", view=all_users, name="connection_view_users"),
     re_path(

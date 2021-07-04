@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from django.contrib import admin
 
-from .models import Block, Follow, Friend, FriendshipRequest
+from .models import Block, Follow, Contact, ConnectionRequest
 
 
 class BlockAdmin(admin.ModelAdmin):
@@ -15,17 +15,17 @@ class FollowAdmin(admin.ModelAdmin):
     raw_id_fields = ("follower", "followee")
 
 
-class FriendAdmin(admin.ModelAdmin):
-    model = Friend
+class ContactAdmin(admin.ModelAdmin):
+    model = Contact
     raw_id_fields = ("to_user", "from_user")
 
 
-class FriendshipRequestAdmin(admin.ModelAdmin):
-    model = FriendshipRequest
+class ConnectionRequestAdmin(admin.ModelAdmin):
+    model = ConnectionRequest
     raw_id_fields = ("from_user", "to_user")
 
 
 admin.site.register(Block, BlockAdmin)
 admin.site.register(Follow, FollowAdmin)
-admin.site.register(Friend, FriendAdmin)
-admin.site.register(FriendshipRequest, FriendshipRequestAdmin)
+admin.site.register(Contact, ContactAdmin)
+admin.site.register(ConnectionRequest, ConnectionRequestAdmin)

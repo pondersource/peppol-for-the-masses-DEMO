@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from connection.exceptions import AlreadyExistsError, AlreadyFriendsError
+from connection.exceptions import AlreadyExistsError, AlreadyContactsError
 from connection.signals import (
     block_created,
     block_removed,
@@ -81,7 +81,7 @@ def bust_cache(type, user_pk):
     cache.delete_many(keys)
 
 
-class FriendshipRequest(models.Model):
+class ConnectionRequest(models.Model):
     """ Model to represent connection requests """
 
     from_user = models.ForeignKey(
@@ -102,8 +102,8 @@ class FriendshipRequest(models.Model):
     viewed = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        verbose_name = _("Friendship Request")
-        verbose_name_plural = _("Friendship Requests")
+        verbose_name = _("Connection Request")
+        verbose_name_plural = _("Connection Requests")
         unique_together = ("from_user", "to_user")
 
     def __str__(self):
@@ -111,9 +111,9 @@ class FriendshipRequest(models.Model):
 
     def accept(self):
         """ Accept this connection request """
-        Friend.objects.create(from_user=self.from_user, to_user=self.to_user)
+        Contact.objects.create(from_user=self.from_user, to_user=self.to_user)
 
-        Friend.objects.create(from_user=self.to_user, to_user=self.from_user)
+        Contact.objects.create(from_user=self.to_user, to_user=self.from_user)
 
         connection_request_accepted.send(
             sender=self, from_user=self.from_user, to_user=self.to_user
@@ -122,7 +122,7 @@ class FriendshipRequest(models.Model):
         self.delete()
 
         # Delete any reverse requests
-        FriendshipRequest.objects.filter(
+        ConnectionRequest.objects.filter(
             from_user=self.to_user, to_user=self.from_user
         ).delete()
 
@@ -161,8 +161,8 @@ class FriendshipRequest(models.Model):
         return True
 
 
-class FriendshipManager(models.Manager):
-    """ Friendship manager """
+class ConnectionManager(models.Manager):
+    """ Connection manager """
 
     def connections(self, user):
         """ Return a list of all connections """
@@ -171,7 +171,7 @@ class FriendshipManager(models.Manager):
 
         if connections is None:
             qs = (
-                Friend.objects.select_related("from_user", "to_user")
+                Contact.objects.select_related("from_user", "to_user")
                 .filter(to_user=user)
                 .all()
             )
@@ -187,7 +187,7 @@ class FriendshipManager(models.Manager):
 
         if requests is None:
             qs = (
-                FriendshipRequest.objects.select_related("from_user", "to_user")
+                ConnectionRequest.objects.select_related("from_user", "to_user")
                 .filter(to_user=user)
                 .all()
             )
@@ -203,7 +203,7 @@ class FriendshipManager(models.Manager):
 
         if requests is None:
             qs = (
-                FriendshipRequest.objects.select_related("from_user", "to_user")
+                ConnectionRequest.objects.select_related("from_user", "to_user")
                 .filter(from_user=user)
                 .all()
             )
@@ -219,7 +219,7 @@ class FriendshipManager(models.Manager):
 
         if unread_requests is None:
             qs = (
-                FriendshipRequest.objects.select_related("from_user", "to_user")
+                ConnectionRequest.objects.select_related("from_user", "to_user")
                 .filter(to_user=user, viewed__isnull=True)
                 .all()
             )
@@ -235,7 +235,7 @@ class FriendshipManager(models.Manager):
 
         if count is None:
             count = (
-                FriendshipRequest.objects.select_related("from_user", "to_user")
+                ConnectionRequest.objects.select_related("from_user", "to_user")
                 .filter(to_user=user, viewed__isnull=True)
                 .count()
             )
@@ -250,7 +250,7 @@ class FriendshipManager(models.Manager):
 
         if read_requests is None:
             qs = (
-                FriendshipRequest.objects.select_related("from_user", "to_user")
+                ConnectionRequest.objects.select_related("from_user", "to_user")
                 .filter(to_user=user, viewed__isnull=False)
                 .all()
             )
@@ -266,7 +266,7 @@ class FriendshipManager(models.Manager):
 
         if rejected_requests is None:
             qs = (
-                FriendshipRequest.objects.select_related("from_user", "to_user")
+                ConnectionRequest.objects.select_related("from_user", "to_user")
                 .filter(to_user=user, rejected__isnull=False)
                 .all()
             )
@@ -282,7 +282,7 @@ class FriendshipManager(models.Manager):
 
         if unrejected_requests is None:
             qs = (
-                FriendshipRequest.objects.select_related("from_user", "to_user")
+                ConnectionRequest.objects.select_related("from_user", "to_user")
                 .filter(to_user=user, rejected__isnull=True)
                 .all()
             )
@@ -298,7 +298,7 @@ class FriendshipManager(models.Manager):
 
         if count is None:
             count = (
-                FriendshipRequest.objects.select_related("from_user", "to_user")
+                ConnectionRequest.objects.select_related("from_user", "to_user")
                 .filter(to_user=user, rejected__isnull=True)
                 .count()
             )
@@ -312,23 +312,23 @@ class FriendshipManager(models.Manager):
             raise ValidationError("Users cannot be connections with themselves")
 
         if self.are_connections(from_user, to_user):
-            raise AlreadyFriendsError("Users are already connections")
+            raise AlreadyContactsError("Users are already connections")
 
-        if (FriendshipRequest.objects.filter(from_user=from_user, to_user=to_user).exists()):
+        if (ConnectionRequest.objects.filter(from_user=from_user, to_user=to_user).exists()):
             raise AlreadyExistsError("You already requested connection from this user.")
 
-        if (FriendshipRequest.objects.filter(from_user=to_user, to_user=from_user).exists()):
+        if (ConnectionRequest.objects.filter(from_user=to_user, to_user=from_user).exists()):
             raise AlreadyExistsError("This user already requested connection from you.")
 
         if message is None:
             message = ""
 
-        request, created = FriendshipRequest.objects.get_or_create(
+        request, created = ConnectionRequest.objects.get_or_create(
             from_user=from_user, to_user=to_user
         )
 
         if created is False:
-            raise AlreadyExistsError("Friendship already requested")
+            raise AlreadyExistsError("Connection already requested")
 
         if message:
             request.message = message
@@ -343,7 +343,7 @@ class FriendshipManager(models.Manager):
     def remove_connection(self, from_user, to_user):
         """ Destroy a connection relationship """
         try:
-            qs = Friend.objects.filter(Q(to_user=to_user, from_user=from_user) | Q(to_user=from_user, from_user=to_user))
+            qs = Contact.objects.filter(Q(to_user=to_user, from_user=from_user) | Q(to_user=from_user, from_user=to_user))
             distinct_qs = qs.distinct().all()
 
             if distinct_qs:
@@ -356,7 +356,7 @@ class FriendshipManager(models.Manager):
                 return True
             else:
                 return False
-        except Friend.DoesNotExist:
+        except Contact.DoesNotExist:
             return False
 
     def are_connections(self, user1, user2):
@@ -369,14 +369,14 @@ class FriendshipManager(models.Manager):
             return True
         else:
             try:
-                Friend.objects.get(to_user=user1, from_user=user2)
+                Contact.objects.get(to_user=user1, from_user=user2)
                 return True
-            except Friend.DoesNotExist:
+            except Contact.DoesNotExist:
                 return False
 
 
-class Friend(models.Model):
-    """ Model to represent Friendships """
+class Contact(models.Model):
+    """ Model to represent Connections """
 
     to_user = models.ForeignKey(AUTH_USER_MODEL, models.CASCADE, related_name="connections")
     from_user = models.ForeignKey(
@@ -384,11 +384,11 @@ class Friend(models.Model):
     )
     created = models.DateTimeField(default=timezone.now)
 
-    objects = FriendshipManager()
+    objects = ConnectionManager()
 
     class Meta:
-        verbose_name = _("Friend")
-        verbose_name_plural = _("Friends")
+        verbose_name = _("Contact")
+        verbose_name_plural = _("Contacts")
         unique_together = ("from_user", "to_user")
 
     def __str__(self):
@@ -398,7 +398,7 @@ class Friend(models.Model):
         # Ensure users can't be connections with themselves
         if self.to_user == self.from_user:
             raise ValidationError("Users cannot be connections with themselves.")
-        super(Friend, self).save(*args, **kwargs)
+        super(Contact, self).save(*args, **kwargs)
 
 
 class FollowingManager(models.Manager):
