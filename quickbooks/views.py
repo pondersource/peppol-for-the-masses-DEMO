@@ -13,7 +13,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseServer
 from django.conf import settings
 from django.core import serializers
 
-from app.services import qbo_api_call
+from quickbooks.services import qbo_api_call
 
 # Create your views here.
 def index(request):
@@ -56,7 +56,7 @@ def callback(request):
     error = request.GET.get('error', None)
     
     if error == 'access_denied':
-        return redirect('app:index')
+        return redirect('quickbooks:index')
     
     if state_tok is None:
         return HttpResponseBadRequest()
@@ -82,7 +82,7 @@ def callback(request):
         print(e.intuit_tid)
     except Exception as e:
         print(e)
-    return redirect('app:connected')
+    return redirect('quickbooks:connected')
 
 def connected(request):
     auth_client = AuthClient(
