@@ -4,7 +4,17 @@ import django_heroku
 from django.utils.translation import gettext_lazy as _
 from os.path import dirname
 
-warnings.simplefilter('error', DeprecationWarning)
+
+# Start Quickbooks
+CLIENT_ID = os.getenv('QBO_CLIENT_ID')
+CLIENT_SECRET = os.getenv('QBO_CLIENT_SECRET')
+REDIRECT_URI = os.getenv('QBO_REDIRECT_URI') # http://localhost:8000/app/callback'
+ENVIRONMENT = os.getenv('QBO_ENVIRONMENT')
+QBO_BASE_SANDBOX = 'https://sandbox-quickbooks.api.intuit.com'
+QBO_BASE_PROD = 'https://quickbooks.api.intuit.com'
+# End Quickbooks
+
+# warnings.simplefilter('error', DeprecationWarning)
 
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 CONTENT_DIR = os.path.join(BASE_DIR, 'content')
@@ -34,7 +44,8 @@ INSTALLED_APPS = [
     'content',
     'django_messages',
     'django_extensions',
-    'connection'
+    'connection',
+    'quickbooks'
 ]
 
 MIDDLEWARE = [
