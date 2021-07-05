@@ -17,7 +17,7 @@ from quickbooks.services import qbo_api_call
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'quickbooks/index.html')
 
 def oauth(request):
     auth_client = AuthClient(
