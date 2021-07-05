@@ -6,7 +6,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script>
             if (window.opener) {
-                window.opener.location.href = '/app/'
+                window.opener.location.href = '/quickbooks/'
                 window.close()
             }
 
@@ -22,7 +22,7 @@
 
             function migrateCall() {
                 $("#result").html('Loading...')
-                $.get("/app/migration", function (data) {
+                $.get("/quickbooks/migration", function (data) {
                     $("#result").html(JSON.stringify(data, null, 2))
                 })
             }

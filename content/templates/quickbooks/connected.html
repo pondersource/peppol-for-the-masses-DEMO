@@ -6,42 +6,42 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script>
             if (window.opener) {
-                window.opener.location.href = '/app/connected'
+                window.opener.location.href = '/quickbooks/connected'
                 window.close()
             }
         </script>
         <script>
             function apiCall() {
                 $("#result").html('Loading...')
-                $.get("/app/qbo_request", function (data) {
+                $.get("/quickbooks/qbo_request", function (data) {
                     $("#result").html(data)
                 })
             }
 
             function revokeCall() {
                 $("#result").html('Loading...')
-                $.get("/app/revoke", function (data) {
+                $.get("/quickbooks/revoke", function (data) {
                     $("#result").html(data)
                 })
             }
 
             function refreshCall() {
                 $("#result").html('Loading...')
-                $.get("/app/refresh", function (data) {
+                $.get("/quickbooks/refresh", function (data) {
                     $("#result").html(JSON.stringify(data, null, 2))
                 })
             }
 
             function userInfoCall() {
                 $("#result").html('Loading...')
-                $.get("/app/user_info", function (data) {
+                $.get("/quickbooks/user_info", function (data) {
                     $("#result").html(data)
                 })
             }
         </script>
     </head>
     <body>
-        <a href="/app/">Home</a>
+        <a href="/quickbooks/">Home</a>
         <h3>Connected!</h3>
         <p>Would you like to make a sample API call?</p>
         <div>
