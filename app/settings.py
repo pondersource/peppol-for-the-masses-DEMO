@@ -8,7 +8,7 @@ from os.path import dirname
 # Start Quickbooks
 CLIENT_ID = os.getenv('QBO_CLIENT_ID')
 CLIENT_SECRET = os.getenv('QBO_CLIENT_SECRET')
-REDIRECT_URI = os.getenv('QBO_REDIRECT_URL') # http://localhost:8000/app/callback'
+REDIRECT_URI = os.getenv('QBO_REDIRECT_URI') # http://localhost:8000/app/callback'
 ENVIRONMENT = os.getenv('QBO_ENVIRONMENT')
 QBO_BASE_SANDBOX = 'https://sandbox-quickbooks.api.intuit.com'
 QBO_BASE_PROD = 'https://quickbooks.api.intuit.com'
