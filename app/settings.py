@@ -4,6 +4,17 @@ import django_heroku
 from django.utils.translation import gettext_lazy as _
 from os.path import dirname
 
+
+# Start Quickbooks
+# OAauth2 config here
+CLIENT_ID = os.getenv('CLIENT_ID')
+CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+REDIRECT_URI = os.getenv('REDIRECT_URL') # http://localhost:8000/app/callback'
+ENVIRONMENT = os.getenv('ENVIRONMENT')
+QBO_BASE_SANDBOX = 'https://sandbox-quickbooks.api.intuit.com'
+QBO_BASE_PROD = 'https://quickbooks.api.intuit.com'
+# End Quickbooks
+
 warnings.simplefilter('error', DeprecationWarning)
 
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
