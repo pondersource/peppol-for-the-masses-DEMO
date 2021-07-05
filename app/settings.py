@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     'content',
     'django_messages',
     'django_extensions',
-    'connection'
+    'connection',
+    'quickbooks'
 ]
 
 MIDDLEWARE = [

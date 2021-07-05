@@ -19,6 +19,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('django_messages/', include('django_messages.urls'), name="django_messages"),
     path('connection/', include('connection.urls') , name="connection"),
+    path('quickbooks/', include('quickbooks.urls') , name="quickbooks"),
 ]
 
 if settings.DEBUG:
