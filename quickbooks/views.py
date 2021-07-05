@@ -21,10 +21,10 @@ def index(request):
 
 def oauth(request):
     auth_client = AuthClient(
-        settings.CLIENT_ID, 
-        settings.CLIENT_SECRET, 
-        settings.REDIRECT_URI, 
-        settings.ENVIRONMENT,
+        settings.QBO_CLIENT_ID, 
+        settings.QBO_CLIENT_SECRET, 
+        settings.QBO_REDIRECT_URI, 
+        'sandbox',
     )
 
     url = auth_client.get_authorization_url([Scopes.ACCOUNTING])
@@ -33,10 +33,10 @@ def oauth(request):
 
 def openid(request):
     auth_client = AuthClient(
-        settings.CLIENT_ID, 
-        settings.CLIENT_SECRET, 
-        settings.REDIRECT_URI, 
-        settings.ENVIRONMENT,
+        settings.QBO_CLIENT_ID, 
+        settings.QBO_CLIENT_SECRET, 
+        settings.QBO_REDIRECT_URI, 
+        'sandbox',
     )
 
     url = auth_client.get_authorization_url([Scopes.OPENID, Scopes.EMAIL])
@@ -45,10 +45,10 @@ def openid(request):
 
 def callback(request):
     auth_client = AuthClient(
-        settings.CLIENT_ID, 
-        settings.CLIENT_SECRET, 
-        settings.REDIRECT_URI, 
-        settings.ENVIRONMENT, 
+        settings.QBO_CLIENT_ID, 
+        settings.QBO_CLIENT_SECRET, 
+        settings.QBO_REDIRECT_URI, 
+        'sandbox', 
         state_token=request.session.get('state', None),
     )
 
@@ -86,10 +86,10 @@ def callback(request):
 
 def connected(request):
     auth_client = AuthClient(
-        settings.CLIENT_ID, 
-        settings.CLIENT_SECRET, 
-        settings.REDIRECT_URI, 
-        settings.ENVIRONMENT, 
+        settings.QBO_CLIENT_ID, 
+        settings.QBO_CLIENT_SECRET, 
+        settings.QBO_REDIRECT_URI, 
+        'sandbox', 
         access_token=request.session.get('access_token', None), 
         refresh_token=request.session.get('refresh_token', None), 
         id_token=request.session.get('id_token', None),
@@ -102,10 +102,10 @@ def connected(request):
 
 def qbo_request(request):
     auth_client = AuthClient(
-        settings.CLIENT_ID, 
-        settings.CLIENT_SECRET, 
-        settings.REDIRECT_URI, 
-        settings.ENVIRONMENT, 
+        settings.QBO_CLIENT_ID, 
+        settings.QBO_CLIENT_SECRET, 
+        settings.QBO_REDIRECT_URI, 
+        'sandbox', 
         access_token=request.session.get('access_token', None), 
         refresh_token=request.session.get('refresh_token', None), 
         realm_id=request.session.get('realm_id', None),
@@ -125,10 +125,10 @@ def qbo_request(request):
 
 def user_info(request):
     auth_client = AuthClient(
-        settings.CLIENT_ID, 
-        settings.CLIENT_SECRET, 
-        settings.REDIRECT_URI, 
-        settings.ENVIRONMENT, 
+        settings.QBO_CLIENT_ID, 
+        settings.QBO_CLIENT_SECRET, 
+        settings.QBO_REDIRECT_URI, 
+        'sandbox', 
         access_token=request.session.get('access_token', None), 
         refresh_token=request.session.get('refresh_token', None), 
         id_token=request.session.get('id_token', None),
@@ -145,10 +145,10 @@ def user_info(request):
         
 def refresh(request):
     auth_client = AuthClient(
-        settings.CLIENT_ID, 
-        settings.CLIENT_SECRET, 
-        settings.REDIRECT_URI, 
-        settings.ENVIRONMENT, 
+        settings.QBO_CLIENT_ID, 
+        settings.QBO_CLIENT_SECRET, 
+        settings.QBO_REDIRECT_URI, 
+        'sandbox', 
         access_token=request.session.get('access_token', None), 
         refresh_token=request.session.get('refresh_token', None), 
     )
@@ -162,10 +162,10 @@ def refresh(request):
 
 def revoke(request):
     auth_client = AuthClient(
-        settings.CLIENT_ID, 
-        settings.CLIENT_SECRET, 
-        settings.REDIRECT_URI, 
-        settings.ENVIRONMENT, 
+        settings.QBO_CLIENT_ID, 
+        settings.QBO_CLIENT_SECRET, 
+        settings.QBO_REDIRECT_URI, 
+        'sandbox', 
         access_token=request.session.get('access_token', None), 
         refresh_token=request.session.get('refresh_token', None), 
     )
@@ -179,10 +179,10 @@ def revoke(request):
 
 def migration(request):
     auth_client = AuthClient(
-        settings.CLIENT_ID, 
-        settings.CLIENT_SECRET, 
-        settings.REDIRECT_URI, 
-        settings.ENVIRONMENT,
+        settings.QBO_CLIENT_ID, 
+        settings.QBO_CLIENT_SECRET, 
+        settings.QBO_REDIRECT_URI, 
+        'sandbox',
     )
     try:
         migrate(
