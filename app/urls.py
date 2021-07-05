@@ -8,18 +8,18 @@ from main.views import IndexPageView, ChangeLanguageView , MessagesView , Profil
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', IndexPageView.as_view(), namespace='index'),
-    path('profile/', ProfileView.as_view(), namespace='profile'),
-    path('messages/', MessagesView.as_view(), namespace='messages'),
-    path('connections/', ConnectionsView.as_view(), namespace='connections'),
+    path('', IndexPageView.as_view(), name='index'),
+    path('profile/', ProfileView.as_view(), name='profile'),
+    path('messages/', MessagesView.as_view(), name='messages'),
+    path('connections/', ConnectionsView.as_view(), name='connections'),
 
     path('i18n/', include('django.conf.urls.i18n')),
-    path('language/', ChangeLanguageView.as_view(), namespace='change_language'),
+    path('language/', ChangeLanguageView.as_view(), name='change_language'),
 
     path('accounts/', include('accounts.urls')),
-    path('django_messages/', include(('django_messages.urls', 'django_messages'), namespace="django_messages")),
-    path('connection/', include(('connection.urls', 'connection') , namespace="connection")),
-    path('quickbooks/', include(('quickbooks.urls', 'quickbooks') , namespace="quickbooks")),
+    path('django_messages/', include('django_messages.urls', namespace="django_messages")),
+    path('connection/', include('connection.urls', namespace="connection")),
+    path('quickbooks/', include('quickbooks.urls', namespace="quickbooks")),
 ]
 
 if settings.DEBUG:

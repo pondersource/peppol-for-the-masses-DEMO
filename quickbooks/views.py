@@ -96,9 +96,9 @@ def connected(request):
     )
 
     if auth_client.id_token is not None:
-        return render(request, 'connected.html', context={'openid': True})
+        return render(request, 'quickbooks/connected.html', context={'openid': True})
     else:
-        return render(request, 'connected.html', context={'openid': False})
+        return render(request, 'quickbooks/connected.html', context={'openid': False})
 
 def qbo_request(request):
     auth_client = AuthClient(
