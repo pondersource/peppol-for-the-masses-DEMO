@@ -121,22 +121,34 @@ def qbo_request(request, table):
     response = qbo_query(auth_client.access_token, auth_client.realm_id, table)
     
     if not response.ok:
-        return HttpResponse(' '.join([response.content, str(response.status_code)]))
+        print("not ok", file=sys.stderr)
+        return ' '.join([response.content, str(response.status_code)])
     else:
-        return HttpResponse(response.content)
+        print("yes ok", file=sys.stderr)
+        return json.loads(response.content)
+
+def display(arr, table, field):
+    str = "imported " + table + "! <ul>"
+    for i in arr:
+        print("i!! %s", i, file=sys.stderr)
+        str += "<li>" + i[field] + "</li>"
+    return HttpResponse(str + "</ul>")
 
 def qbo_suppliers(request):
-    return qbo_request(request, 'vendor')
-
+    response = qbo_request(request, 'vendor')
+    return display(response["QueryResponse"]["Vendor"], "suppliers", "DisplayName")
 
 def qbo_invoices_received(request):
-    return qbo_request(request, 'bill')
+    response = qbo_request(request, 'bill')
+    return display(response["QueryResponse"]["Bill"], "invoices recceived", "Id")
 
 def qbo_customers(request):
-    return qbo_request(request, 'customer')
+    response = qbo_request(request, 'customer')
+    return display(response["QueryResponse"]["Customer"], "customers", "DisplayName")
 
 def qbo_invoices_sent(request):
-    return qbo_request(request, 'invoice')
+    response = qbo_request(request, 'invoice')
+    return display(response["QueryResponse"]["Invoice"], "invoices sent", "Id")
 
 def user_info(request):
     print("hi", file=sys.stderr)
