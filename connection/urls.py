@@ -17,6 +17,7 @@ from connection.views import (
     connection_request_list_rejected,
     connection_requests_detail,
     view_connections,
+    contacts
 )
 
 app_name = 'connection'
@@ -29,7 +30,7 @@ urlpatterns = [
         name="connection_view_connections",
     ),
     re_path(
-        r"^connection/add/(?P<to_username>[\w-]+)/$",
+        r"^connection/add/$",
         view=connection_add_connection,
         name="connection_add_connection",
     ),
@@ -103,4 +104,7 @@ urlpatterns = [
         view=block_remove,
         name="block_remove",
     ),
+    re_path(r"^contacts/$",
+    view=contacts,
+    name="contacts")
 ]

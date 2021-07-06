@@ -1,12 +1,23 @@
+{% extends 'layouts/default/page.html' %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Connection</title>
 </head>
 <body>
-{% block header %}
-    {% include 'header.html' %}
-{% endblock header %}
-{% block content %}{% endblock content %}
+
+{% load i18n %}
+
+
+<br><a class="navbar-brand" href="{% url 'connection:connection_request_list' %}">{% trans 'Contact Requests ' %}</a>
+<br><a class="navbar-brand" href="{% url 'connection:connection_requests_rejected' %}">{% trans 'Rejected Contacts' %}</a>
+<br><a class="navbar-brand" href="{% url 'connection:connection_view_users' %}">{% trans 'Make a new Request' %}</a>
+<br><a class="navbar-brand" href="{% url 'connection:connection_view_connections' user.username %}">{% trans 'My Contacts' %}</a>
+
+
+{% endblock %}
 </body>
 </html>

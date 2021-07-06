@@ -1,11 +1,16 @@
-<div>{{ connection_request.from_user }} wants to be connections with {{ connection_request.to_user }}</div>
+{% extends 'layouts/default/page.html' %}
 
-<form method="post" action="{% url 'connection_accept' connection_request.pk %}">
+{% block content %}
+
+<div>{{ connection_request.from_user }} wants to be connections with {{ connection_request.to_user }}</div>
+<form method="post" action="{% url 'connection:connection_accept' connection_request.pk %}">
 {% csrf_token %}
 <input type="submit" value="accept" />
 </form>
 
-<form method="post" action="{% url 'connection_reject' connection_request.pk %}">
+<form method="post" action="{% url 'connection:connection_reject' connection_request.pk %}">
 {% csrf_token %}
 <input type="submit" value="reject" />
 </form>
+
+{% endblock content %}

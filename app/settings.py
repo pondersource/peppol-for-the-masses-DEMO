@@ -27,6 +27,7 @@ INSTALLED_APPS = [
 
     # Vendor apps
     'bootstrap4',
+    'simple_autocomplete',
 
     # Application apps
     'main',
@@ -34,7 +35,7 @@ INSTALLED_APPS = [
     'content',
     'django_messages',
     'django_extensions',
-    'connection'
+    'connection',
 ]
 
 MIDDLEWARE = [
@@ -152,6 +153,7 @@ LOCALE_PATHS = [
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SIMPLE_AUTOCOMPLETE = {'auth.user': {'search_field': 'username'}}
 
 #Activate Django-Heroku.
 django_heroku.settings(locals())

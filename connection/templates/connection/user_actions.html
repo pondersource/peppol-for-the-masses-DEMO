@@ -1,9 +1,20 @@
+{% extends 'layouts/default/page.html' %}
+{% block content %}
+
+{% load i18n %}
+
 <ul>
 {% for list_user in users %}
-    <li>
-        {% if user %}
-            {{ list_user.username }} | <a href="{% url 'connection_add_connection' list_user.username %}">add as connection</a> | <a href="{% url 'follower_add' list_user.username %}">follow user</a>
+
+        {% if user.username != list_user.username %}
+          <li>
+            <a class="navbar-brand">{{list_user.username}}</a>
+            <a class="navbar-brand" href="{% url 'connection:connection_add_connection' %}">Add </a>
+            <a class="navbar-brand" href="{% url 'connection:follower_add' list_user.username %}">Follow </a>
+          </li>
         {% endif %}
-    </li>
+
 {% endfor %}
 </ul>
+
+{% endblock %}

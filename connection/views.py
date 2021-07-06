@@ -4,6 +4,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from connection.exceptions import AlreadyExistsError
 from connection.models import Block, Follow, Contact, ConnectionRequest
+from django.views.generic import TemplateView
+from django import forms
+from django.contrib.auth.models import User
+
+from simple_autocomplete.widgets import AutoCompleteWidget
 
 try:
     from django.contrib.auth import get_user_model
@@ -39,21 +44,24 @@ def view_connections(request, username, template_name="connection/connection/use
 
 @login_required
 def connection_add_connection(
-    request, to_username, template_name="connection/connection/add.html"
+    request,  template_name="connection/connection/add.html" , form_class = forms.Form
 ):
     """ Create a ConnectionRequest """
-    ctx = {"to_username": to_username}
 
+
+
+
+    ctx = dict()
     if request.method == "POST":
-        to_user = user_model.objects.get(username=to_username)
-        from_user = request.user
-        try:
-            Contact.objects.add_connection(from_user, to_user)
-        except AlreadyExistsError as e:
-            ctx["errors"] = ["%s" % e]
-        else:
-            return redirect("connection_request_list")
 
+        """in progress"""
+        to_username = forms.ModelChoiceField(
+            queryset=user_model.objects.all(),
+            initial=3,
+            widget=AutoCompleteWidget(
+                url='/custom-json-query',
+                initial_display='John Smith'
+            ))
     return render(request, template_name, ctx)
 
 
@@ -65,7 +73,7 @@ def connection_accept(request, connection_request_id):
             request.user.connection_requests_received, id=connection_request_id
         )
         f_request.accept()
-        return redirect("connection_view_connections", username=request.user.username)
+        return redirect("connection:connection_view_connections", username=request.user.username)
 
     return redirect(
         "connection_requests_detail", connection_request_id=connection_request_id
@@ -80,7 +88,7 @@ def connection_reject(request, connection_request_id):
             request.user.connection_requests_received, id=connection_request_id
         )
         f_request.reject()
-        return redirect("connection_request_list")
+        return redirect("connection:connection_request_list")
 
     return redirect(
         "connection_requests_detail", connection_request_id=connection_request_id
@@ -95,10 +103,10 @@ def connection_cancel(request, connection_request_id):
             request.user.connection_requests_sent, id=connection_request_id
         )
         f_request.cancel()
-        return redirect("connection_request_list")
+        return redirect("connection:connection_request_list")
 
     return redirect(
-        "connection_requests_detail", connection_request_id=connection_request_id
+        "connection:connection_requests_detail", connection_request_id=connection_request_id
     )
 
 
@@ -180,7 +188,7 @@ def follower_add(
         except AlreadyExistsError as e:
             ctx["errors"] = ["%s" % e]
         else:
-            return redirect("connection_following", username=follower.username)
+            return redirect("connection:connection_following", username=follower.username)
 
     return render(request, template_name, ctx)
 
@@ -250,7 +258,7 @@ def block_add(request, blocked_username, template_name="connection/block/add.htm
         except AlreadyExistsError as e:
             ctx["errors"] = ["%s" % e]
         else:
-            return redirect("connection_blocking", username=blocker.username)
+            return redirect("connection:connection_blocking", username=blocker.username)
 
     return render(request, template_name, ctx)
 
@@ -264,6 +272,12 @@ def block_remove(
         blocked = user_model.objects.get(username=blocked_username)
         blocker = request.user
         Block.objects.remove_block(blocker, blocked)
-        return redirect("connection_blocking", username=blocker.username)
+        return redirect("connection:connection_blocking", username=blocker.username)
 
     return render(request, template_name, {"blocked_username": blocked_username})
+
+@login_required
+def contacts(
+    request, template_name="connection/base.html"
+):
+    return render(request, template_name)

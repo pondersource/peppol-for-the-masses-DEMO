@@ -312,7 +312,7 @@ class ConnectionManager(models.Manager):
             raise ValidationError("Users cannot be connections with themselves")
 
         if self.are_connections(from_user, to_user):
-            raise AlreadyContactsError("Users are already connections")
+            raise AlreadyExistsError("Users are already connections")
 
         if (ConnectionRequest.objects.filter(from_user=from_user, to_user=to_user).exists()):
             raise AlreadyExistsError("You already requested connection from this user.")
