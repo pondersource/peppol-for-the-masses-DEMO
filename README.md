@@ -24,4 +24,3 @@ To create a superuser first run:
 
 **python3 manage.py createsuperuser**
 
-

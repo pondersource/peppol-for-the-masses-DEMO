@@ -48,9 +48,6 @@ def connection_add_connection(
 ):
     """ Create a ConnectionRequest """
 
-
-
-
     ctx = dict()
     if request.method == "POST":
 

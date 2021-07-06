@@ -61,7 +61,12 @@
 
                 <a class="navbar-brand" href="/profile">{% trans 'Profile' %}</a>
                 <a class="navbar-brand" href="/messages">{% trans 'Messages' %}</a>
+<<<<<<< HEAD
                 <a class="navbar-brand" href="{% url 'connection:contacts' %}">{% trans 'Connections' %}</a>
+=======
+                <a class="navbar-brand" href="/connections">{% trans 'Connections' %}</a>
+                <a class="navbar-brand" href="/quickbooks">{% trans 'Quickbooks' %}</a>
+>>>>>>> f1eb63c089dceac19d9b1cf6f6518e4408ae35d6
                 <a class="navbar-brand" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
             {% else %}
                 <a class="navbar-brand" href="{% url 'accounts:log_in' %}">{% trans 'Log in' %}</a>
