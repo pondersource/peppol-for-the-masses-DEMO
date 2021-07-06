@@ -15,6 +15,10 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseServer
 from django.conf import settings
 from django.core import serializers
 
+
+from django.contrib.auth.models import User
+from django_messages.models import Message
+
 from quickbooks.services import qbo_query
 
 # Create your views here.
@@ -134,21 +138,63 @@ def display(arr, table, field):
         str += "<li>" + i[field] + "</li>"
     return HttpResponse(str + "</ul>")
 
+def invoiceToString(invoice):
+    # return str(invoice["DocNumber"]) + ": Please pay " + str(invoice["Balance"]) + " by " + str(invoice["DueDate"])
+    return str("-") + ": Please pay " + str(invoice["Balance"]) + " by " + str(invoice["DueDate"])
+
+def ensureInvoice(fromUser, toUser, body):
+    print("Ensure Invoice %s %s", fromUser, toUser, body, file=sys.stderr)
+    try:
+        existingMessage = Message.objects.get(sender=fromUser, recipient=toUser, body=body)
+        print("Message exists!", file=sys.stderr)
+        return existingMessage
+    except Message.DoesNotExist:
+        created = Message.objects.create(sender=fromUser, recipient=toUser, body=body)
+        print("Created message!", file=sys.stderr)
+        return created
+
+def ensureUser(name):
+    try:
+        existingUser = User.objects.get(username=name)
+        print("User exists! " + name, file=sys.stderr)
+        return existingUser
+    except User.DoesNotExist:
+        created = User.objects.create_user(name)
+        print("Created user! " + name, file=sys.stderr)
+        return created
+
+def display2(arr, table, field1, field2):
+    str = "imported " + table + "! <ul>"
+    for i in arr:
+        print("i!! %s", i, file=sys.stderr)
+        str += "<li>" + i[field1][field2] + "</li>"
+    return HttpResponse(str + "</ul>")
+
 def qbo_suppliers(request):
-    response = qbo_request(request, 'vendor')
-    return display(response["QueryResponse"]["Vendor"], "suppliers", "DisplayName")
+    suppliers = qbo_request(request, 'vendor')["QueryResponse"]["Vendor"]
+    for i in suppliers:
+        ensureUser(i["DisplayName"])
+    return display(suppliers, "suppliers", "DisplayName")
 
 def qbo_invoices_received(request):
-    response = qbo_request(request, 'bill')
-    return display(response["QueryResponse"]["Bill"], "invoices recceived", "Id")
+    bills = qbo_request(request, 'bill')["QueryResponse"]["Bill"]
+    for i in bills:
+        vendorUser = ensureUser(i["VendorRef"]["name"])
+        ensureInvoice(vendorUser, request.user, invoiceToString(i))
+    return display2(bills, "invoices recceived", "VendorRef", "name")
 
 def qbo_customers(request):
-    response = qbo_request(request, 'customer')
-    return display(response["QueryResponse"]["Customer"], "customers", "DisplayName")
+    customers = qbo_request(request, 'customer')["QueryResponse"]["Customer"]
+    for i in customers:
+        ensureUser(i["DisplayName"])
+    return display(customers, "customers", "DisplayName")
 
 def qbo_invoices_sent(request):
-    response = qbo_request(request, 'invoice')
-    return display(response["QueryResponse"]["Invoice"], "invoices sent", "Id")
+    invoices = qbo_request(request, 'invoice')["QueryResponse"]["Invoice"]
+    for i in invoices:
+        customerUser = ensureUser(i["CustomerRef"]["name"])
+        ensureInvoice(request.user, customerUser, invoiceToString(i))
+    return display2(invoices, "invoices sent", "CustomerRef", "name")
 
 def user_info(request):
     print("hi", file=sys.stderr)
