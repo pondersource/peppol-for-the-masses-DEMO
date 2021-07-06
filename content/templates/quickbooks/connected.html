@@ -11,9 +11,30 @@
             }
         </script>
         <script>
-            function apiCall() {
+            function apiCustomers() {
                 $("#result").html('Loading...')
-                $.get("/quickbooks/qbo_request", function (data) {
+                $.get("/quickbooks/qbo_customers", function (data) {
+                    $("#result").html(data)
+                })
+            }
+
+            function apiSuppliers() {
+                $("#result").html('Loading...')
+                $.get("/quickbooks/qbo_suppliers", function (data) {
+                    $("#result").html(data)
+                })
+            }
+
+            function apiInvoicesReceived() {
+                $("#result").html('Loading...')
+                $.get("/quickbooks/qbo_invoices_received", function (data) {
+                    $("#result").html(data)
+                })
+            }
+
+            function apiInvoicesSent() {
+                $("#result").html('Loading...')
+                $.get("/quickbooks/qbo_invoices_sent", function (data) {
                     $("#result").html(data)
                 })
             }
@@ -48,7 +69,10 @@
             {% if openid %}
                 <button onclick="userInfoCall()">UserInfo API Call</button>
             {% else %}
-                <button onclick="apiCall()">QuickBooks API Call</button>
+            <button onclick="apiCustomers()">Import Customers</button>
+            <button onclick="apiSuppliers()">Import Supliers</button>
+            <button onclick="apiInvoicesReceived()">Import Invoices Received</button>
+            <button onclick="apiInvoicesSent()">Import Invoices Sent</button>
             {% endif %}
             <button onclick="refreshCall()">Refresh Token Call</button>
             <button onclick="revokeCall()">Revoke Token Call</button>
