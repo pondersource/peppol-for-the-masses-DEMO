@@ -1,10 +1,12 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 from requests import HTTPError
 import json
+import sys
 
 from intuitlib.client import AuthClient
 from intuitlib.migration import migrate
+from intuitlib.utils import send_request
 from intuitlib.enums import Scopes
 from intuitlib.exceptions import AuthClientError
 
@@ -13,7 +15,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseServer
 from django.conf import settings
 from django.core import serializers
 
-from quickbooks.services import qbo_api_call
+from quickbooks.services import qbo_query
 
 # Create your views here.
 def index(request):
@@ -100,7 +102,7 @@ def connected(request):
     else:
         return render(request, 'quickbooks/connected.html', context={'openid': False})
 
-def qbo_request(request):
+def qbo_request(request, table):
     auth_client = AuthClient(
         settings.CLIENT_ID, 
         settings.CLIENT_SECRET, 
@@ -116,14 +118,40 @@ def qbo_request(request):
 
     if auth_client.realm_id is None:
         raise ValueError('Realm id not specified.')
-    response = qbo_api_call(auth_client.access_token, auth_client.realm_id)
+    response = qbo_query(auth_client.access_token, auth_client.realm_id, table)
     
     if not response.ok:
-        return HttpResponse(' '.join([response.content, str(response.status_code)]))
+        print("not ok", file=sys.stderr)
+        return ' '.join([response.content, str(response.status_code)])
     else:
-        return HttpResponse(response.content)
+        print("yes ok", file=sys.stderr)
+        return json.loads(response.content)
+
+def display(arr, table, field):
+    str = "imported " + table + "! <ul>"
+    for i in arr:
+        print("i!! %s", i, file=sys.stderr)
+        str += "<li>" + i[field] + "</li>"
+    return HttpResponse(str + "</ul>")
+
+def qbo_suppliers(request):
+    response = qbo_request(request, 'vendor')
+    return display(response["QueryResponse"]["Vendor"], "suppliers", "DisplayName")
+
+def qbo_invoices_received(request):
+    response = qbo_request(request, 'bill')
+    return display(response["QueryResponse"]["Bill"], "invoices recceived", "Id")
+
+def qbo_customers(request):
+    response = qbo_request(request, 'customer')
+    return display(response["QueryResponse"]["Customer"], "customers", "DisplayName")
+
+def qbo_invoices_sent(request):
+    response = qbo_request(request, 'invoice')
+    return display(response["QueryResponse"]["Invoice"], "invoices sent", "Id")
 
 def user_info(request):
+    print("hi", file=sys.stderr)
     auth_client = AuthClient(
         settings.CLIENT_ID, 
         settings.CLIENT_SECRET, 
@@ -135,7 +163,16 @@ def user_info(request):
     )
 
     try:
-        response = auth_client.get_user_info()
+        # response = auth_client.get_user_info()
+        token = auth_client.access_token
+        if token is None:
+            raise ValueError('Acceess token not specified')
+
+        headers = {
+            'Authorization': 'Bearer {0}'.format(token)
+        }
+        print("Requesting %s", auth_client.user_info_url, file=sys.stderr)
+        response = send_request('GET', auth_client.user_info_url, headers, auth_client, session=auth_client)
     except ValueError:
         return HttpResponse('id_token or access_token not found.')
     except AuthClientError as e:
