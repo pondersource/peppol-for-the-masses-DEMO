@@ -9,9 +9,9 @@
         {% if user.username != list_user.username %}
           <li>
             <a class="navbar-brand">{{list_user.username}}</a>
-            <a class="navbar-brand" href="{% url 'connection:connection_add_connection' list_user %}">Add </a>
-            <a class="navbar-brand" href="{% url 'connection:follower_add' list_user %}">Follow </a>
-            <a class="navbar-brand" href="{% url 'connection:block_add' list_user %}">Block </a>
+            <a class="navbar-brand" href="{% url 'connection:connection_add_connection' list_user.username %}">Add </a>
+            <a class="navbar-brand" href="{% url 'connection:follower_add' list_user.username %}">Follow </a>
+            <a class="navbar-brand" href="{% url 'connection:block_add' list_user.username %}">Block </a>
 
           </li>
         {% endif %}
