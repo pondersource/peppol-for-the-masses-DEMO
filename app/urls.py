@@ -22,13 +22,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('django_messages/', include('django_messages.urls'), name="django_messages"),
     path('connection/', include('connection.urls') , name="connection"),
-    path('simple-autocomplete/', include('simple_autocomplete.urls', namespace='simple_autocomplete')),
-    path('django_messages/', include('django_messages.urls', namespace="django_messages")),
-    path('connection/', include('connection.urls', namespace="connection")),
     path('quickbooks/', include('quickbooks.urls', namespace="quickbooks")),
-    path('iommi-form-test/', Form.create(auto__model=User).as_view()),
 
-]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

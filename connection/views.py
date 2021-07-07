@@ -8,9 +8,6 @@ from django.views.generic import TemplateView
 from django import forms
 from django.contrib.auth.models import User
 
-from simple_autocomplete.widgets import AutoCompleteWidget
-from iommi import Page, Form, Table
-
 try:
     from django.contrib.auth import get_user_model
 
@@ -52,6 +49,7 @@ def connection_add_connection(
     ctx = dict()
     if request.method == "POST":
 
+<<<<<<< HEAD
         to_user = user_model.objects.get(username=to_username)
         from_user = request.user
         try:
@@ -60,6 +58,18 @@ def connection_add_connection(
             ctx["errors"] = ["%s" % e]
         else:
             return redirect("connection:connection_request_list")
+=======
+        """in progress"""
+        to_username = forms.ModelChoiceField(
+            queryset=user_model.objects.all(),
+            initial=3)
+            # initial=3,
+            # widget=AutoCompleteWidget(
+            #     url='/custom-json-query',
+            #     initial_display='John Smith'
+            # ))
+    return render(request, template_name, ctx)
+>>>>>>> a1aa7338316d59d87c6cdbf1108ea336a1708f26
 
     return render(request, template_name, ctx)
 
