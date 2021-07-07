@@ -8,7 +8,7 @@ from django.views.generic import TemplateView
 from django import forms
 from django.contrib.auth.models import User
 
-from simple_autocomplete.widgets import AutoCompleteWidget
+# from simple_autocomplete.widgets import AutoCompleteWidget
 
 try:
     from django.contrib.auth import get_user_model
@@ -54,11 +54,12 @@ def connection_add_connection(
         """in progress"""
         to_username = forms.ModelChoiceField(
             queryset=user_model.objects.all(),
-            initial=3,
-            widget=AutoCompleteWidget(
-                url='/custom-json-query',
-                initial_display='John Smith'
-            ))
+            initial=3)
+            # initial=3,
+            # widget=AutoCompleteWidget(
+            #     url='/custom-json-query',
+            #     initial_display='John Smith'
+            # ))
     return render(request, template_name, ctx)
 
 

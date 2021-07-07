@@ -17,15 +17,10 @@ urlpatterns = [
     path('language/', ChangeLanguageView.as_view(), name='change_language'),
 
     path('accounts/', include('accounts.urls')),
-<<<<<<< HEAD
-    path('django_messages/', include('django_messages.urls'), name="django_messages"),
-    path('connection/', include('connection.urls') , name="connection"),
-    path('simple-autocomplete/', include('simple_autocomplete.urls', namespace='simple_autocomplete')),
-=======
+    # path('simple-autocomplete/', include('simple_autocomplete.urls', namespace='simple_autocomplete')),
     path('django_messages/', include('django_messages.urls', namespace="django_messages")),
     path('connection/', include('connection.urls', namespace="connection")),
     path('quickbooks/', include('quickbooks.urls', namespace="quickbooks")),
->>>>>>> f1eb63c089dceac19d9b1cf6f6518e4408ae35d6
 ]
 
 if settings.DEBUG:

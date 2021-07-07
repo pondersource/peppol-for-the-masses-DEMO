@@ -37,7 +37,7 @@ INSTALLED_APPS = [
 
     # Vendor apps
     'bootstrap4',
-    'simple_autocomplete',
+    # 'simple_autocomplete',
 
     # Application apps
     'main',
@@ -46,10 +46,7 @@ INSTALLED_APPS = [
     'django_messages',
     'django_extensions',
     'connection',
-<<<<<<< HEAD
-=======
     'quickbooks'
->>>>>>> f1eb63c089dceac19d9b1cf6f6518e4408ae35d6
 ]
 
 MIDDLEWARE = [
