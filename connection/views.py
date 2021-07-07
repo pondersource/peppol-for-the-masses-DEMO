@@ -45,18 +45,17 @@ def view_connections(request, username, template_name="connection/connection/use
 
 @login_required
 def connection_add_connection(
-    request,  template_name="connection/connection/add.html" , form_class = forms.Form
+    request, to_username,  template_name="connection/connection/add.html"
 ):
     """ Create a ConnectionRequest """
 
     ctx = dict()
     if request.method == "POST":
 
-        to_username = Form.create(auto__model=user_model)
         to_user = user_model.objects.get(username=to_username)
         from_user = request.user
         try:
-            Friend.objects.add_friend(from_user, to_user)
+            Contact.objects.add_connection(from_user, to_user)
         except AlreadyExistsError as e:
             ctx["errors"] = ["%s" % e]
         else:

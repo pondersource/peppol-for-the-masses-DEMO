@@ -30,7 +30,7 @@ urlpatterns = [
         name="connection_view_connections",
     ),
     re_path(
-        r"^connection/add/$",
+        r"^connection/add/(?P<to_username>[\w-]+)/$",
         view=connection_add_connection,
         name="connection_add_connection",
     ),

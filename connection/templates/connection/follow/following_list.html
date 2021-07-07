@@ -1,6 +1,9 @@
+{% extends 'layouts/default/page.html' %}
+
 {% block content %}
 {% load connectiontags %}
 <h1>Following</h1>
 {% get_by_name connection_context_object_name as var %}
-{% following var %}
+<a class="navbar-brand" {% following var %}</a> 
+<a class="navbar-brand" href="{% url 'connection:follower_remove' var %}">Remove </a>
 {% endblock %}
