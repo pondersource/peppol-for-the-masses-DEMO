@@ -22,11 +22,15 @@ class ComposeForm(forms.Form):
 
     """
 
-    users = forms.ModelChoiceField(
+    # users = forms.ModelChoiceField(
+    #     queryset = Users,
+    #     initial = 0
+    #     )
+    # recipient = CommaSeparatedUserField()
+    recipient = forms.ModelChoiceField(
         queryset = Users,
         initial = 0
         )
-    recipient = CommaSeparatedUserField()
     subject = forms.CharField( max_length=140)
     body = forms.CharField(widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}))
 

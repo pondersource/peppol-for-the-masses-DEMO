@@ -13,8 +13,8 @@ urlpatterns = [
 
     path('', IndexPageView.as_view(), name='index'),
     path('profile/', ProfileView.as_view(), name='profile'),
-    path('messages/', MessagesView.as_view(), name='messages'),
-    path('connections/', ConnectionsView.as_view(), name='connections'),
+    # path('messages/', MessagesView.as_view(), name='messages'),
+    # path('connections/', ConnectionsView.as_view(), name='connections'),
 
     path('i18n/', include('django.conf.urls.i18n')),
     path('language/', ChangeLanguageView.as_view(), name='change_language'),
