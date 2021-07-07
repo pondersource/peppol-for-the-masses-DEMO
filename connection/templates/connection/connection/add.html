@@ -3,11 +3,10 @@
 {% block content %}
 
 {% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}
+
+<form method="post">
 {% csrf_token %}
-
-<form method="post" autocomplete="on" action="/action_page.php">
-  <br><input type="text" name="to_username" placeholder= 'Find a user' />
-  <input type="submit" value="add" />
+<br><input type="text" name="to_username" />
+<input type="submit" value="Add" />
 </form>
-
 {% endblock content %}
