@@ -37,7 +37,7 @@ INSTALLED_APPS = [
 
     # Vendor apps
     'bootstrap4',
-    'simple_autocomplete',
+    # 'simple_autocomplete',
 
     # Application apps
     'main',
