@@ -2,6 +2,7 @@
 {% block content %}
 
 {% load i18n %}
+{% include "connection/options.html" %}
 
 {% if not to_username == request.user.username %}
 {% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}

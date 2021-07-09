@@ -1,18 +1,9 @@
-{% extends "django_messages/base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 
 {% block content %}
 
-<style>
-    ul li { display:inline; } 
-</style>
-  
-<ul class="subnavilist">
-    <li><a href="{% url 'django_messages:messages_inbox' %} ">&raquo;&nbsp;{% trans "Inbox" %}</a></li>
-    <li><a href="{% url 'django_messages:messages_outbox' %} ">&raquo;&nbsp;{% trans "Sent Messages" %}</a></li>
-    <li><a href="{% url 'django_messages:messages_compose' %} ">&raquo;&nbsp;{% trans "New Message" %}</a></li>
-    <li><a href="{% url 'django_messages:messages_trash' %} ">&raquo;&nbsp;{% trans "Trash" %}</a></li>
-</ul>
+{% include "django_messages/options.html" %}
 
 <h1>{% trans "Deleted Messages" %}</h1>
 {% if message_list %}

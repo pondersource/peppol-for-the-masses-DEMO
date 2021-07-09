@@ -26,11 +26,11 @@ class ComposeForm(forms.Form):
     #     queryset = Users,
     #     initial = 0
     #     )
-    # recipient = CommaSeparatedUserField()
-    recipient = forms.ModelChoiceField(
+    see_users = forms.ModelChoiceField(
         queryset = Users,
         initial = 0
         )
+    recipient = CommaSeparatedUserField()
     subject = forms.CharField( max_length=140)
     body = forms.CharField(widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}))
 

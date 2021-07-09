@@ -1,6 +1,7 @@
 {% extends 'layouts/default/page.html' %}
 
 {% block content %}
+{% include "connection/options.html" %}
 
 <div>{{ connection_request.from_user }} wants to be connections with {{ connection_request.to_user }}</div>
 <form method="post" action="{% url 'connection:connection_accept' connection_request.pk %}">

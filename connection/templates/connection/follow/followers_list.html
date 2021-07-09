@@ -1,8 +1,0 @@
-{% extends 'layouts/default/page.html' %}
-
-{% block content %}
-{% load connectiontags %}
-<h1>Followers</h1>
-{% get_by_name connection_context_object_name as var %}
-{% followers var %}
-{% endblock %}

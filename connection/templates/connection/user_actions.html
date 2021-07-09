@@ -2,6 +2,8 @@
 {% block content %}
 
 {% load i18n %}
+{% include "connection/options.html" %}
+<h1>New Request</h1>
 
 <ul>
 {% for list_user in users %}
@@ -10,7 +12,6 @@
           <li>
             <a class="navbar-brand">{{list_user.username}}</a>
             <a class="navbar-brand" href="{% url 'connection:connection_add_connection' list_user.username %}">Add </a>
-            <a class="navbar-brand" href="{% url 'connection:follower_add' list_user.username %}">Follow </a>
             <a class="navbar-brand" href="{% url 'connection:block_add' list_user.username %}">Block </a>
 
           </li>

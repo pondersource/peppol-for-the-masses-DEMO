@@ -11,15 +11,7 @@
 
 {% load i18n %}
 
-
-<br><a class="navbar-brand" href="{% url 'connection:connection_request_list' %}">{% trans 'Contact Requests ' %}</a>
-<br><a class="navbar-brand" href="{% url 'connection:connection_requests_rejected' %}">{% trans 'Rejected Contacts' %}</a>
-<br><a class="navbar-brand" href="{% url 'connection:connection_view_users' %}">{% trans 'Make a new Request' %}</a>
-<br><a class="navbar-brand" href="{% url 'connection:connection_view_connections' user.username %}">{% trans 'My Contacts' %}</a>
-<br><a class="navbar-brand" href="{% url 'connection:connection_followers' user.username %}">{% trans 'My Followers' %}</a>
-<br><a class="navbar-brand" href="{% url 'connection:connection_following' user.username %}">{% trans 'My Follows' %}</a>
-<br><a class="navbar-brand" href="{% url 'connection:connection_blockers' user.username %}">{% trans 'My Blockers' %}</a>
-<br><a class="navbar-brand" href="{% url 'connection:connection_blocking' user.username %}">{% trans 'My Blockings' %}</a>
+{% include "connection/options.html" %}
 
 {% endblock %}
 </body>y

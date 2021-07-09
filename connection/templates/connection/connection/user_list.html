@@ -1,8 +1,10 @@
 {% extends 'layouts/default/page.html' %}
 
 {% block content %}
+{% include "connection/options.html" %}
+
 {% load connectiontags %}
-<h1>Your Friends</h1>
+<h1>Your Contacts With Trust</h1>
 {% get_by_name connection_context_object_name as var %}
 {% connections var %}
 {% endblock %}

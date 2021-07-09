@@ -1,4 +1,5 @@
 {% load i18n %}
+{% include "django_messages/options.html" %}
 
 {% blocktrans with recipient=message.recipient sender=message.sender %}Hello {{ recipient }},
 

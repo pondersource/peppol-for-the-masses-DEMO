@@ -1,5 +1,6 @@
 {% extends 'layouts/default/page.html' %}
 {% block content %}
+{% include "connection/options.html" %}
 
 {% if not followee_username == request.user.username %}
 {% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}

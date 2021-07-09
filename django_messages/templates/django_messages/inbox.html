@@ -3,16 +3,7 @@
 {% load i18n %}
 
 {% block content %}
-<style>
-    ul li { display:inline; } 
-  </style>
-  
-<ul class="subnavilist">
-    <li><a href="{% url 'django_messages:messages_inbox' %} ">&raquo;&nbsp;{% trans "Inbox" %}</a></li>
-    <li><a href="{% url 'django_messages:messages_outbox' %} ">&raquo;&nbsp;{% trans "Sent Messages" %}</a></li>
-    <li><a href="{% url 'django_messages:messages_compose' %} ">&raquo;&nbsp;{% trans "New Message" %}</a></li>
-    <li><a href="{% url 'django_messages:messages_trash' %} ">&raquo;&nbsp;{% trans "Trash" %}</a></li>
-</ul>
+{% include "django_messages/options.html" %}
 
 <h1>{% trans "Inbox" %}</h1>
 {% if message_list %}
@@ -30,8 +21,10 @@
             <a href="{{ django_messages.get_absolute_url }}">{{ message.subject }}</a>
             {% if message.replied %}</em>{% endif %}
             {% if message.new %}</strong>{% endif %}</td>
+
         <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
-        <td><a href="{% url 'django_messages:messages_delete' message.id %}">{% trans "delete" %}</a></td>
+        <td><a href="{% url 'django_messages:messages_detail' message.id %}">{% trans "View" %}</a></td>
+        <td><a href="{% url 'django_messages:messages_delete' message.id %}">{% trans "Delete" %}</a></td>
     </tr>
 {% endfor %}
     </tbody>
