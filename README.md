@@ -1,4 +1,7 @@
 # peppol-python-demo
+
+*** UNDER CONSTRUCTION ***
+
 A Django-based demo server that shows how to use the peppol-python library
 
 # Command line (recommended: use a virtual environment)
