@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load connectiontags %}
 
 {% block content %}
 {% include "django_messages/options.html" %}
@@ -9,7 +10,11 @@
     <dt>{% trans "Subject" %}</dt>
     <dd><strong>{{ message.subject }}</strong></dd>
     <dt>{% trans "Sender" %}</dt>
-    <dd>{{ message.sender }}</dd>
+    {% if message.sender in connections %}
+      <dd style="color:green;">{{ message.sender }}</dd>
+    {% else %}
+      <dd style="color:orange;">{{ message.sender }}</dd>
+    {% endif %}
     <dt>{% trans "Date" %} </dt>
     <dd>{{ message.sent_at|date:_("DATETIME_FORMAT")}}</dd>
     <dt>{% trans "Recipient" %}</dt>

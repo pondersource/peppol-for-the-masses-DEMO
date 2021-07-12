@@ -1,0 +1,5 @@
+<form method="post">
+{% csrf_token %}
+<input type="hidden" name="connection_to_remove" value="{{ connection_to_remove }}" />
+<input type="submit" value="Remove connection " style="color:white;background-color:green; />
+</form>

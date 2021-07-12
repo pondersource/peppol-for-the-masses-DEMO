@@ -1,7 +1,7 @@
 {% extends 'main/messages.html' %}
 
 {% load i18n %}
-
+{% load connectiontags %}
 {% block content %}
 {% include "django_messages/options.html" %}
 
@@ -14,18 +14,23 @@
     <tbody>
 {% for message in message_list %}
     <tr>
-        <td>{{ message.sender }}</td>
-        <td>
-            {% if message.new %}<strong>{% endif %}
-            {% if message.replied %}<em>{% endif %}
-            <a href="{{ django_messages.get_absolute_url }}">{{ message.subject }}</a>
-            {% if message.replied %}</em>{% endif %}
-            {% if message.new %}</strong>{% endif %}</td>
+        {% if message.sender in connections %}
+          <td style="color:green;">{{ message.sender }}</td>
+        {% else %}
+          <td style="color:orange;">{{ message.sender }}</td>
+        {% endif %}
+          <td>
+              {% if message.new %}<strong>{% endif %}
+              {% if message.replied %}<em>{% endif %}
+              <a href="{{ django_messages.get_absolute_url }}">{{ message.subject }}</a>
+              {% if message.replied %}</em>{% endif %}
+              {% if message.new %}</strong>{% endif %}</td>
 
-        <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
-        <td><a href="{% url 'django_messages:messages_detail' message.id %}">{% trans "View" %}</a></td>
-        <td><a href="{% url 'django_messages:messages_delete' message.id %}">{% trans "Delete" %}</a></td>
-    </tr>
+          <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+          <td><a href="{% url 'django_messages:messages_detail' message.id %}">{% trans "View" %}</a></td>
+          <td><a href="{% url 'django_messages:messages_delete' message.id %}">{% trans "Delete" %}</a></td>
+
+      </tr>
 {% endfor %}
     </tbody>
 </table>

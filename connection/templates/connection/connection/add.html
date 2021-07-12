@@ -1,4 +1,6 @@
 {% extends 'layouts/default/page.html' %}
+
+
 {% block content %}
 
 {% load i18n %}
@@ -9,7 +11,7 @@
 <form method="post">
 {% csrf_token %}
 <input type="hidden" name="to_username" value="{{ to_username }}" />
-<input type="submit" value="add {{ to_username }} as a connection" />
+<input type="submit" value="Add connection"  style="color:white;background-color:green; />
 </form>
 {% endif %}
 

@@ -15,7 +15,7 @@ from django_messages.models import Message
 from django_messages.urls import *
 from django_messages.forms import ComposeForm
 from django_messages.utils import format_quote, get_user_model, get_username_field
-
+from connection.models import Contact
 User = get_user_model()
 
 if "pinax.notifications" in settings.INSTALLED_APPS and getattr(settings, 'DJANGO_MESSAGES_NOTIFY', True):
@@ -31,8 +31,10 @@ def inbox(request, template_name='django_messages/inbox.html'):
         ``template_name``: name of the template to use.
     """
     message_list = Message.objects.inbox_for(request.user)
+    connections = Contact.objects.connections(request.user)
+
     return render(request, template_name, {
-        'message_list': message_list,
+        'message_list': message_list, 'connections': connections,
     })
 
 @login_required

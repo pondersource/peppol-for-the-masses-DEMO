@@ -7,13 +7,11 @@
 
 <ul>
 {% for list_user in users %}
-
         {% if user.username != list_user.username %}
           <li>
             <a class="navbar-brand">{{list_user.username}}</a>
             <a class="navbar-brand" href="{% url 'connection:connection_add_connection' list_user.username %}">Add </a>
             <a class="navbar-brand" href="{% url 'connection:block_add' list_user.username %}">Block </a>
-
           </li>
         {% endif %}
 

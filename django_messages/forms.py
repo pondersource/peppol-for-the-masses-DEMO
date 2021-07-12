@@ -11,10 +11,24 @@ else:
 from django_messages.models import Message
 from django_messages.fields import CommaSeparatedUserField
 
-from django_messages.utils import get_user_model, get_username_field
+from django_messages.utils import get_user_model
+from connection.views import get_connection_context_object_list_name
+from connection.models import Contact
 
-User = get_user_model()
-Users = User.objects.all()
+from django.contrib.auth.models import User
+
+try:
+    from django.contrib.auth import get_user_model
+
+    user_model = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+
+    user_model = User
+
+
+connections = get_connection_context_object_list_name()
+
 
 class ComposeForm(forms.Form):
     """
@@ -26,10 +40,7 @@ class ComposeForm(forms.Form):
     #     queryset = Users,
     #     initial = 0
     #     )
-    see_users = forms.ModelChoiceField(
-        queryset = Users,
-        initial = 0
-        )
+
     recipient = CommaSeparatedUserField()
     subject = forms.CharField( max_length=140)
     body = forms.CharField(widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}))
@@ -54,6 +65,11 @@ class ComposeForm(forms.Form):
                 subject = subject,
                 body = body,
             )
+            if r.username not in connections:
+                to_user = user_model.objects.get(username=r.username)
+                from_user = sender
+                Contact.objects.add_connection(from_user, to_user)
+
             if parent_msg is not None:
                 msg.parent_msg = parent_msg
                 parent_msg.replied_at = timezone.now()

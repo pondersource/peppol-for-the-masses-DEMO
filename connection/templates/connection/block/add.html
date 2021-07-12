@@ -7,7 +7,7 @@
 <form method="post">
 {% csrf_token %}
 <input type="hidden" name="blocked_username" value="{{ blocked_username }}" />
-<input type="submit" value="block {{ blocked_username }}" />
+<input type="submit" value="Block connection" style="color:white;background-color:green; />
 </form>
 {% endif %}
 

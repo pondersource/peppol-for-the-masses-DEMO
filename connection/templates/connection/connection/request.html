@@ -3,7 +3,7 @@
 {% block content %}
 {% include "connection/options.html" %}
 
-<div>{{ connection_request.from_user }} wants to be connections with {{ connection_request.to_user }}</div>
+<div>{{ connection_request.from_user }} wants to be connections with you {{ user.username }}</div>
 <form method="post" action="{% url 'connection:connection_accept' connection_request.pk %}">
 {% csrf_token %}
 <input type="submit" value="accept" />

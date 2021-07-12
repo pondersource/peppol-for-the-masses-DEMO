@@ -137,70 +137,6 @@ def connection_requests_detail(
     return render(request, template_name, {"connection_request": f_request})
 
 
-def followers(request, username, template_name="connection/follow/followers_list.html"):
-    """ List this user's followers """
-    user = get_object_or_404(user_model, username=username)
-    followers = Follow.objects.followers(user)
-    return render(
-        request,
-        template_name,
-        {
-            get_connection_context_object_name(): user,
-            "connection_context_object_name": get_connection_context_object_name(),
-            "followers": followers,
-        },
-    )
-
-
-def following(request, username, template_name="connection/follow/following_list.html"):
-    """ List who this user follows """
-    user = get_object_or_404(user_model, username=username)
-    following = Follow.objects.following(user)
-    return render(
-        request,
-        template_name,
-        {
-            get_connection_context_object_name(): user,
-            "connection_context_object_name": get_connection_context_object_name(),
-            "following": following,
-        },
-    )
-
-
-@login_required
-def follower_add(
-    request, followee_username, template_name="connection/follow/add.html"
-):
-    """ Create a following relationship """
-    ctx = {"followee_username": followee_username}
-
-    if request.method == "POST":
-        followee = user_model.objects.get(username=followee_username)
-        follower = request.user
-        try:
-            Follow.objects.add_follower(follower, followee)
-        except AlreadyExistsError as e:
-            ctx["errors"] = ["%s" % e]
-        else:
-            return redirect("connection:connection_following", username=follower.username)
-
-    return render(request, template_name, ctx)
-
-
-@login_required
-def follower_remove(
-    request, followee_username, template_name="connection/follow/remove.html"
-):
-    """ Remove a following relationship """
-    if request.method == "POST":
-        followee = user_model.objects.get(username=followee_username)
-        follower = request.user
-        Follow.objects.remove_follower(follower, followee)
-        return redirect("connection_following", username=follower.username)
-
-    return render(request, template_name, {"followee_username": followee_username})
-
-
 def all_users(request, template_name="connection/user_actions.html"):
     users = user_model.objects.all()
 
@@ -269,6 +205,19 @@ def block_remove(
         return redirect("connection:connection_blocking", username=blocker.username)
 
     return render(request, template_name, {"blocked_username": blocked_username})
+@login_required
+
+def connection_remove(
+    request, connection_to_remove, template_name="connection/connection/remove.html"
+):
+    """ Remove a following relationship """
+    if request.method == "POST":
+        connection_to_remove= user_model.objects.get(username=connection_to_remove)
+        remover = request.user
+        Contact.objects.remove_connection(remover,connection_to_remove)
+        return redirect("connection:connection_request_list")
+
+    return render(request, template_name, {"connection username": connection_to_remove})
 
 @login_required
 def contacts(

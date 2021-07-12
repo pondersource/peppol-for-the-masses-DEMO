@@ -5,14 +5,11 @@ from connection.views import (
     block_remove,
     blockers,
     blocking,
-    follower_add,
-    follower_remove,
-    followers,
-    following,
     connection_accept,
     connection_add_connection,
     connection_cancel,
     connection_reject,
+    connection_remove,
     connection_request_list,
     connection_request_list_rejected,
     connection_requests_detail,
@@ -65,24 +62,9 @@ urlpatterns = [
         name="connection_requests_detail",
     ),
     re_path(
-        r"^followers/(?P<username>[\w-]+)/$",
-        view=followers,
-        name="connection_followers",
-    ),
-    re_path(
-        r"^following/(?P<username>[\w-]+)/$",
-        view=following,
-        name="connection_following",
-    ),
-    re_path(
-        r"^follower/add/(?P<followee_username>[\w-]+)/$",
-        view=follower_add,
-        name="follower_add",
-    ),
-    re_path(
-        r"^follower/remove/(?P<followee_username>[\w-]+)/$",
-        view=follower_remove,
-        name="follower_remove",
+        r"^connection/remove/(?P<connection_to_remove>[\w-]+)/$",
+        view=connection_remove,
+        name="connection_remove",
     ),
     re_path(
         r"^blockers/(?P<username>[\w-]+)/$",
@@ -104,6 +86,7 @@ urlpatterns = [
         view=block_remove,
         name="block_remove",
     ),
+
     re_path(r"^contacts/$",
     view=contacts,
     name="contacts")

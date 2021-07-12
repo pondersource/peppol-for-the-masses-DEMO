@@ -374,7 +374,6 @@ class ConnectionManager(models.Manager):
             except Contact.DoesNotExist:
                 return False
 
-
 class Contact(models.Model):
     """ Model to represent Connections """
 

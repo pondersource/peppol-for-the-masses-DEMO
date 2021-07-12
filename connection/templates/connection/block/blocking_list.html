@@ -7,8 +7,7 @@
 <h1>Blockers</h1>
 {% get_by_name connection_context_object_name as var %}
 {% if var %}
-<a class="navbar-brand" {% blockers var %}</a>
-<a class="navbar-brand" href="{% url 'connection:block_remove' var %}">Remove </a>
+{% blockers var %}
 {% endif %}
 
 {% endblock %}
