@@ -8,7 +8,7 @@ if "pinax.notifications" in settings.INSTALLED_APPS and getattr(settings, 'DJANG
 else:
     notification = None
 
-from django_messages.models import Message
+from django_messages.models import Message , MessageManager
 from django_messages.fields import CommaSeparatedUserField
 
 from django_messages.utils import get_user_model
@@ -16,6 +16,8 @@ from connection.views import get_connection_context_object_list_name
 from connection.models import Contact
 
 from django.contrib.auth.models import User
+from simple_autocomplete.widgets import AutoCompleteWidget
+from connection.models import Contact, ConnectionManager
 
 try:
     from django.contrib.auth import get_user_model
@@ -27,8 +29,10 @@ except ImportError:
     user_model = User
 
 
-connections = get_connection_context_object_list_name()
-
+def my_username(request):
+    username = None
+    if request.user.is_authenticated():
+        username = request.user.username
 
 class ComposeForm(forms.Form):
     """
@@ -51,6 +55,7 @@ class ComposeForm(forms.Form):
         super(ComposeForm, self).__init__(*args, **kwargs)
         if recipient_filter is not None:
             self.fields['recipient']._recipient_filter = recipient_filter
+
 
 
     def save(self, sender, parent_msg=None):
