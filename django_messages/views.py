@@ -94,6 +94,7 @@ def compose(request, recipient=None, form_class=ComposeForm,
                 success_url = reverse_lazy('django_messages:messages_inbox')
             if 'next' in request.GET:
                 success_url = request.GET['next']
+            logging.info("Message just sent!")
             return HttpResponseRedirect(success_url)
     else:
         form = form_class(initial={"subject": request.GET.get("subject", "")})
