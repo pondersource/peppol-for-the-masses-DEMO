@@ -23,7 +23,9 @@ urlpatterns = [
     path('django_messages/', include('django_messages.urls'), name="django_messages"),
     path('connection/', include('connection.urls') , name="connection"),
     path('quickbooks/', include('quickbooks.urls', namespace="quickbooks")),
-    path('simple-autocomplete/', include('simple_autocomplete.urls', namespace='simple_autocomplete'))
+    path('simple-autocomplete/', include('simple_autocomplete.urls', namespace='simple_autocomplete')),
+    path('SOAP/', include('SOAP.urls'), name='SOAP'),
+
 ]
 
 if settings.DEBUG:
