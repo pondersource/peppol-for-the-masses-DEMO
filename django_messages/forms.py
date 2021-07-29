@@ -16,7 +16,6 @@ from connection.views import get_connection_context_object_list_name
 from connection.models import Contact
 
 from django.contrib.auth.models import User
-from simple_autocomplete.widgets import AutoCompleteWidget
 from connection.models import Contact, ConnectionManager
 
 try:
