@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'connection',
     'quickbooks',
-    'simple_autocomplete',
+    'SOAP_client'
 
 ]
 

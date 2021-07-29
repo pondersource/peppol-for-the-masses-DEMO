@@ -13,8 +13,6 @@ urlpatterns = [
 
     path('', IndexPageView.as_view(), name='index'),
     path('profile/', ProfileView.as_view(), name='profile'),
-    # path('messages/', MessagesView.as_view(), name='messages'),
-    # path('connections/', ConnectionsView.as_view(), name='connections'),
 
     path('i18n/', include('django.conf.urls.i18n')),
     path('language/', ChangeLanguageView.as_view(), name='change_language'),
@@ -23,7 +21,7 @@ urlpatterns = [
     path('django_messages/', include('django_messages.urls'), name="django_messages"),
     path('connection/', include('connection.urls') , name="connection"),
     path('quickbooks/', include('quickbooks.urls', namespace="quickbooks")),
-    path('simple-autocomplete/', include('simple_autocomplete.urls', namespace='simple_autocomplete'))
+
 ]
 
 if settings.DEBUG:

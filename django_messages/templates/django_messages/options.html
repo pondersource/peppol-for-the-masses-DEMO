@@ -4,8 +4,9 @@
   ul li { display:inline; }
 </style>
 <ul class="subnavilist">
-  <li><a href="{% url 'django_messages:messages_inbox' %} ">&raquo;&nbsp;{% trans "Inbox" %}</a></li>
-  <li><a href="{% url 'django_messages:messages_outbox' %} ">&raquo;&nbsp;{% trans "Sent Messages" %}</a></li>
-  <li><a href="{% url 'django_messages:messages_compose' %} ">&raquo;&nbsp;{% trans "New Message" %}</a></li>
-  <li><a href="{% url 'django_messages:messages_trash' %} ">&raquo;&nbsp;{% trans "Trash" %}</a></li>
+  <li><a  class="navbar-brand"href="{% url 'django_messages:messages_inbox' %} ">&raquo;&nbsp;{% trans "Inbox" %}</a></li>
+  <li><a  class="navbar-brand"href="{% url 'django_messages:messages_outbox' %} ">&raquo;&nbsp;{% trans "Outbox" %}</a></li>
+  <li><a  class="navbar-brand"href="{% url 'django_messages:messages_compose' %} ">&raquo;&nbsp;{% trans "New Message" %}</a></li>
+  <li><a  class="navbar-brand"href="{% url 'django_messages:messages_trash' %} ">&raquo;&nbsp;{% trans "Trash" %}</a></li>
+
 </ul>

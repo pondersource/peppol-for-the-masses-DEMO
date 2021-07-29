@@ -16,6 +16,7 @@ from django_messages.urls import *
 from django_messages.forms import ComposeForm
 from django_messages.utils import format_quote, get_user_model, get_username_field
 from connection.models import Contact
+from peppol.peppol_lib.Sender import *
 User = get_user_model()
 
 if "pinax.notifications" in settings.INSTALLED_APPS and getattr(settings, 'DJANGO_MESSAGES_NOTIFY', True):
@@ -86,7 +87,7 @@ def compose(request, recipient=None, form_class=ComposeForm,
     """
     if request.method == "POST":
         sender = request.user
-        form = form_class(request.POST, recipient_filter=recipient_filter)
+        form = form_class(request.POST, request.FILES, recipient_filter=recipient_filter)
         if form.is_valid():
             form.save(sender=request.user)
             messages.info(request, _(u"Message successfully sent."))

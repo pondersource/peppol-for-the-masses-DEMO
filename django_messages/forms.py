@@ -16,7 +16,6 @@ from connection.views import get_connection_context_object_list_name
 from connection.models import Contact
 
 from django.contrib.auth.models import User
-from simple_autocomplete.widgets import AutoCompleteWidget
 from connection.models import Contact, ConnectionManager
 
 try:
@@ -34,6 +33,14 @@ def my_username(request):
     if request.user.is_authenticated():
         username = request.user.username
 
+def validate_file_extension(value):
+    import os
+    from django.core.exceptions import ValidationError
+    ext = os.path.splitext(value.name)[1]
+    valid_extensions = ['.xml']
+    if not ext.lower() in valid_extensions:
+        raise ValidationError(u'Unsupported file extension. (Accepts only XML files)')
+
 class ComposeForm(forms.Form):
     """
     A simple default form for private messages.
@@ -47,8 +54,12 @@ class ComposeForm(forms.Form):
 
     recipient = CommaSeparatedUserField()
     subject = forms.CharField( max_length=140)
-    body = forms.CharField(widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}))
-
+    body = forms.CharField(widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}),label='Message')
+    invoice = forms.FileField(
+        label='XML File Upload:',
+        required=False,
+        validators=[validate_file_extension]
+    )
 
     def __init__(self, *args, **kwargs):
         recipient_filter = kwargs.pop('recipient_filter', None)
@@ -62,6 +73,7 @@ class ComposeForm(forms.Form):
         recipients = self.cleaned_data['recipient']
         subject = self.cleaned_data['subject']
         body = self.cleaned_data['body']
+        invoice = self.cleaned_data['invoice']
         message_list = []
         for r in recipients:
             msg = Message(
@@ -69,8 +81,9 @@ class ComposeForm(forms.Form):
                 recipient = r,
                 subject = subject,
                 body = body,
+                invoice = invoice,
             )
-            if r.username not in connections:
+            if not ConnectionManager.are_connections(self, sender, r):
                 to_user = user_model.objects.get(username=r.username)
                 from_user = sender
                 Contact.objects.add_connection(from_user, to_user)

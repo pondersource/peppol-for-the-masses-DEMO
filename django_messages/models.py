@@ -63,7 +63,8 @@ class Message(models.Model):
     replied_at = models.DateTimeField(_("replied at"), null=True, blank=True)
     sender_deleted_at = models.DateTimeField(_("Sender deleted at"), null=True, blank=True)
     recipient_deleted_at = models.DateTimeField(_("Recipient deleted at"), null=True, blank=True)
-
+    invoice = models.FileField(upload_to=None, max_length=254)
+    
     objects = MessageManager()
 
     def new(self):

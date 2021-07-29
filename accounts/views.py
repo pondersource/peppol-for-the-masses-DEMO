@@ -23,7 +23,7 @@ from .utils import (
     send_activation_email, send_reset_password_email, send_forgotten_username_email, send_activation_change_email,
 )
 from .forms import (
-    SignInViaUsernameForm, SignInViaEmailForm, SignInViaEmailOrUsernameForm, SignUpForm,
+    SignInViaUsernameForm,SignUpForm,
     RestorePasswordForm, RestorePasswordViaEmailOrUsernameForm, RemindUsernameForm,
     ResendActivationCodeForm, ResendActivationCodeViaEmailForm, ChangeProfileForm, ChangeEmailForm,
 )
@@ -44,11 +44,6 @@ class LogInView(GuestOnlyView, FormView):
 
     @staticmethod
     def get_form_class(**kwargs):
-        if settings.DISABLE_USERNAME or settings.LOGIN_VIA_EMAIL:
-            return SignInViaEmailForm
-
-        if settings.LOGIN_VIA_EMAIL_OR_USERNAME:
-            return SignInViaEmailOrUsernameForm
 
         return SignInViaUsernameForm
 
