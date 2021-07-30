@@ -4,6 +4,8 @@ import django_heroku
 from django.utils.translation import gettext_lazy as _
 from os.path import dirname
 
+import logging
+import logging.config
 
 # Start Quickbooks
 CLIENT_ID = os.getenv('QBO_CLIENT_ID')
@@ -133,9 +135,9 @@ USE_REMEMBER_ME = True
 RESTORE_PASSWORD_VIA_EMAIL_OR_USERNAME = False
 ENABLE_ACTIVATION_AFTER_EMAIL_CHANGE = True
 
-SIGN_UP_FIELDS = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+SIGN_UP_FIELDS = ['username','domain_name', 'email', 'password1', 'password2' ]
 if DISABLE_USERNAME:
-    SIGN_UP_FIELDS = ['first_name', 'last_name', 'email', 'password1', 'password2']
+    SIGN_UP_FIELDS = ['first_name', 'last_name', 'domain_name','email', 'password1', 'password2']
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
@@ -165,19 +167,32 @@ LOCALE_PATHS = [
     os.path.join(CONTENT_DIR, 'locale')
 ]
 
-LOGGING = {
+# To see the SOAP XML messages which are sent to the remote server and the response received,
+# you can set the Python logger level to DEBUG for the zeep.transports module
+
+logging.config.dictConfig({
     'version': 1,
-    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(name)s: %(message)s'
+        }
+    },
     'handlers': {
         'console': {
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
-    },
-}
+    'loggers': {
+        'zeep.transports': {
+            'level': 'DEBUG',
+            'propagate': True,
+            'handlers': ['console'],
+        },
+    }
+})
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SIMPLE_AUTOCOMPLETE = {'auth.user': {'search_field': 'username'}}

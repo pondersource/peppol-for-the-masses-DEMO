@@ -66,7 +66,8 @@ class SignUpForm(UserCreationForm):
         fields = settings.SIGN_UP_FIELDS
 
     email = forms.EmailField(label=_('Email'), help_text=_('Required. Enter an existing email address.'))
-
+    domain_name = forms.URLField(label=_('Domain name'), help_text=_('Required. Enter an existing Domain name.'))
+    
     def clean_email(self):
         email = self.cleaned_data['email']
 
