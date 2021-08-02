@@ -135,7 +135,7 @@ ACCOUNT_USERNAME_REQUIRED=False
 RESTORE_PASSWORD_VIA_EMAIL_OR_USERNAME = False
 ENABLE_ACTIVATION_AFTER_EMAIL_CHANGE = True
 ACCOUNT_UNIQUE_USERNAME = False
-
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 SIGN_UP_FIELDS = ['domain_name', 'email', 'password1', 'password2']
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
@@ -164,7 +164,6 @@ STATICFILES_DIRS = [
 
 LOCALE_PATHS = [
     os.path.join(CONTENT_DIR, 'locale')
-]
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
