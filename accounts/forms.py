@@ -36,6 +36,7 @@ class SignIn(UserCacheMixin, forms.Form):
 
 
 class SignInViaUsernameForm(SignIn):
+    
     domain_name = forms.CharField(label=_('Domain name'))
 
     @property
@@ -67,7 +68,7 @@ class SignUpForm(UserCreationForm):
 
     email = forms.EmailField(label=_('Email'), help_text=_('Required. Enter an existing email address.'), required=True)
     domain_name = forms.URLField(label='Your website', required=True)
-    
+
     def clean_email(self):
         email = self.cleaned_data['email']
 

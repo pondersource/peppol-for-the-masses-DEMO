@@ -165,7 +165,7 @@ STATICFILES_DIRS = [
 LOCALE_PATHS = [
     os.path.join(CONTENT_DIR, 'locale')
 
-
+]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SIMPLE_AUTOCOMPLETE = {'auth.user': {'search_field': 'domain_name'}}
 
