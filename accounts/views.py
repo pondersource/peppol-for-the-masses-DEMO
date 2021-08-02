@@ -91,14 +91,14 @@ class SignUpView(GuestOnlyView, FormView):
         user.domain_name = form.cleaned_data['domain_name']
 
         if settings.ENABLE_USER_ACTIVATION:
-            user.is_active = True
+            user.is_active = False
 
         # Create a user record
         user.save()
 
         # Change the username to the "user_ID" form
         if settings.DISABLE_USERNAME:
-            user.username = f'user_{user.id}'
+            #user.username = f'user_{user.id}'
             user.save()
 
         if settings.ENABLE_USER_ACTIVATION:
@@ -116,7 +116,7 @@ class SignUpView(GuestOnlyView, FormView):
         else:
             raw_password = form.cleaned_data['password1']
 
-            user = authenticate(username=user.username, password=raw_password)
+            user = authenticate(domain_name=user.domain_name, password=raw_password)
             login(request, user)
 
             messages.success(request, _('You are successfully signed up!'))
@@ -280,7 +280,7 @@ class RemindUsernameView(GuestOnlyView, FormView):
 
     def form_valid(self, form):
         user = form.user_cache
-        send_forgotten_username_email(user.email, user.username)
+        #send_forgotten_username_email(user.email, user.username)
 
         messages.success(self.request, _('Your username has been successfully sent to your email.'))
 
