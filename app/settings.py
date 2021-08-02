@@ -148,6 +148,10 @@ LANGUAGES = [
     ('en', _('English')),
     ('ru', _('Russian')),
     ('zh-Hans', _('Simplified Chinese')),
+    # ('it', _('Italian')),
+    # ('de', _('German')),
+    # ('nl', _('Dutch')),
+    # ('el', _('Greek')),
 ]
 
 TIME_ZONE = 'UTC'
@@ -170,28 +174,28 @@ LOCALE_PATHS = [
 # To see the SOAP XML messages which are sent to the remote server and the response received,
 # you can set the Python logger level to DEBUG for the zeep.transports module
 
-logging.config.dictConfig({
-    'version': 1,
-    'formatters': {
-        'verbose': {
-            'format': '%(name)s: %(message)s'
-        }
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'zeep.transports': {
-            'level': 'DEBUG',
-            'propagate': True,
-            'handlers': ['console'],
-        },
-    }
-})
+# logging.config.dictConfig({
+#     'version': 1,
+#     'formatters': {
+#         'verbose': {
+#             'format': '%(name)s: %(message)s'
+#         }
+#     },
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'verbose',
+#         },
+#     },
+#     'loggers': {
+#         'zeep.transports': {
+#             'level': 'DEBUG',
+#             'propagate': True,
+#             'handlers': ['console'],
+#         },
+#     }
+# })
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

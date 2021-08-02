@@ -210,6 +210,12 @@ msgstr "简体中文"
 msgid "Home"
 msgstr "首页"
 
+msgid "About me"
+msgstr "关于我"
+
+msgid "Network"
+msgstr "网络"
+
 msgid "Log out"
 msgstr "登出"
 

@@ -21,6 +21,8 @@ urlpatterns = [
     path('django_messages/', include('django_messages.urls'), name="django_messages"),
     path('connection/', include('connection.urls') , name="connection"),
     path('quickbooks/', include('quickbooks.urls', namespace="quickbooks")),
+    #path('SOAP_client/', include('SOAP_client.urls', namespace="SOAP_client")),
+
 
 ]
 

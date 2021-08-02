@@ -224,6 +224,12 @@ msgstr "Китайский (упрощённый)"
 msgid "Home"
 msgstr "Главная"
 
+msgid "About me"
+msgstr "Oбо мне"
+
+msgid "Network"
+msgstr "Cеть"
+
 msgid "Log out"
 msgstr "Выйти"
 
