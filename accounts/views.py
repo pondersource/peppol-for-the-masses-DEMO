@@ -88,14 +88,10 @@ class SignUpView(GuestOnlyView, FormView):
         request = self.request
         user = form.save(commit=False)
 
-        if settings.DISABLE_USERNAME:
-            # Set a temporary username
-            user.username = get_random_string()
-        else:
-            user.username = form.cleaned_data['username']
+        user.domain_name = form.cleaned_data['domain_name']
 
         if settings.ENABLE_USER_ACTIVATION:
-            user.is_active = False
+            user.is_active = True
 
         # Create a user record
         user.save()
