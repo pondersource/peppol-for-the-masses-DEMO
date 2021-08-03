@@ -6,13 +6,12 @@ from django.conf.urls.static import static
 # from iommi import Form
 from django.contrib.auth.models import User
 
-from main.views import IndexPageView, ChangeLanguageView , MessagesView , ProfileView , ConnectionsView
+from main.views import IndexPageView, ChangeLanguageView , MessagesView , ConnectionsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', IndexPageView.as_view(), name='index'),
-    path('profile/', ProfileView.as_view(), name='profile'),
 
     path('i18n/', include('django.conf.urls.i18n')),
     path('language/', ChangeLanguageView.as_view(), name='change_language'),

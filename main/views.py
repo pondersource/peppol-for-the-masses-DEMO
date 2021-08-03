@@ -7,9 +7,6 @@ class IndexPageView(TemplateView):
 class ChangeLanguageView(TemplateView):
     template_name = 'main/change_language.html'
 
-class ProfileView(TemplateView):
-    template_name = 'main/profile.html'
-
 class MessagesView(TemplateView):
     template_name = 'main/messages.html'
 

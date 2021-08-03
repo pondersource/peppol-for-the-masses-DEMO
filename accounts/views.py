@@ -6,7 +6,7 @@ from django.contrib.auth.views import (
     LogoutView as BaseLogoutView, PasswordChangeView as BasePasswordChangeView,
     PasswordResetDoneView as BasePasswordResetDoneView, PasswordResetConfirmView as BasePasswordResetConfirmView,
 )
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect ,render
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -19,6 +19,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View, FormView
 from django.conf import settings
 
+
 from .utils import (
     send_activation_email, send_reset_password_email, send_forgotten_username_email, send_activation_change_email,
 )
@@ -29,6 +30,14 @@ from .forms import (
 )
 from .models import Activation
 
+
+user_model = Activation.objects.all()
+
+
+def getProfile(request,id,template_name="accounts/profile.html"):
+    user = get_object_or_404(user_model, id=id)
+
+    return  render(request,template_name, {"user": user})
 
 class GuestOnlyView(View):
     def dispatch(self, request, *args, **kwargs):
