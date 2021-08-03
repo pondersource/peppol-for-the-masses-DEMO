@@ -23,7 +23,7 @@ from .utils import (
     send_activation_email, send_reset_password_email, send_forgotten_username_email, send_activation_change_email,
 )
 from .forms import (
-    SignInViaUsernameForm,SignUpForm,
+    SignInViaDomainNameForm,SignUpForm,
     RestorePasswordForm, RestorePasswordViaEmailOrUsernameForm, RemindUsernameForm,
     ResendActivationCodeForm, ResendActivationCodeViaEmailForm, ChangeProfileForm, ChangeEmailForm,
 )
@@ -45,7 +45,7 @@ class LogInView(GuestOnlyView, FormView):
     @staticmethod
     def get_form_class(**kwargs):
 
-        return SignInViaUsernameForm
+        return SignInViaDomainNameForm
 
     @method_decorator(sensitive_post_parameters('password'))
     @method_decorator(csrf_protect)
@@ -111,7 +111,7 @@ class SignUpView(GuestOnlyView, FormView):
         else:
             raw_password = form.cleaned_data['password1']
 
-            user = authenticate(domain_name=user.domain_name, password=raw_password)
+        #    user = authenticate(domain_name=user.domain_name, password=raw_password)
             login(request, user)
 
             messages.success(request, _('You are successfully signed up!'))

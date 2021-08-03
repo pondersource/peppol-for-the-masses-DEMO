@@ -35,7 +35,7 @@ class SignIn(UserCacheMixin, forms.Form):
         return password
 
 
-class SignInViaUsernameForm(SignIn):
+class SignInViaDomainNameForm(SignIn):
     domain_name = forms.CharField(label=_('Domain name'))
 
     @property
