@@ -28,10 +28,19 @@ from .forms import (
     RestorePasswordForm, RestorePasswordViaEmailOrUsernameForm, RemindUsernameForm,
     ResendActivationCodeForm, ResendActivationCodeViaEmailForm, ChangeProfileForm, ChangeEmailForm,
 )
-from .models import Activation
+# from .models import Activation
+#
+#
+# user_model = Activation.objects.all()
 
+try:
+    from django.contrib.auth import get_user_model
 
-user_model = Activation.objects.all()
+    user_model = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+
+    user_model = User
 
 
 def getProfile(request,id,template_name="accounts/profile.html"):
