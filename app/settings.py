@@ -107,7 +107,6 @@ DATABASES = {
     }
 }
 
-AUTHENTICATION_BACKENDS = ('accounts.backends.AuthBackend',)
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -140,7 +139,7 @@ ACCOUNT_USERNAME_REQUIRED=False
 RESTORE_PASSWORD_VIA_EMAIL_OR_USERNAME = False
 ENABLE_ACTIVATION_AFTER_EMAIL_CHANGE = True
 
-SIGN_UP_FIELDS = ['domain_name', 'email', 'password1', 'password2']
+SIGN_UP_FIELDS = ['username','domain_name', 'email', 'password1', 'password2']
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 

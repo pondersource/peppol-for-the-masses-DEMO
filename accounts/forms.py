@@ -35,19 +35,19 @@ class SignIn(UserCacheMixin, forms.Form):
         return password
 
 
-class SignInViaDomainNameForm(SignIn):
-    domain_name = forms.CharField(label=_('Domain name'))
+class SignInViaUsernameForm(SignIn):
+    username = forms.CharField(label=_('Usename'))
 
     @property
     def field_order(self):
         if settings.USE_REMEMBER_ME:
-            return ['domain_name', 'password', 'remember_me']
-        return ['domain_name', 'password']
+            return ['username', 'password', 'remember_me']
+        return ['username', 'password']
 
     def clean_username(self):
-        domain_name = self.cleaned_data['domain_name']
+        username = self.cleaned_data['username']
 
-        user = User.objects.filter(domain_name=domain_name).first()
+        user = User.objects.filter(username=username).first()
         if not user:
             raise ValidationError(_('You entered an invalid domain name.'))
 
@@ -72,8 +72,8 @@ class SignUpForm(UserCreationForm):
         email = self.cleaned_data['email']
 
         user = User.objects.filter(email__iexact=email).exists()
-        if user:
-            raise ValidationError(_('You can not use this email address.'))
+        # if user:
+        #     raise ValidationError(_('You can not use this email address.'))
 
         return email
 
