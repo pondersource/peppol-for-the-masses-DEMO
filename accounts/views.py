@@ -69,7 +69,11 @@ class LogInView(GuestOnlyView, FormView):
             if not form.cleaned_data['remember_me']:
                 request.session.set_expiry(0)
 
-        login(request, form.user_cache)
+        domain_name = form.cleaned_data["domain_name"]
+        password = form.cleaned_data["password"]
+        user = authenticate(request, domain_name = domain_name, password = password)
+
+        login(request, user)
 
         redirect_to = request.POST.get(REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME))
         url_is_safe = url_has_allowed_host_and_scheme(redirect_to, allowed_hosts=request.get_host(), require_https=request.is_secure())
@@ -111,7 +115,7 @@ class SignUpView(GuestOnlyView, FormView):
         else:
             raw_password = form.cleaned_data['password1']
 
-        #    user = authenticate(domain_name=user.domain_name, password=raw_password)
+            user = authenticate(domain_name=user.domain_name, password=raw_password)
             login(request, user)
 
             messages.success(request, _('You are successfully signed up!'))
