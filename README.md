@@ -30,7 +30,7 @@ $ python manage.py runserver
 | `quickbooks` | Quickbooks connection |
 | `SOAP_client` | The SOAP client through which the messages/invoices will be sent|
 
-* ## contacts
+* ## Contacts
 
 ### What a contact is?
 
