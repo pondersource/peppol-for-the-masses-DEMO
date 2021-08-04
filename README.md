@@ -1,26 +1,81 @@
-# peppol-python-demo
 
-A Django-based demo server that shows how to use the peppol-python library
+## :bulb: The idea
 
-# Command line (recommended: use a virtual environment)
+## In this project we will represent the usage of the [open source  python implementation](https://github.com/pondersource/peppol-python) of [Peppol](https://peppol.eu/) and also we will extend the functionility with sending an invoice straight to its recipient, identified by a WebID URL.
 
-**git clone https://github.com/pondersource/peppol-python-demo**
+# Peppol-python-Demo
 
-**cd peppol-python-demo**
+A Django-based Website that you can see imidiately how it is working on our [Pondersource Demo](https://demo-pondersource-net.herokuapp.com) or you can download the code and run it on your local machine like this:
 
-**pip install -r requirements.txt**
+# Open terminal (recommended: use a virtual environment)
 
-export DATABASE_URL=postgres://...
+```console
+$ git clone https://github.com/pondersource/peppol-python-demo
+$ cd peppol-python-demo
+$ pip install -r requirements.txt
+$ python manage.py makemigrations
+$ python manage.py migrate
+$ python manage.py runserver
+```
 
-**python manage.py makemigrations** 
+## :wrench: How the [Pondersource Demo](https://demo-pondersource-net.herokuapp.com) works
 
-**python manage.py migrate**
+| Apps | Functionallity |
+| --- | --- | 
+| `accounts` | Handle the users who sign up |
+| `app/main` | Main set up of the Django project |
+| `contacts` | User's Contacts (collection of trusted WebIDs )|
+| `content` | Most of the interface | 
+| `messages` | How the messages ( XML files because we use a SOAP server) are sent |
+| `quickbooks` | Quickbooks connection |
+| `SOAP_client` | The SOAP client through which the messages/invoices will be sent|
 
-**python manage.py runserver**
+* ## contacts
 
-# Superuser 
+### What a contact is?
 
-To create a superuser first run:
+Each Contact represents a trusted company or person, with whom you can exchange messages.
 
-**python3 manage.py createsuperuser**
+- [ ] See your contacts 
+- [ ] Send contact requests
+- [ ] See the requests you have sent
+- [ ] Receive contact requests ( Accept/Decline ) 
+- [ ] Block a WebID from sending you messages
+- [ ] Unblock a WebID 
+- [ ] Display notifications when you have a new message/contact request
+
+* ## Accounts
+
+### What an Account is?
+
+Each account is a user who signed up at [pondersource Demo](https://demo-pondersource-net.herokuapp.com), and exists on our database.
+
+- [x] Sign up ( WebID , username , email , password )
+- [x] Log in/ Log out
+- [x] Remind username
+- [x] Resend activication code
+- [x] Change password
+- [x] Change username
+- [x] Change email
+
+* ## Messages
+
+### What a Message is?
+
+Each Message is a [XML](https://www.w3schools.com/xml/xml_whatis.asp) file.
+
+- [ ] Inbox
+- [ ] Outbox
+- [ ] Compose a new message
+- [ ] Trash
+
+* ## SOAP_client 
+
+For the SOAP client we will use the [Zeep](https://docs.python-zeep.org/en/master) library.
+
+* ## Quickbooks
+
+## :question: Open questions
+
+
 
