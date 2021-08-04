@@ -139,7 +139,7 @@ ACCOUNT_USERNAME_REQUIRED=False
 RESTORE_PASSWORD_VIA_EMAIL_OR_USERNAME = False
 ENABLE_ACTIVATION_AFTER_EMAIL_CHANGE = True
 
-SIGN_UP_FIELDS = ['username','domain_name', 'email', 'password1', 'password2']
+SIGN_UP_FIELDS = ['username', 'email', 'password1', 'password2']
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
@@ -170,7 +170,7 @@ LOCALE_PATHS = [
 
 ]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SIMPLE_AUTOCOMPLETE = {'auth.user': {'search_field': 'domain_name'}}
+SIMPLE_AUTOCOMPLETE = {'auth.user': {'search_field': 'username'}}
 
 #Activate Django-Heroku.
 django_heroku.settings(locals())

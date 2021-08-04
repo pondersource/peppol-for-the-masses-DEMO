@@ -49,7 +49,7 @@ class SignInViaUsernameForm(SignIn):
 
         user = User.objects.filter(username=username).first()
         if not user:
-            raise ValidationError(_('You entered an invalid domain name.'))
+            raise ValidationError(_('You entered an invalid username.'))
 
         if not user.is_active:
             raise ValidationError(_('This account is not active.'))
@@ -66,7 +66,6 @@ class SignUpForm(UserCreationForm):
         fields = settings.SIGN_UP_FIELDS
 
     email = forms.EmailField(label=_('Email'), help_text=_('Required. Enter an existing email address.'), required=True)
-    domain_name = forms.URLField(label='Your website', required=True)
 
     def clean_email(self):
         email = self.cleaned_data['email']

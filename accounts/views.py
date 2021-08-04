@@ -28,20 +28,9 @@ from .forms import (
     RestorePasswordForm, RestorePasswordViaEmailOrUsernameForm, RemindUsernameForm,
     ResendActivationCodeForm, ResendActivationCodeViaEmailForm, ChangeProfileForm, ChangeEmailForm,
 )
-# from .models import Activation
-#
-#
-# user_model = Activation.objects.all()
+from .models import Activation
 
-try:
-    from django.contrib.auth import get_user_model
-
-    user_model = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
-
-    user_model = User
-
+user_model = Activation.objects.all()
 
 def getProfile(request,id,template_name="accounts/profile.html"):
     user = get_object_or_404(user_model, id=id)
@@ -107,7 +96,7 @@ class SignUpView(GuestOnlyView, FormView):
         request = self.request
         user = form.save(commit=False)
 
-        user.domain_name = form.cleaned_data['domain_name']
+        user.username = form.cleaned_data['username']
 
         if settings.ENABLE_USER_ACTIVATION:
             user.is_active = False

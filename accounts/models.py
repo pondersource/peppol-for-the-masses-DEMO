@@ -7,4 +7,3 @@ class Activation(models.Model):
     created_at  = models.DateTimeField(auto_now_add=True)
     code        = models.CharField(max_length=20, unique=True)
     email       = models.EmailField(blank=True)
-    domain_name = models.URLField(max_length=200,  unique=True)
