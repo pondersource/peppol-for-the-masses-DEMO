@@ -50,7 +50,7 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <div class="sidenav">
-            <a class="navbar-brand" href="/">{% trans 'Home' %}</a>
+            <a class="navbar-brand" href="/">{% trans 'About us' %}</a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault">
                 <span class="navbar-toggler-icon"></span>
@@ -61,6 +61,7 @@
                 <a class="navbar-brand" href="/django_messages">{% trans 'Messages' %}</a>
                 <a class="navbar-brand" href="{% url 'connection:contacts' %}">{% trans 'Network' %}</a>
                 <!-- <a class="navbar-brand" href="/quickbooks">{% trans 'Quickbooks' %}</a> -->
+                <a class="navbar-brand" href="/account">{% trans 'Account' %}</a>
                 <a class="navbar-brand" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
             {% else %}
                 <a class="navbar-brand" href="{% url 'accounts:log_in' %}">{% trans 'Log in' %}</a>

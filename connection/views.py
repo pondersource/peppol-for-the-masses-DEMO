@@ -29,14 +29,8 @@ def view_connections(request, username, template_name="connection/connection/use
     """ View the connections of a user """
     user = get_object_or_404(user_model, username=username)
     connections = Contact.objects.connections(user)
-    return render(
-        request,
-        template_name,
-        {
-            get_connection_context_object_name(): user,
-            "connection_context_object_name": get_connection_context_object_name(),
-            "connections": connections,
-        },
+
+    return render(request,template_name,{"connections": connections,},
     )
 
 
@@ -137,13 +131,26 @@ def connection_requests_detail(
     return render(request, template_name, {"connection_request": f_request})
 
 
-def all_users(request, template_name="connection/user_actions.html"):
+@login_required
+def connection_requests_sent(
+    request, template_name="connection/connection/sent_requests.html"
+):
+    """ View all the sent connection requests from a user"""
+    sent_requests= Contact.objects.sent_requests(request.user)
+
+    return render(request, template_name, {"sent_requests": sent_requests})
+
+
+def connection_request_send(request, template_name="connection/connection/send_request.html"):
     users = user_model.objects.all()
-
+    user = get_object_or_404(user_model, username=request.user.username)
+    connections = Contact.objects.connections(user)
     return render(
-        request, template_name, {get_connection_context_object_list_name(): users}
+        request, template_name,
+        {
+            get_connection_context_object_list_name(): users,
+            "connections": connections }
     )
-
 
 def blocking(request, username, template_name="connection/block/blockers_list.html"):
     """ List this user's followers """

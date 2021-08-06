@@ -5,11 +5,12 @@
 </style>
 <ul class="subnavilist">
 
-  <li><a class="navbar-brand" href="{% url 'connection:connection_request_list' %}">&raquo;&nbsp;{% trans 'Connection Requests ' %}</a></li>
-  <li><a class="navbar-brand" href="{% url 'connection:connection_requests_rejected' %}">&raquo;&nbsp;{% trans 'Rejected Requests' %}</a></li>
-  <li><a class="navbar-brand" href="{% url 'connection:connection_view_users' %}">&raquo;&nbsp;{% trans 'Make a new Request' %}</a></li>
-  <li><a class="navbar-brand" href="{% url 'connection:connection_view_connections' user.username %}">&raquo;&nbsp;{% trans 'My Contacts' %}</a></li>
-  <li><a class="navbar-brand" href="{% url 'connection:connection_blockers' user.username %}">&raquo;&nbsp;{% trans 'My Blockers' %}</a></li>
-  <li><a class="navbar-brand" href="{% url 'connection:connection_blocking' user.username %}">&raquo;&nbsp;{% trans 'My Blockings' %}</a></li>
+  <a class="navbar-brand" href="{% url 'connection:connection_request_list' %}">&raquo;&nbsp;{% trans 'Connection Requests ' %}</a>
+  <a class="navbar-brand" href="{% url 'connection:connection_requests_sent' %}">&raquo;&nbsp;{% trans 'Sent Connection Requests ' %}</a>
+  <a class="navbar-brand" href="{% url 'connection:connection_requests_rejected' %}">&raquo;&nbsp;{% trans 'Rejected Requests' %}</a>
+  <a class="navbar-brand" href="{% url 'connection:connection_request_send' %}">&raquo;&nbsp;{% trans 'Make a new Request' %}</a>
+  <a class="navbar-brand" href="{% url 'connection:connection_view_connections' user.username %}">&raquo;&nbsp;{% trans 'My Contacts' %}</a>
+  <a class="navbar-brand" href="{% url 'connection:connection_blockers' user.username %}">&raquo;&nbsp;{% trans 'My Blockers' %}</a>
+  <a class="navbar-brand" href="{% url 'connection:connection_blocking' user.username %}">&raquo;&nbsp;{% trans 'My Blockings' %}</a>
 
 </ul>

@@ -1,6 +1,5 @@
 from django.conf.urls import re_path
 from connection.views import (
-    all_users,
     block_add,
     block_remove,
     blockers,
@@ -13,6 +12,8 @@ from connection.views import (
     connection_request_list,
     connection_request_list_rejected,
     connection_requests_detail,
+    connection_requests_sent,
+    connection_request_send,
     view_connections,
     contacts
 )
@@ -20,7 +21,6 @@ from connection.views import (
 app_name = 'connection'
 
 urlpatterns = [
-    re_path(r"^users/$", view=all_users, name="connection_view_users"),
     re_path(
         r"^connections/(?P<username>[\w-]+)/$",
         view=view_connections,
@@ -89,5 +89,13 @@ urlpatterns = [
 
     re_path(r"^contacts/$",
     view=contacts,
-    name="contacts")
+    name="contacts"),
+
+    re_path(r"^sent_requests/$",
+    view=connection_requests_sent,
+    name="connection_requests_sent"),
+
+    re_path(r"^send_request/$",
+    view=connection_request_send,
+    name="connection_request_send"),
 ]

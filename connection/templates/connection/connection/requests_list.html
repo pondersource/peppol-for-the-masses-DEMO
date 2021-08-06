@@ -5,7 +5,7 @@
 
 <ul>
 {% for connection_request in requests %}
-    <li>{{ connection_request.from_user }} to {{ connection_request.to_user }} <a href="{% url 'connection:connection_requests_detail' connection_request.id %}">view</a></li>
+    <li>{{ connection_request.from_user }} wants you to be contacts!<a href="{% url 'connection:connection_requests_detail' connection_request.id %}"> Respond</a></li>
 {% empty %}
 </ul>
 <div>no contacts:(</div>

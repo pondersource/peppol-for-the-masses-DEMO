@@ -3,8 +3,18 @@
 {% block content %}
 {% include "connection/options.html" %}
 
-{% load connectiontags %}
-<h1>Your Contacts With Trust</h1>
-{% get_by_name connection_context_object_name as var %}
-{% connections var %}
+<ul>
+{% for f in connections %}
+   {% if f.first_name or f.last_name %}
+   <li>{{ f.username }} ({{ f.first_name }} {{ f.last_name }})</li>
+   {% else %}
+   <li>{{ f.username }}
+     <a class="navbar-brand" href="{% url 'connection:connection_remove' f.username %}">Remove </a>
+   </li>
+   {% endif %}
+{% empty %}
+</ul>
+<div>no contacts:(</div>
+{% endfor %}
+
 {% endblock %}

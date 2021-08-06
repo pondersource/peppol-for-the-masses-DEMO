@@ -3,15 +3,21 @@
 {% block content %}
 {% include "connection/options.html" %}
 
-<div>{{ connection_request.from_user }} wants to be connections with you {{ user.username }}</div>
-<form method="post" action="{% url 'connection:connection_accept' connection_request.pk %}">
-{% csrf_token %}
-<input type="submit" value="accept" />
-</form>
+<div>Welcome {{ connection_request.from_user }} in your Newtwork with trust.</div>
 
-<form method="post" action="{% url 'connection:connection_reject' connection_request.pk %}">
-{% csrf_token %}
-<input type="submit" value="reject" />
-</form>
+<div style="width:400px;">
+    <div style="float: left; width: 80px">
 
+      <form method="post" action="{% url 'connection:connection_accept' connection_request.pk %}">
+      {% csrf_token %}
+      <input type="submit" value="accept" style="color:white;background-color:green;" />
+      </form>
+    </div>
+
+      <form method="post" action="{% url 'connection:connection_reject' connection_request.pk %}">
+      {% csrf_token %}
+      <input type="submit" value="reject" style="color:white;background-color:green;" />
+      </form>
+
+</div>
 {% endblock content %}

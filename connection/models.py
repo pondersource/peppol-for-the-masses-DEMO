@@ -340,6 +340,7 @@ class ConnectionManager(models.Manager):
 
         return request
 
+
     def remove_connection(self, from_user, to_user):
         """ Destroy a connection relationship """
         try:
@@ -353,6 +354,8 @@ class ConnectionManager(models.Manager):
                 qs.delete()
                 bust_cache("connections", to_user.pk)
                 bust_cache("connections", from_user.pk)
+                bust_cache("sent_requests", to_user.pk)
+                bust_cache("sent_requests", from_user.pk)
                 return True
             else:
                 return False

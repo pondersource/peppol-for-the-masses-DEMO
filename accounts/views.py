@@ -6,7 +6,7 @@ from django.contrib.auth.views import (
     LogoutView as BaseLogoutView, PasswordChangeView as BasePasswordChangeView,
     PasswordResetDoneView as BasePasswordResetDoneView, PasswordResetConfirmView as BasePasswordResetConfirmView,
 )
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect , render
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -18,6 +18,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View, FormView
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 from .utils import (
     send_activation_email, send_reset_password_email, send_forgotten_username_email, send_activation_change_email,
@@ -29,6 +31,21 @@ from .forms import (
 )
 from .models import Activation
 
+@login_required
+def delete(request, email ,template_name = "accounts/delete.html"):
+
+    if request.method == "POST":
+        try:
+            u = User.objects.get(email = email)
+            u.delete()
+            messages.success(request, "The user is deleted")
+            return redirect(settings.LOGIN_REDIRECT_URL)
+
+        except User.DoesNotExist:
+            messages.error(request, "User doesnot exist")
+            return redirect(settings.LOGIN_REDIRECT_URL)
+            
+    return render(request, template_name)
 
 class GuestOnlyView(View):
     def dispatch(self, request, *args, **kwargs):
@@ -100,7 +117,8 @@ class SignUpView(GuestOnlyView, FormView):
             user.username = form.cleaned_data['username']
 
         if settings.ENABLE_USER_ACTIVATION:
-            user.is_active = False
+            #user.is_active = False
+            user.is_active = True
 
         # Create a user record
         user.save()
