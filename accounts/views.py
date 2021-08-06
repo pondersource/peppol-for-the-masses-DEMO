@@ -44,7 +44,7 @@ def delete(request, email ,template_name = "accounts/delete.html"):
         except User.DoesNotExist:
             messages.error(request, "User doesnot exist")
             return redirect(settings.LOGIN_REDIRECT_URL)
-            
+
     return render(request, template_name)
 
 class GuestOnlyView(View):
@@ -117,8 +117,8 @@ class SignUpView(GuestOnlyView, FormView):
             user.username = form.cleaned_data['username']
 
         if settings.ENABLE_USER_ACTIVATION:
-            #user.is_active = False
-            user.is_active = True
+            user.is_active = False
+            #user.is_active = True
 
         # Create a user record
         user.save()
