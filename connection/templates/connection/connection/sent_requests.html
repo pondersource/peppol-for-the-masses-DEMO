@@ -1,0 +1,15 @@
+{% extends 'layouts/default/page.html' %}
+
+{% block content %}
+
+<h1>Sent Requests</h1>
+
+<ul>
+{% for request in sent_requests %}
+    <li>{{ request.to_user }} </li>
+{% empty %}
+</ul>
+<div>no requests yet:(</div>
+{% endfor %}
+
+{% endblock %}

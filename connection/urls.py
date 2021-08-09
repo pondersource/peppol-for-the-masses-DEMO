@@ -13,7 +13,6 @@ from connection.views import (
     connection_request_list_rejected,
     connection_requests_detail,
     connection_requests_sent,
-    connection_request_send,
     view_connections,
     contacts
 )
@@ -27,7 +26,7 @@ urlpatterns = [
         name="connection_view_connections",
     ),
     re_path(
-        r"^connection/add/(?P<to_username>[\w-]+)/$",
+        r"^connection/add/$",
         view=connection_add_connection,
         name="connection_add_connection",
     ),
@@ -94,8 +93,4 @@ urlpatterns = [
     re_path(r"^sent_requests/$",
     view=connection_requests_sent,
     name="connection_requests_sent"),
-
-    re_path(r"^send_request/$",
-    view=connection_request_send,
-    name="connection_request_send"),
 ]

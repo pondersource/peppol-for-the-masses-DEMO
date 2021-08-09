@@ -4,15 +4,12 @@
 {% block content %}
 
 {% load i18n %}
-{% include "connection/options.html" %}
 
-{% if not to_username == request.user.username %}
 {% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}
 <form method="post">
-{% csrf_token %}
-<input type="hidden" name="to_username" value="{{ to_username }}" />
-<input type="submit" value="Add connection"  style="color:white;background-color:green;" />
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit" class="save btn btn-default">Add connection</button>
 </form>
-{% endif %}
 
 {% endblock content %}

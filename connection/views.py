@@ -7,7 +7,7 @@ from connection.models import Block, Follow, Contact, ConnectionRequest
 from django.views.generic import TemplateView
 from django import forms
 from django.contrib.auth.models import User
-
+from .forms import  FindUserForm
 try:
     from django.contrib.auth import get_user_model
 
@@ -33,16 +33,17 @@ def view_connections(request, username, template_name="connection/connection/use
     return render(request,template_name,{"connections": connections,},
     )
 
-
 @login_required
 def connection_add_connection(
-    request, to_username,  template_name="connection/connection/add.html"
+    request, template_name="connection/connection/add.html"
 ):
     """ Create a ConnectionRequest """
 
-    ctx = dict()
+    ctx = {}
+    ctx['form'] = FindUserForm()
+    get_form = ctx['form']
     if request.method == "POST":
-        to_user = user_model.objects.get(username=to_username)
+        to_user = user_model.objects.get(username=get_form.user)
         from_user = request.user
         try:
             Contact.objects.add_connection(from_user, to_user)
@@ -50,8 +51,7 @@ def connection_add_connection(
             ctx["errors"] = ["%s" % e]
         else:
             return redirect("connection:connection_request_list")
-
-    return render(request, template_name, ctx)
+    return render(request, template_name,  ctx)
 
 @login_required
 def connection_accept(request, connection_request_id):
@@ -139,18 +139,6 @@ def connection_requests_sent(
     sent_requests= Contact.objects.sent_requests(request.user)
 
     return render(request, template_name, {"sent_requests": sent_requests})
-
-
-def connection_request_send(request, template_name="connection/connection/send_request.html"):
-    users = user_model.objects.all()
-    user = get_object_or_404(user_model, username=request.user.username)
-    connections = Contact.objects.connections(user)
-    return render(
-        request, template_name,
-        {
-            get_connection_context_object_list_name(): users,
-            "connections": connections }
-    )
 
 def blocking(request, username, template_name="connection/block/blockers_list.html"):
     """ List this user's followers """

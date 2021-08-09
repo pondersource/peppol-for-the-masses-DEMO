@@ -1,0 +1,14 @@
+
+{% extends 'layouts/default/page.html' %}
+
+{% block content %}
+
+{% load i18n %}
+
+{% if request.user.is_authenticated %}
+
+  {% include "accounts/profile/options.html" %}
+
+{% endif %}
+
+{% endblock %}

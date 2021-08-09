@@ -1,12 +1,11 @@
 {% extends 'layouts/default/page.html' %}
 
 {% block content %}
-{% include "connection/options.html" %}
 
 <form method="post">
 {% csrf_token %}
-<input type="hidden" name="connection_to_remove" value="{{ connection_to_remove }}" />
-<input type="submit" value="Remove connection " style="color:white;background-color:green;" />
+<input class="btn btn-success" type="hidden" name="connection_to_remove" value="{{ connection_to_remove }}" />
+<input class="btn btn-success" type="submit" value="Remove connection " style="color:white;background-color:green;" />
 </form>
 
 {% endblock %}

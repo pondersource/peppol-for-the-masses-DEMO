@@ -1,97 +1,273 @@
 {% load static %}
-{% load bootstrap4 %}
 {% load i18n %}
 
-{% get_current_language as language_code %}
-
 <!DOCTYPE html>
-<html lang="{{ language_code }}">
+<html lang="en">
 <head>
-  <style type="text/css">
-    .sidenav {
-      height: 100%; /* Full-height: remove this if you want "auto" height */
-      width: 215px; /* Set the width of the sidebar */
-      position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-      z-index: 1; /* Stay on top */
-      top: 0; /* Stay at the top */
-      left: 0;
-      background-color: #111; /* Black */
-      overflow-x: hidden; /* Disable horizontal scroll */
-      padding-top: 20px;
-    }
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Complete Website Layout</title>
+		<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+	<link href="style.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
 
-    /* The navigation menu links */
-    .sidenav a {
-      padding: 6px 8px 6px 16px;
-      text-decoration: none;
-      font-size: 25px;
-      color: #818181;
-      display: block;
-    }
+  <script>
+    $(document).ready(function () {
 
-    /* When you mouse over the navigation links, change their color */
-    .sidenav a:hover {
-      color: #f1f1f1;
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+
+    });
+  </script>
+  <style>
+    .wrapper {
+      display: flex;
+      align-items: stretch;
+  }
+
+  #sidebar {
+      min-width: 250px;
+      max-width: 250px;
+  }
+
+  #sidebar.active {
+      margin-left: -250px;
+  }
+  #sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 100vh;
+}
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
     }
-    .main{
-       margin-left: 160px;
-       padding: 0px 10px;
+    #sidebar.active {
+        margin-left: 0;
     }
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+}
+
+a, a:hover, a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+#sidebar {
+    /* don't forget to add all the previously mentioned styles here too */
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #6d7fcc;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
+}
+
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
+#sidebar ul li a:hover {
+    color: #7386D5;
+    background: #fff;
+}
+
+#sidebar ul li.active > a, a[aria-expanded="true"] {
+    color: #fff;
+    background: #6d7fcc;
+}
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #6d7fcc;
+}
   </style>
-
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <div class="sidenav">
-            <a class="navbar-brand" href="/">{% trans 'About us' %}</a>
+<!--- Two Column Section -->
+<div class="container-fluid padding" data-aos="fade-up"
+		data-aos-offset="200"
+		data-aos-delay="50"
+		data-aos-duration="1000">
+	<div class="row padding">
+    <div id="content" name="content" class="main">
+      <div class = "row justify-content-center">
+        <div class="wrapper">
+          <!-- Sidebar -->
+          <nav id="sidebar">
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+              <ul class="list-unstyled components">
+                      <li class="active">
+                      </li>
+                      <li>
+                          <a href="/">.   About us</a>
+                      </li>
+                      <li>
+                      <a href="#MessageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Messages</a>
+                      <ul class="collapse list-unstyled" id="MessageSubmenu">
+                          <li>
+                              <a href="{% url 'django_messages:messages_inbox' %} " >Inbox</a>
+                          </li>
+                          <li>
+                              <a href="{% url 'django_messages:messages_outbox' %} ">Outbox</a>
+                          </li>
+                          <li>
+                              <a href="{% url 'django_messages:messages_compose' %} ">Compose Message</a>
+                          </li>
+                          <li>
+                              <a href="{% url 'django_messages:messages_trash' %} " >Trash</a>
+                          </li>
+                      </ul>
 
-            {% if request.user.is_authenticated %}
+                      <a href="#NetworkSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Network</a>
+                      <ul class="collapse list-unstyled" id="NetworkSubmenu">
 
-                <a class="navbar-brand" href="/django_messages">{% trans 'Messages' %}</a>
-                <a class="navbar-brand" href="{% url 'connection:contacts' %}">{% trans 'Network' %}</a>
-                <!-- <a class="navbar-brand" href="/quickbooks">{% trans 'Quickbooks' %}</a> -->
-                <a class="navbar-brand" href="/account">{% trans 'Account' %}</a>
-                <a class="navbar-brand" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
-            {% else %}
-                <a class="navbar-brand" href="{% url 'accounts:log_in' %}">{% trans 'Log in' %}</a>
-                <a class="navbar-brand" href="{% url 'accounts:sign_up' %}">{% trans 'Sign up' %}</a>
-            {% endif %}
-        </ul>
+                        <a href="#RequestsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Requests</a>
+                        <ul class="collapse list-unstyled" id="RequestsSubmenu">
+                          <li>
+                              <a href="{% url 'connection:connection_request_list' %}"">Received Requests </a>
+                          </li>
+                          <li>
+                              <a href="{% url 'connection:connection_requests_sent' %}">Send Requests</a>
+                          </li>
+                          <li>
+                              <a href="{% url 'connection:connection_requests_rejected' %}">Rejected Requests</a>
+                          </li>
+                        </ul>
+
+                        <li>
+                            <a href="{% url 'connection:connection_view_connections' user.username %}">My Network</a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'connection:connection_add_connection' %}">Add Contact</a>
+                        </li>
+
+                      </ul>
+
+                  </li>
+                  <li>
+                      <a href="#">.   Portfolio</a>
+                  </li>
+                  <li >
+                      <a  href="{% url 'change_language' %}">.   Change language</a>
+                  </li>
+              </ul>
+          </nav>
+          <div id="content">
+              <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                  <div class="container-fluid">
+
+                      <button type="button" id="sidebarCollapse" class="btn btn-info">
+                          <i class="fas fa-align-left"></i>
+                          <span></span>
+                      </button>
+                  </div>
+              </nav>
           </div>
+          <div class="col-8">
+            {% block content%}
+            {% endblock %}
+          </div>
+      </div>
 
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'change_language' %}">{% trans 'Change language' %}</a>
-            </li>
-        </ul>
-
-
-</nav>
-
-<div id="content" name="content" class="main">
-  <div class = "row justify-content-center">
-    <div class="col-8">
-      {% block content%}
-      {% endblock %}
+      </div>
     </div>
-  </div>
+	</div>
+	<hr class="my-4">
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!--- Connect -->
+<div class="container-fluid padding">
+	<div class="row text-center padding">
+		<div class="col-12">
+			<h2>Connect</h2>
+		</div>
+		<div class="col-12 social padding">
+			<a href="https://www.linkedin.com/company/pondersource/"><i class="fab fa-linkedin"></i></a>
+		</div>
+	</div>
+</div>
 
+<!--- Footer -->
+<footer>
+	<div class="container-fluid padding" data-aos="fade-up"
+		data-aos-offset="200"
+		data-aos-delay="50"
+		data-aos-duration="1000">
+		<div class="row text-center">
+			<div class="col-md-4 pt-0">
+				<hr class="light">
+				<p>demo@pondersource.com</p>
+				<p>Jaarbeursplein 6</p>
+				<p>3521 AL Utrecht, The Netherlands</p>
+			</div>
+			<div class="col-md-4">
+				<hr class="light">
+				<h5>Our hours</h5>
+				<hr class="light">
+				<p>Monday: 9am - 5pm</p>
+			</div>
+			<div class="col-md-4">
+				<hr class="light">
+        <div class="footer-image">
+        <img src="{% static 'img/logo.png' %}"></div>
+			</div>
+
+		</div>
+	</div>
+</footer>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+AOS.init();
+</script>
 
 </body>
 </html>

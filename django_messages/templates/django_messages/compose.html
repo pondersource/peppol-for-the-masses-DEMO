@@ -2,7 +2,6 @@
 {% load i18n %}
 
 {% block content %}
-{% include "django_messages/options.html" %}
 
 
 <h1>{% trans "Compose Message"%}</h1>
@@ -12,7 +11,7 @@
 <table>
 {{ form.as_table }}
 </table>
-<input type="submit" value={% trans "Send" %} &raquo; style="color:white;background-color:green;"/>
+<input class="btn btn-success" type="submit" value={% trans "Send" %} &raquo; style="color:white;background-color:green;"/>
 
 </form>
 

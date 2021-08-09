@@ -1,0 +1,11 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+{% block content %}
+{% include "accounts/profile/options.html" %}
+<h4>Are you sure you want to delete this account?</h4>
+<form method="post">
+{% csrf_token %}
+<input class="btn btn-success" type="submit" value="Delete"  style="color:white;background-color:red;" />
+</form>
+{% endblock %}

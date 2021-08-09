@@ -1,14 +1,15 @@
 {% extends 'layouts/default/page.html' %}
 
 {% block content %}
-{% include "connection/options.html" %}
+
+<h1>Received Requests</h1>
 
 <ul>
 {% for connection_request in requests %}
     <li>{{ connection_request.from_user }} wants you to be contacts!<a href="{% url 'connection:connection_requests_detail' connection_request.id %}"> Respond</a></li>
 {% empty %}
 </ul>
-<div>no contacts:(</div>
+<div>no requests yet:(</div>
 {% endfor %}
 
 {% endblock %}
