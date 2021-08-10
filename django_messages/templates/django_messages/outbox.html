@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends 'main/messages.html' %}
 {% load i18n %}
-
+{% load connectiontags %}
 {% block content %}
 
-<h1>{% trans "Outbox" %}</h1>
+<h1>{% trans "Costumers" %}</h1>
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -12,20 +12,40 @@
 </ul>
 {% endif %}
 {% if message_list %}
+{% for message in message_list %}
+
 <table class="messages">
     <thead>
-        <tr><th>{% trans "Recipient" %}</th><th>{% trans "Subject" %}</th><th>{% trans "Sent" %}</th><th>{% trans "Action" %}</th></tr>
+        <tr><th>{% trans "Subject" %}</th><th>{% trans "Sent" %}</th><th>{% trans "Action" %}</th></tr>
     </thead>
     <tbody>
-{% for message in message_list %}
-    <tr>
-        <td>{{ message.recipient }}</td>
-        <td>
-        <a href="{{ message.get_absolute_url }}">{{ message.subject }}</a>
-        </td>
+
+  <tr>
+      {% if message.recipient in connections %}
+        <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }}</a>
+      {% else %}
+        <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.recipient }}</a>
+      <td>
+      <a style="color:purple;" href="{{ message.get_absolute_url }}">{{ message.subject }}</a>
+      </td>
         <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
         <td><a href="{% url 'django_messages:messages_delete' message.id %}?next={% url 'django_messages:messages_outbox' %}">{% trans "delete" %}</a></td>
     </tr>
+    {% endif %}
+    <td>
+        {% if message.new %}<strong>{% endif %}
+        {% if message.replied %}<em>{% endif %}
+        <a style="color:purple;" href="{% url 'django_messages:messages_detail' message.id %}">{{ message.subject }}</a>
+        {% if message.replied %}</em>{% endif %}
+        {% if message.new %}</strong>{% endif %}</td>
+
+    <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+    <td>
+        <form method="post"  action="{% url 'django_messages:messages_delete' message.id %}">
+           {% csrf_token %}
+           <input display: block; class="btn btn-success"  type="submit" value="Delete" style="color:white;background-color:red;" />
+        </form>
+
 {% endfor %}
     </tbody>
 </table>

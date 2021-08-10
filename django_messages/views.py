@@ -35,7 +35,8 @@ def inbox(request, template_name='django_messages/inbox.html'):
     connections = Contact.objects.connections(request.user)
 
     return render(request, template_name, {
-        'message_list': message_list, 'connections': connections,
+        'message_list': message_list,
+        'connections': connections,
     })
 
 @login_required
@@ -46,8 +47,11 @@ def outbox(request, template_name='django_messages/outbox.html'):
         ``template_name``: name of the template to use.
     """
     message_list = Message.objects.outbox_for(request.user)
+    connections = Contact.objects.connections(request.user)
+
     return render(request, template_name, {
         'message_list': message_list,
+        'connections': connections,
     })
 
 @login_required
@@ -214,6 +218,7 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
     """
     user = request.user
     now = timezone.now()
+    connections = Contact.objects.connections(request.user)
     message = get_object_or_404(Message, id=message_id)
     if (message.sender != user) and (message.recipient != user):
         raise Http404
@@ -221,7 +226,7 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
         message.read_at = now
         message.save()
 
-    context = {'message': message, 'reply_form': None}
+    context = {'message': message, 'reply_form': None , 'connections': connections,}
     if message.recipient == user:
         form = form_class(initial={
             'body': quote_helper(message.sender, message.body),

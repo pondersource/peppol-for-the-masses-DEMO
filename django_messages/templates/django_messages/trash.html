@@ -17,7 +17,11 @@
         {{ message.subject }}
         </td>
         <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
-        <td><a href="{% url 'django_messages:messages_undelete' message.id %}">{% trans "undelete" %}</a></td>
+        <td>
+          <form method="post"  action="{% url 'django_messages:messages_undelete' message.id %}">
+             {% csrf_token %}
+             <input display: block; class="btn btn-success"  type="submit" value="Undelete" style="color:white;background-color:blue;" />
+          </form>
     </tr>
 {% endfor %}
     </tbody>

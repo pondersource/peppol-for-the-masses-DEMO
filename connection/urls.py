@@ -11,10 +11,8 @@ from connection.views import (
     connection_remove,
     connection_request_list,
     connection_request_list_rejected,
-    connection_requests_detail,
     connection_requests_sent,
     view_connections,
-    contacts
 )
 
 app_name = 'connection'
@@ -56,11 +54,6 @@ urlpatterns = [
         name="connection_requests_rejected",
     ),
     re_path(
-        r"^connection/request/(?P<connection_request_id>\d+)/$",
-        view=connection_requests_detail,
-        name="connection_requests_detail",
-    ),
-    re_path(
         r"^connection/remove/(?P<connection_to_remove>[\w-]+)/$",
         view=connection_remove,
         name="connection_remove",
@@ -85,11 +78,6 @@ urlpatterns = [
         view=block_remove,
         name="block_remove",
     ),
-
-    re_path(r"^contacts/$",
-    view=contacts,
-    name="contacts"),
-
     re_path(r"^sent_requests/$",
     view=connection_requests_sent,
     name="connection_requests_sent"),

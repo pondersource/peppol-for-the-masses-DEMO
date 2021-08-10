@@ -6,7 +6,28 @@
 
 <ul>
 {% for connection_request in requests %}
-    <li>{{ connection_request.from_user }} wants you to be contacts!<a href="{% url 'connection:connection_requests_detail' connection_request.id %}"> Respond</a></li>
+    <div><a  style="color:blue;"  href="{% url 'accounts:profile' connection_request.id %}"> {{ connection_request.from_user }}</a> wants you to be contacts!
+        {% csrf_token %}
+
+
+
+        <div style="width:400px;">
+            <div style="float: left; width: 80px">
+
+              <form method="post" action="{% url 'connection:connection_accept' connection_request.pk %}">
+              {% csrf_token %}
+              <input class="btn btn-success" type="submit" value="accept" style="color:white;background-color:green;" />
+              </form>
+            </div>
+
+              <form method="post" action="{% url 'connection:connection_reject' connection_request.pk %}">
+              {% csrf_token %}
+              <input class="btn btn-success" type="submit" value="reject" style="color:white;background-color:green;" />
+              </form>
+
+        </div>
+    </div>
+
 {% empty %}
 </ul>
 <div>no requests yet:(</div>

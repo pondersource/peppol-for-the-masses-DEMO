@@ -7,9 +7,9 @@
 <ul>
 {% for request in sent_requests %}
     <a>{{ request.to_user }}
-      <form method="post" style=" display: inline-block;" action="{% url 'connection:connection_cancel' request.pk %}">
+      <form method="post"  action="{% url 'connection:connection_cancel' request.pk %}">
         {% csrf_token %}
-        <input type="submit" value="Cancel" style="color:white;background-color:orange;" />
+        <input class="btn btn-success"  type="submit" value="Cancel" style="color:white;background-color:orange;" />
       </form>
     </a>
 

@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (
     LogInView, ResendActivationCodeView, RemindUsernameView, SignUpView, ActivateView, LogOutView,
     ChangeEmailView, ChangeEmailActivateView, ChangeProfileView, ChangePasswordView,
-    RestorePasswordView, RestorePasswordDoneView, RestorePasswordConfirmView, delete,
+    RestorePasswordView, RestorePasswordDoneView, RestorePasswordConfirmView, delete, getProfileDetails,
     )
 
 app_name = 'accounts'
@@ -32,6 +32,10 @@ urlpatterns = [
     path('delete/<email>/',
         view = delete,
         name='delete'),
+
+    path('profile/<id>/',
+        view = getProfileDetails,
+        name='profile'),
 
     path('restore/password/',
         RestorePasswordView.as_view(),

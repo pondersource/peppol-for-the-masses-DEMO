@@ -24,9 +24,6 @@ def get_connection_context_object_name():
 def get_connection_context_object_list_name():
     return getattr(settings, "CONNECTION_CONTEXT_OBJECT_LIST_NAME", "users")
 
-def get_queryset(request):
-    return User.objects.exclude(username=request.user)
-
 def view_connections(request, username, template_name="connection/connection/user_list.html"):
     """ View the connections of a user """
     user = get_object_or_404(user_model, username=username)
@@ -68,31 +65,24 @@ def connection_add_connection(
 @login_required
 def connection_accept(request, connection_request_id):
     """ Accept a connection request """
-    if request.method == "POST":
-        f_request = get_object_or_404(
-            request.user.connection_requests_received, id=connection_request_id
-        )
-        f_request.accept()
-        return redirect("connection:connection_view_connections", username=request.user.username)
-
-    return redirect(
-        "connection_requests_detail", connection_request_id=connection_request_id
+    f_request = get_object_or_404(
+        request.user.connection_requests_received, id=connection_request_id
     )
+    f_request.accept()
+    return redirect("connection:connection_view_connections", username=request.user.username)
+
 
 
 @login_required
 def connection_reject(request, connection_request_id):
     """ Reject a connection request """
-    if request.method == "POST":
-        f_request = get_object_or_404(
-            request.user.connection_requests_received, id=connection_request_id
-        )
-        f_request.reject()
-        return redirect("connection:connection_request_list")
-
-    return redirect(
-        "connection_requests_detail", connection_request_id=connection_request_id
+    f_request = get_object_or_404(
+        request.user.connection_requests_received, id=connection_request_id
     )
+    f_request.reject()
+    return redirect("connection:connection_request_list")
+
+
 
 
 @login_required
@@ -103,11 +93,9 @@ def connection_cancel(request, connection_request_id):
             request.user.connection_requests_sent, id=connection_request_id
         )
         f_request.cancel()
-        return redirect("connection:connection_request_list")
+        return redirect("connection:connection_requests_sent")
 
-    return redirect(
-        "connection:connection_requests_detail", connection_request_id=connection_request_id
-    )
+    return redirect("connection:connection_requests_sent")
 
 
 @login_required
@@ -131,16 +119,6 @@ def connection_request_list_rejected(
     connection_requests = ConnectionRequest.objects.filter(rejected__isnull=False)
 
     return render(request, template_name, {"requests": connection_requests})
-
-
-@login_required
-def connection_requests_detail(
-    request, connection_request_id, template_name="connection/connection/request.html"
-):
-    """ View a particular connection request """
-    f_request = get_object_or_404(ConnectionRequest, id=connection_request_id)
-
-    return render(request, template_name, {"connection_request": f_request})
 
 
 @login_required
@@ -222,12 +200,6 @@ def connection_remove(
         connection_to_remove= user_model.objects.get(username=connection_to_remove)
         remover = request.user
         Contact.objects.remove_connection(remover,connection_to_remove)
-        return redirect("connection:connection_request_list")
+        return redirect("connection:connection_view_connections" , username=remover.username)
 
     return render(request, template_name, {"connection username": connection_to_remove})
-
-@login_required
-def contacts(
-    request, template_name="connection/base.html"
-):
-    return render(request, template_name)

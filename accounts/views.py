@@ -30,6 +30,15 @@ from .forms import (
     ResendActivationCodeForm, ResendActivationCodeViaEmailForm, ChangeProfileForm, ChangeEmailForm,
 )
 from .models import Activation
+from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+
+    user_model = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+
+    user_model = User
 
 @login_required
 def delete(request, email ,template_name = "accounts/delete.html"):
@@ -46,6 +55,13 @@ def delete(request, email ,template_name = "accounts/delete.html"):
             return redirect(settings.LOGIN_REDIRECT_URL)
 
     return render(request, template_name)
+
+def getProfileDetails(request,id,template_name="accounts/profile.html"):
+    user = get_object_or_404(user_model, id=id)
+
+    return  render(request,template_name, {"user": user})
+
+
 
 class GuestOnlyView(View):
     def dispatch(self, request, *args, **kwargs):

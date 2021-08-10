@@ -1,10 +1,9 @@
 {% extends 'main/messages.html' %}
-
 {% load i18n %}
 {% load connectiontags %}
 {% block content %}
 
-<h1>{% trans "Inbox" %}</h1>
+<h1>{% trans "Suppliers" %}</h1>
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -13,28 +12,33 @@
 </ul>
 {% endif %}
 {% if message_list %}
+{% for message in message_list %}
+
 <table class="messages">
     <thead>
-        <tr><th>{% trans "Sender" %}</th><th>{% trans "Subject" %}</th><th>{% trans "Received" %}</th><th>{% trans "Action" %}</th></tr>
+        <tr><th>{% trans "Subject" %}</th><th>{% trans "Received" %}</th><th>{% trans "Action" %}</th></tr>
     </thead>
     <tbody>
-{% for message in message_list %}
     <tr>
         {% if message.sender in connections %}
-          <td style="color:green;">{{ message.sender }}</td>
+
+          <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }}</a>
         {% else %}
-          <td style="color:orange;">{{ message.sender }}</td>
+          <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }}</a>
         {% endif %}
           <td>
               {% if message.new %}<strong>{% endif %}
               {% if message.replied %}<em>{% endif %}
-              <a href="{% url 'django_messages:messages_detail' message.id %}">{{ message.subject }}</a>
+              <a style="color:purple;" href="{% url 'django_messages:messages_detail' message.id %}">{{ message.subject }}</a>
               {% if message.replied %}</em>{% endif %}
               {% if message.new %}</strong>{% endif %}</td>
 
           <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
-          <td><a href="{% url 'django_messages:messages_delete' message.id %}">{% trans "Delete" %}</a></td>
-
+          <td>
+              <form method="post"  action="{% url 'django_messages:messages_delete' message.id %}">
+                 {% csrf_token %}
+                 <input class="btn btn-success"   type="submit" value="Delete" &raquo; style="color:white;background-color:red;" />
+              </form>
       </tr>
 {% endfor %}
     </tbody>

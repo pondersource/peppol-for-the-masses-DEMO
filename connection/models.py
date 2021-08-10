@@ -140,7 +140,7 @@ class ConnectionRequest(models.Model):
     def reject(self):
         """ reject this connection request """
         self.rejected = timezone.now()
-        self.save()
+        self.delete()
         connection_request_rejected.send(sender=self)
         bust_cache("requests", self.to_user.pk)
         return True

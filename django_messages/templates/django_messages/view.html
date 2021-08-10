@@ -10,9 +10,9 @@
     <dd><strong>{{ message.subject }}</strong></dd>
     <dt>{% trans "Sender" %}</dt>
     {% if message.sender in connections %}
-      <dd style="color:green;">{{ message.sender }}</dd>
+      <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
     {% else %}
-      <dd style="color:orange;">{{ message.sender }}</dd>
+      <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
     {% endif %}
     <dt>{% trans "Recipient" %}</dt>
     <dd>{{ message.recipient }}</dd>
@@ -28,9 +28,10 @@
 {{ message.body|linebreaksbr }}<br /><br />
 
 {% ifequal message.recipient.pk user.pk %}
-<a href="{% url 'django_messages:messages_reply' message.id %}">{% trans "Reply" %}</a>
+<a  style="color:blue;" href="{% url 'django_messages:messages_reply' message.id %}">{% trans "Reply" %}</a>
 {% endifequal %}
-<a href="{% url 'django_messages:messages_delete' message.id %}">{% trans "Delete" %}</a>
+
+<a  style="color:red;" href="{% url 'django_messages:messages_delete' message.id %}">{% trans "Delete" %}</a>
 
 {% comment %}Example reply_form integration
 {% if reply_form %}
@@ -40,7 +41,7 @@
 <table>
 {{ reply_form.as_table }}
 </table>
-<input type="submit" value="{% trans "Send" %} &raquo;"/>
+<input  class="btn btn-success" type="submit" value="{% trans "Send" %} &raquo;"/>
 </form>
 {% endif %}
 {% endcomment %}
