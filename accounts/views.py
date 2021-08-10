@@ -148,7 +148,7 @@ class SignUpView(GuestOnlyView, FormView):
 
             messages.success(request, _('You are successfully signed up!'))
 
-        return redirect('index')
+        return redirect(template_name)
 
 
 class ActivateView(View):
