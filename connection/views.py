@@ -39,19 +39,26 @@ def connection_add_connection(
 ):
     """ Create a ConnectionRequest """
 
-    ctx = {}
-    ctx['form'] = FindUserForm()
-    get_form = ctx['form']
+
     if request.method == "POST":
-        to_user = user_model.objects.get(username=get_form.user)
-        from_user = request.user
-        try:
-            Contact.objects.add_connection(from_user, to_user)
-        except AlreadyExistsError as e:
-            ctx["errors"] = ["%s" % e]
-        else:
-            return redirect("connection:connection_request_list")
-    return render(request, template_name,  ctx)
+
+        form = FindUserForm(request.POST)
+
+        if form.is_valid():
+
+            user = form.cleaned_data['user']
+            to_user_pk = user.pk
+            to_user = user_model.objects.get(pk=to_user_pk)
+            from_user = request.user
+            try:
+                Contact.objects.add_connection(from_user, to_user)
+            except AlreadyExistsError as e:
+                ctx["errors"] = ["%s" % e]
+            else:
+                return redirect("connection:connection_requests_sent")
+    else:
+        form = FindUserForm()
+    return render(request, template_name, {'form': form})
 
 @login_required
 def connection_accept(request, connection_request_id):
