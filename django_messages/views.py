@@ -89,7 +89,7 @@ def compose(request, recipient=None, form_class=ComposeForm,
             form.save(sender=request.user)
             messages.info(request, _(u"Message successfully sent."))
             if success_url is None:
-                success_url = reverse_lazy('django_messages:messages_inbox')
+                success_url = reverse_lazy('django_messages:messages_outbox')
             if 'next' in request.GET:
                 success_url = request.GET['next']
             return HttpResponseRedirect(success_url)

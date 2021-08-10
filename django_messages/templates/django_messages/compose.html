@@ -8,10 +8,10 @@
 <form action="" method="post" enctype="multipart/form-data">
 {% csrf_token %}
 
-<table>
-{{ form.as_table }}
-</table>
-<input class="btn btn-success" type="submit" value={% trans "Send" %} &raquo; style="color:white;background-color:green;"/>
+  <table>
+    {{ form.as_table }}
+  </table>
+  <input class="btn btn-success" type="submit" value={% trans "Send" %} &raquo; style="color:white;background-color:green;"/>
 
 </form>
 

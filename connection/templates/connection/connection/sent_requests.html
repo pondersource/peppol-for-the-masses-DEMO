@@ -6,7 +6,13 @@
 
 <ul>
 {% for request in sent_requests %}
-    <li>{{ request.to_user }} </li>
+    <a>{{ request.to_user }}
+      <form method="post" style=" display: inline-block;" action="{% url 'connection:connection_cancel' request.pk %}">
+        {% csrf_token %}
+        <input type="submit" value="Cancel" style="color:white;background-color:orange;" />
+      </form>
+    </a>
+
 {% empty %}
 </ul>
 <div>no requests yet:(</div>

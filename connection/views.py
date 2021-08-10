@@ -24,6 +24,8 @@ def get_connection_context_object_name():
 def get_connection_context_object_list_name():
     return getattr(settings, "CONNECTION_CONTEXT_OBJECT_LIST_NAME", "users")
 
+def get_queryset(request):
+    return User.objects.exclude(username=request.user)
 
 def view_connections(request, username, template_name="connection/connection/user_list.html"):
     """ View the connections of a user """
@@ -43,7 +45,7 @@ def connection_add_connection(
     if request.method == "POST":
 
         form = FindUserForm(request.POST)
-
+        ctx = {}
         if form.is_valid():
 
             user = form.cleaned_data['user']
@@ -53,7 +55,10 @@ def connection_add_connection(
             try:
                 Contact.objects.add_connection(from_user, to_user)
             except AlreadyExistsError as e:
+                ctx['form'] = form
                 ctx["errors"] = ["%s" % e]
+                return render(request, template_name, ctx )
+
             else:
                 return redirect("connection:connection_requests_sent")
     else:
