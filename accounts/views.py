@@ -117,8 +117,8 @@ class SignUpView(GuestOnlyView, FormView):
             user.username = form.cleaned_data['username']
 
         if settings.ENABLE_USER_ACTIVATION:
-            user.is_active = False
-            #user.is_active = True
+            #user.is_active = False
+            user.is_active = True
 
         # Create a user record
         user.save()
@@ -137,7 +137,6 @@ class SignUpView(GuestOnlyView, FormView):
             act.save()
 
             send_activation_email(request, user.email, code)
-
             messages.success(
                 request, _('You are signed up. To activate the account, follow the link sent to the mail.'))
         else:
@@ -148,7 +147,8 @@ class SignUpView(GuestOnlyView, FormView):
 
             messages.success(request, _('You are successfully signed up!'))
 
-        return redirect(template_name)
+
+        return redirect('accounts:log_in')
 
 
 class ActivateView(View):
@@ -229,14 +229,12 @@ class ChangeProfileView(LoginRequiredMixin, FormView):
     def get_initial(self):
         user = self.request.user
         initial = super().get_initial()
-        initial['first_name'] = user.first_name
-        initial['last_name'] = user.last_name
+        initial['username'] = user.first_name
         return initial
 
     def form_valid(self, form):
         user = self.request.user
-        user.first_name = form.cleaned_data['first_name']
-        user.last_name = form.cleaned_data['last_name']
+        user.username = form.cleaned_data['username']
         user.save()
 
         messages.success(self.request, _('Profile data has been successfully updated.'))

@@ -118,8 +118,8 @@ class SignUpForm(UserCreationForm):
         email = self.cleaned_data['email']
 
         user = User.objects.filter(email__iexact=email).exists()
-        if user:
-            raise ValidationError(_('You can not use this email address.'))
+        # if user:
+        #     raise ValidationError(_('You can not use this email address.'))
 
         return email
 
@@ -213,8 +213,7 @@ class RestorePasswordViaEmailOrUsernameForm(UserCacheMixin, forms.Form):
 
 
 class ChangeProfileForm(forms.Form):
-    first_name = forms.CharField(label=_('First name'), max_length=30, required=False)
-    last_name = forms.CharField(label=_('Last name'), max_length=150, required=False)
+    username = forms.CharField(label=_('Username'))
 
 
 class ChangeEmailForm(forms.Form):
