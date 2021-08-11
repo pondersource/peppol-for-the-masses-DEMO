@@ -7,3 +7,6 @@ class AlreadyExistsError(IntegrityError):
 
 class AlreadyContactsError(IntegrityError):
     pass
+
+class ValidationError(IntegrityError):
+    pass

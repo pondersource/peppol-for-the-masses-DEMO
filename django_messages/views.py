@@ -77,8 +77,7 @@ def compose(request, recipient=None, form_class=ComposeForm,
     Required Arguments: None
     Optional Arguments:
         ``recipient``: username of a `django.contrib.auth` User, who should
-                       receive the message, optionally multiple usernames
-                       could be separated by a '+'
+                       receive the message
         ``form_class``: the form-class to use
         ``template_name``: the template to use
         ``success_url``: where to redirect after successfull submission
@@ -86,22 +85,31 @@ def compose(request, recipient=None, form_class=ComposeForm,
     Passing GET parameter ``subject`` to the view allows pre-filling the
     subject field of the form.
     """
+    users= User.objects.all()
     if request.method == "POST":
         sender = request.user
         form = form_class(request.POST, request.FILES)
-        if form.is_valid():
-            form.save(sender=request.user)
-            messages.info(request, _(u"Message successfully sent."))
-            if success_url is None:
-                success_url = reverse_lazy('django_messages:messages_outbox')
-            if 'next' in request.GET:
-                success_url = request.GET['next']
-            return HttpResponseRedirect(success_url)
+        recipient_username = request.POST['recipient']
+        recipient = User.objects.get(username=recipient_username)
+        if  sender.username == recipient.username:
+            messages.info(request, _(u"Why are you talking to yourself?"))
+            return render(request, template_name,  {
+                'users': users,'form': form,
+            })
+        else:
+            if form.is_valid():
+                form.save(sender=request.user , recipient=recipient)
+                messages.info(request, _(u"Message successfully sent."))
+                if success_url is None:
+                    success_url = reverse_lazy('django_messages:messages_outbox')
+                if 'next' in request.GET:
+                    success_url = request.GET['next']
+                return HttpResponseRedirect(success_url)
     else:
         form = form_class(initial={"subject": request.GET.get("subject", "")})
 
     return render(request, template_name, {
-        'form': form,
+        'users': users,'form': form,
     })
 
 @login_required

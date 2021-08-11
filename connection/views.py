@@ -2,12 +2,12 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from connection.exceptions import AlreadyExistsError
+from connection.exceptions import AlreadyExistsError , ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from connection.models import Block, Follow, Contact, ConnectionRequest
 from django.views.generic import TemplateView
 from django import forms
 from django.contrib.auth.models import User
-from .forms import  FindUserForm
 try:
     from django.contrib.auth import get_user_model
 
@@ -38,29 +38,28 @@ def connection_add_connection(
 ):
     """ Create a ConnectionRequest """
 
-
+    users= User.objects.all()
+    ctx = {}
     if request.method == "POST":
-
-        form = FindUserForm(request.POST)
-        ctx = {}
-        if form.is_valid():
-
-            user = form.cleaned_data['user']
-            to_user_pk = user.pk
-            to_user = user_model.objects.get(pk=to_user_pk)
+        username = request.POST['username']
+        try:
+            to_user = User.objects.get(username=username)
+        except ObjectDoesNotExist as e:
+            ctx["errors"] = ["%s" % e]
+            return render(request, template_name, ctx )
+        else:
+            to_user = user_model.objects.get(pk=to_user.pk)
             from_user = request.user
             try:
                 Contact.objects.add_connection(from_user, to_user)
             except AlreadyExistsError as e:
-                ctx['form'] = form
+                ctx['users'] = users
                 ctx["errors"] = ["%s" % e]
                 return render(request, template_name, ctx )
 
             else:
                 return redirect("connection:connection_requests_sent")
-    else:
-        form = FindUserForm()
-    return render(request, template_name, {'form': form})
+    return render(request, template_name, {'users': users})
 
 @login_required
 def connection_accept(request, connection_request_id):

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+
+{% if request.user.is_authenticated %}
+
+  <h2 style="color:green;">Profile info:</h2>
+  <h5>Username:<a style="color:purple;">{{ user.username }}</a> </h5>
+  <h5>Email: <a style="color:purple;">{{ user.email }}</a></h5>
+
+{% endif %}
+
+{% endblock content%}

@@ -13,6 +13,7 @@ from django_messages.models import Message , MessageManager
 from django_messages.utils import get_user_model
 from connection.views import get_connection_context_object_list_name
 from connection.models import Contact
+from connection.exceptions import AlreadyExistsError
 
 from django.contrib.auth.models import User
 from connection.models import Contact, ConnectionManager , ConnectionRequest
@@ -46,7 +47,6 @@ class ComposeForm(forms.Form):
 
     """
 
-    recipient_model = forms.ModelChoiceField(queryset=User.objects.filter(is_active=True),empty_label='PonderSourse',label='Recipient')
     subject = forms.CharField( max_length=140)
     body = forms.CharField(widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}),label='Message')
     invoice = forms.FileField(
@@ -55,8 +55,8 @@ class ComposeForm(forms.Form):
         validators=[validate_file_extension]
     )
 
-    def save(self, sender, parent_msg=None):
-        recipient = self.cleaned_data['recipient_model']
+    def save(self, sender, recipient, parent_msg=None):
+        recipient = recipient
         subject = self.cleaned_data['subject']
         body = self.cleaned_data['body']
         invoice = self.cleaned_data['invoice']
@@ -69,12 +69,10 @@ class ComposeForm(forms.Form):
             body = body,
             invoice = invoice,
         )
-        if not ConnectionManager.are_connections(self, sender, recipient):
-            to_user = user_model.objects.get(username=recipient.username)
-            from_user = sender
-            if not ConnectionRequest.objects.filter(from_user=from_user, to_user=to_user).exists():
-                Contact.objects.add_connection(from_user, to_user)
-
+        try:
+            Contact.objects.add_connection(sender, recipient)
+        except AlreadyExistsError:
+            pass
         if parent_msg is not None:
             msg.parent_msg = parent_msg
             parent_msg.replied_at = timezone.now()

@@ -15,10 +15,10 @@
 {% for message in message_list %}
 
 <table class="messages">
-    <thead>
+    <head>
         <tr><th>{% trans "Subject" %}</th><th>{% trans "Received" %}</th><th>{% trans "Action" %}</th></tr>
-    </thead>
-    <tbody>
+    </head>
+    <body>
     <tr>
         {% if message.sender in connections %}
 
@@ -41,7 +41,7 @@
               </form>
       </tr>
 {% endfor %}
-    </tbody>
+    </body>
 </table>
 {% else %}
 <p>{% trans "No messages." %}</p>
