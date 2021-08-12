@@ -129,7 +129,7 @@ ul ul a {
 
 
 <!--- Two Column Section -->
-<div class="container-fluid padding" data-aos="fade-up"
+<div class="container-fluid padding" 
 		data-aos-offset="200"
 		data-aos-delay="50"
 		data-aos-duration="1000">
@@ -148,12 +148,12 @@ ul ul a {
                           <a href="/">.   About us</a>
                       </li>
                       <li>
-											</li>
-											<li>
-													<a href="{% url 'accounts:profile' user.id %}"">.   Portfolio</a>
-											</li>
-											<li>
 											{% if request.user.is_authenticated %}
+												</li>
+												<li>
+														<a href="{% url 'accounts:profile' user.id %}"">.   Portfolio</a>
+												</li>
+												<li>
 	                      <a href="#MessageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Messages</a>
 	                      <ul class="collapse list-unstyled" id="MessageSubmenu">
 	                          <li>
@@ -198,7 +198,7 @@ ul ul a {
 												<a href="#SettingsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.  Settings</a>
 												<ul class="collapse list-unstyled" id="SettingsSubmenu">
 													<li>
-														 <a href="/account"> Account </a>
+														 <a href="{% url 'account' %}">Account </a>
 													</li>
 
 												 </ul>
@@ -254,7 +254,7 @@ ul ul a {
 
 <!--- Footer -->
 <footer>
-	<div class="container-fluid padding" data-aos="fade-up"
+	<div class="container-fluid padding"
 		data-aos-offset="200"
 		data-aos-delay="50"
 		data-aos-duration="1000">

@@ -17,6 +17,7 @@ from django_messages.forms import ComposeForm
 from django_messages.utils import format_quote, get_user_model, get_username_field
 from connection.models import Contact
 from peppol.peppol_lib.Sender import *
+
 User = get_user_model()
 
 if "pinax.notifications" in settings.INSTALLED_APPS and getattr(settings, 'DJANGO_MESSAGES_NOTIFY', True):
@@ -85,7 +86,18 @@ def compose(request, recipient=None, form_class=ComposeForm,
     Passing GET parameter ``subject`` to the view allows pre-filling the
     subject field of the form.
     """
-    users= User.objects.all()
+
+
+    connections_list = Contact.objects.connections(request.user)
+
+    connections_list.append(request.user.username)
+    no_connections_objects = User.objects.exclude(username__in=connections_list)
+
+    for c in no_connections_objects:
+        connections_list.append(c.username)
+
+    users = connections_list
+
     if request.method == "POST":
         sender = request.user
         form = form_class(request.POST, request.FILES)
@@ -115,7 +127,7 @@ def compose(request, recipient=None, form_class=ComposeForm,
 @login_required
 def reply(request, message_id, form_class=ComposeForm,
         template_name='django_messages/compose.html', success_url=None,
-        recipient_filter=None, quote_helper=format_quote,
+        recipient=None, quote_helper=format_quote,
         subject_template=_(u"Re: %(subject)s"),):
     """
     Prepares the ``form_class`` form for writing a reply to a given message
@@ -131,9 +143,9 @@ def reply(request, message_id, form_class=ComposeForm,
 
     if request.method == "POST":
         sender = request.user
-        form = form_class(request.POST, recipient_filter=recipient_filter)
+        form = form_class(request.POST,request.FILES)
         if form.is_valid():
-            form.save(sender=request.user, parent_msg=parent)
+            form.save(sender=request.user, parent_msg=parent,recipient=parent.sender)
             messages.info(request, _(u"Message successfully sent."))
             if success_url is None:
                 success_url = reverse_lazy('django_messages:messages_inbox')

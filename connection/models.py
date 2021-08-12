@@ -143,6 +143,7 @@ class ConnectionRequest(models.Model):
         self.delete()
         connection_request_rejected.send(sender=self)
         bust_cache("requests", self.to_user.pk)
+        bust_cache("sent_requests", self.from_user.pk)
         return True
 
     def cancel(self):
@@ -309,10 +310,10 @@ class ConnectionManager(models.Manager):
     def add_connection(self, from_user, to_user, message=None):
         """ Create a connection request """
         if from_user == to_user:
-            raise ValidationError("Users cannot be connections with themselves")
+            raise AlreadyExistsError("Users cannot contact themselves")
 
         if self.are_connections(from_user, to_user):
-            raise AlreadyExistsError("Users are already connections")
+            raise AlreadyExistsError("You are already connections")
 
         if (ConnectionRequest.objects.filter(from_user=from_user, to_user=to_user).exists()):
             raise AlreadyExistsError("You already requested connection from this user.")

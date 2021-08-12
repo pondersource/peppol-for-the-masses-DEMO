@@ -133,10 +133,9 @@ class SignUpView(GuestOnlyView, FormView):
             user.username = form.cleaned_data['username']
 
         if settings.ENABLE_USER_ACTIVATION:
-            user.is_active = False
-            #user.is_active = True
+            #user.is_active = False
+            user.is_active = True
 
-        # Create a user record
         user.save()
 
         # Change the username to the "user_ID" form

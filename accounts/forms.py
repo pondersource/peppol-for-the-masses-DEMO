@@ -118,8 +118,8 @@ class SignUpForm(UserCreationForm):
         email = self.cleaned_data['email']
 
         user = User.objects.filter(email__iexact=email).exists()
-        if user:
-            raise ValidationError(_('You can not use this email address.'))
+        # if user:
+        #     raise ValidationError(_('You can not use this email address.'))
 
         return email
 

@@ -26,11 +26,12 @@ def get_connection_context_object_list_name():
 
 def view_connections(request, username, template_name="connection/connection/user_list.html"):
     """ View the connections of a user """
-    user = get_object_or_404(user_model, username=username)
-    connections = Contact.objects.connections(user)
+    #user = get_object_or_404(user_model, username=username)
+    connections = Contact.objects.connections(request.user)
 
     return render(request,template_name,{"connections": connections,},
     )
+
 
 @login_required
 def connection_add_connection(
@@ -38,8 +39,9 @@ def connection_add_connection(
 ):
     """ Create a ConnectionRequest """
 
-    users= User.objects.all()
+    users= User.objects.exclude(username=request.user).order_by('username')
     ctx = {}
+    ctx['users'] = users
     if request.method == "POST":
         username = request.POST['username']
         try:
@@ -53,13 +55,12 @@ def connection_add_connection(
             try:
                 Contact.objects.add_connection(from_user, to_user)
             except AlreadyExistsError as e:
-                ctx['users'] = users
                 ctx["errors"] = ["%s" % e]
                 return render(request, template_name, ctx )
 
             else:
                 return redirect("connection:connection_requests_sent")
-    return render(request, template_name, {'users': users})
+    return render(request, template_name, ctx)
 
 @login_required
 def connection_accept(request, connection_request_id):

@@ -25,7 +25,6 @@
           <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }}</a>
         {% else %}
           <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.recipient }}</a>
-        <a style="color:purple;" href="{{ message.get_absolute_url }}">{{ message.subject }}</a>
 
       {% endif %}
       <td>
