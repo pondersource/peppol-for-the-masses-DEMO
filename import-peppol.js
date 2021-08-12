@@ -2,8 +2,8 @@ const fs = require('fs');
 const readline = require('readline');
 const readInterface = readline.createInterface({
     input: fs.createReadStream('/Users/michiel/Downloads/directory-export-business-cards.csv'),
-    output: fs.createWriteStream('/Users/michiel/gh/pondersource/peppol-python-demo/peppol-import.sql'),
-    console: false
+    output: process.stdout,
+    // console: false
 });
 
 function balancedQuotes(str) {
@@ -87,6 +87,34 @@ function scanEntry (entry) {
 //     'ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0::2.1\n' +
 //     'busdox-docid-qns::urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2::CreditNote##urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0::2.1"'));
 
+function escapeString (val) {
+  val = val.replace(/[\0\n\r\b\t\\'"\x1a]/g, function (s) {
+    switch (s) {
+      case "\0":
+        return "\\0";
+      case "\n":
+        return "\\n";
+      case "\r":
+        return "\\r";
+      case "\b":
+        return "\\b";
+      case "\t":
+        return "\\t";
+      case "\x1a":
+        return "\\Z";
+      case "'":
+        return "''";
+      case '"':
+        return '""';
+      default:
+        return "\\" + s;
+    }
+  });
+
+  return val;
+};
+
+
 let headers;
 let entry = '';
 readInterface.on('line', function(line) {
@@ -100,9 +128,9 @@ readInterface.on('line', function(line) {
   arr = scanEntry(entry);
   if (!headers) {
   headers = arr;
-  console.log('HEADERS:', headers);
+//   console.log('HEADERS:', headers);
   } else {
-    // console.log(arr);
+    console.log(`insert into auth_user (username, password, first_name, last_name, email, is_superuser, is_staff, is_active, date_joined) values ('${escapeString(arr[1] + ' ' + arr[0])}', '!!! user should not try to log in !!!', '${escapeString(arr[1])}', '${escapeString(arr[0])}', 'imported@peppol.directory', false, false, false, now());`);
   }
   entry = '';
 });
