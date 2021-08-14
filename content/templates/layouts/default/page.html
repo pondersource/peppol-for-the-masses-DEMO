@@ -148,15 +148,11 @@ ul ul a {
                           <a href="/">.   About us</a>
                       </li>
                       <li>
-											</li>
-											<li>
-													<a href="{% url 'accounts:profile' user.id %}"">.   Profile</a>
-											</li>
-											<li>
+			
 											{% if request.user.is_authenticated %}
 												</li>
 												<li>
-														<a href="{% url 'accounts:profile' user.id %}"">.   Portfolio</a>
+														<a href="{% url 'accounts:profile' user.id %}"">.   Profile</a>
 												</li>
 												<li>
 	                      <a href="#MessageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Messages</a>
