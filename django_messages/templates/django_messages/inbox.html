@@ -12,36 +12,46 @@
 </ul>
 {% endif %}
 {% if message_list %}
-{% for message in message_list %}
 
 <table class="messages">
-    <head>
-        <tr><th>{% trans "Subject" %}</th><th>{% trans "Received" %}</th><th>{% trans "Action" %}</th></tr>
-    </head>
-    <body>
+
+  <table style="width:100%">
     <tr>
+      <th>Suppliers</th>
+      <th>Subject</th>
+      <th>Received</th>
+      <th></th>
+    </tr>
+    {% for message in message_list %}
+
+    <tr>
+      <td>
         {% if message.sender in connections %}
-
-          <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }}</a>
+          <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i></a>
         {% else %}
-          <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }}</a>
+          <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i></a>
         {% endif %}
-          <td>
-              {% if message.new %}<strong>{% endif %}
-              {% if message.replied %}<em>{% endif %}
-              <a style="color:purple;" href="{% url 'django_messages:messages_detail' message.id %}">{{ message.subject }}</a>
-              {% if message.replied %}</em>{% endif %}
-              {% if message.new %}</strong>{% endif %}</td>
+      </td>
 
-          <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
-          <td>
-              <form method="post"  action="{% url 'django_messages:messages_delete' message.id %}">
-                 {% csrf_token %}
-                 <input class="btn btn-success"   type="submit" value="Delete" &raquo; style="color:white;background-color:red;" />
-              </form>
-      </tr>
+      <td>
+        {% if message.new %}<strong>{% endif %}
+      {% if message.replied %}<em>{% endif %}
+      <a style="color:blue;" href="{% url 'django_messages:messages_detail' message.id %}">{{ message.subject }}</a>
+      {% if message.replied %}</em>{% endif %}
+      {% if message.new %}</strong>{% endif %}
+      </td>
+
+      <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+      <td>
+
+          <form method="post"  action="{% url 'django_messages:messages_delete' message.id %}">
+             {% csrf_token %}
+             <input class="btn btn-success"   type="submit" value="Delete" &raquo; style="color:white;background-color:red;" />
+          </form>
+      </td>
+
 {% endfor %}
-    </body>
+</table>
 </table>
 {% else %}
 <p>{% trans "No messages." %}</p>

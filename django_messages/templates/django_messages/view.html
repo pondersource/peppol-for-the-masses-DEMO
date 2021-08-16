@@ -6,43 +6,70 @@
 
 <h1>{% trans "View Message" %}</h1>
 <dl class="message-headers">
-    <dt>{% trans "Subject" %}</dt>
-    <dd><strong>{{ message.subject }}</strong></dd>
-    <dt>{% trans "Sender" %}</dt>
-    {% if message.sender in connections %}
-      <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
-    {% else %}
-      <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
+
+
+  <table style="width:100%">
+
+
+    <tr>
+      <th>Subject:</th>
+      <td><strong>{{ message.subject }}</strong></td>
+    </tr>
+
+
+    <tr>
+      <th>Sender:</th>
+        <td>  {% if message.sender in connections %}
+            <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
+          {% else %}
+            <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
+          {% endif %}
+        </td>
+    </tr>
+
+
+    <tr>
+      <th>Date:</th>
+      <td>{{ message.sent_at|date:_("DATETIME_FORMAT")}}</td>
+    </tr>
+
+
+    <tr>
+      <th>Message:</th>
+        <td>{{ message.body|linebreaksbr }}
+
+        </td>
+    </tr>
+    <tr>
+      {% ifequal message.recipient.pk user.pk %}
+      <a  style="color:blue;" href="{% url 'django_messages:messages_reply' message.id %}">{% trans "Reply" %}</a>
+      {% endifequal %}
+
+      <a  style="color:red;" href="{% url 'django_messages:messages_delete' message.id %}">{% trans "Delete" %}</a>
+
+      {% comment %}Example reply_form integration
+    </tr>
+
+    {% if reply_form %}
+    <br>
+    <th>Reply:</th>
+    <tr>
+      <form action="{% url 'django_messages:messages_reply' message.id %}" method="post">
+      {% csrf_token %}
+      <table>
+      {{ reply_form.as_table }}
+      </table>
+      <input  class="btn btn-success" type="submit" value="{% trans "Send" %} &raquo;"/>
+      </form>
+    </tr>
     {% endif %}
-    <dt>{% trans "Recipient" %}</dt>
-    <dd>{{ message.recipient }}</dd>
-    <dt>{% trans "Date" %} </dt>
-    <dd>{{ message.sent_at|date:_("DATETIME_FORMAT")}}</dd>
+    <tr>
+      {% if message.invoice %}
+        <th>Invoice:</th>
+        <td><a href="{{message.invoice.url}}" download> Download File</a></td>
+      {% endif %}
+    </tr>
+    {% endcomment %}
+  </table>
 
-    {% if message.invoice %}
-      <dt>{% trans "Invoice" %}</dt>
-      <a href="{{message.invoice.url}}" download> Download File</a>
-    {% endif %}
-</dl>
-<dt>{% trans "Message" %}</dt>
-{{ message.body|linebreaksbr }}<br /><br />
-
-{% ifequal message.recipient.pk user.pk %}
-<a  style="color:blue;" href="{% url 'django_messages:messages_reply' message.id %}">{% trans "Reply" %}</a>
-{% endifequal %}
-
-<a  style="color:red;" href="{% url 'django_messages:messages_delete' message.id %}">{% trans "Delete" %}</a>
-
-{% comment %}Example reply_form integration
-{% if reply_form %}
-<h1>{% trans "Compose reply"%}</h1>
-<form action="{% url 'django_messages:messages_reply' message.id %}" method="post">
-{% csrf_token %}
-<table>
-{{ reply_form.as_table }}
-</table>
-<input  class="btn btn-success" type="submit" value="{% trans "Send" %} &raquo;"/>
-</form>
-{% endif %}
-{% endcomment %}
 {% endblock %}

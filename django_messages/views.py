@@ -17,6 +17,8 @@ from django_messages.forms import ComposeForm
 from django_messages.utils import format_quote, get_user_model, get_username_field
 from connection.models import Contact
 from peppol.peppol_lib.Sender import *
+from django.core.exceptions import ObjectDoesNotExist
+from accounts.models import Activation
 
 User = get_user_model()
 
@@ -87,30 +89,45 @@ def compose(request, recipient=None, form_class=ComposeForm,
     subject field of the form.
     """
 
-
+    ctx = {}
     connections = Contact.objects.connections(request.user)
 
-    priority = connections
+    ctx['connections'] = connections
+
+    priority =[]
+    for c in connections:
+        priority.append(c)
+
     priority.append(request.user.username)
     no_connections_objects = User.objects.exclude(username__in=priority)
 
     for c in no_connections_objects:
         priority.append(c.username)
 
-    ctx = {}
-
+    ctx['priority'] = priority
     if request.method == "POST":
         sender = request.user
         form = form_class(request.POST, request.FILES)
-        recipient_username = request.POST['recipient']
-        recipient = User.objects.get(username=recipient_username)
-        if  sender.username == recipient.username:
+        recipient_username_or_webID = request.POST['recipient'].split()
+        recipient_username_or_webID = recipient_username_or_webID[0]
+
+        try:
+            recipient = Activation.objects.get(webID=recipient_username_or_webID)
+            recipient_username = recipient.user.username
+        except ObjectDoesNotExist as e:
+            try:
+                recipient = User.objects.get(username=recipient_username_or_webID)
+                recipient_username = recipient.username
+            except ObjectDoesNotExist as e:
+                ctx["errors"] = ["%s" % e]
+                return render(request, template_name, ctx )
+
+        if  sender.username == recipient_username:
             messages.info(request, _(u"Why are you talking to yourself?"))
-            return render(request, template_name,  {
-                'users': users,'form': form,
-            })
+            return render(request, template_name, ctx)
         else:
             if form.is_valid():
+                recipient = User.objects.get(pk=recipient.pk)
                 form.save(sender=request.user , recipient=recipient)
                 messages.info(request, _(u"Message successfully sent."))
                 if success_url is None:
@@ -121,7 +138,6 @@ def compose(request, recipient=None, form_class=ComposeForm,
     else:
         form = form_class(initial={"subject": request.GET.get("subject", "")})
 
-    ctx['priority'] = priority
     ctx['form'] = form
     return render(request, template_name,ctx)
 
