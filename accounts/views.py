@@ -57,11 +57,8 @@ def delete(request, email ,template_name = "accounts/delete.html"):
     return render(request, template_name)
 
 def getProfileDetails(request,id,template_name="accounts/profile.html"):
-    user = get_object_or_404(user_model, id=id)
-
-    return  render(request,template_name, {"user": user})
-
-
+    profile = get_object_or_404(Activation, id=id)
+    return  render(request,template_name, {"profile": profile})
 
 class GuestOnlyView(View):
     def dispatch(self, request, *args, **kwargs):
@@ -138,17 +135,14 @@ class SignUpView(GuestOnlyView, FormView):
 
         user.save()
 
-        # Change the username to the "user_ID" form
-        if settings.DISABLE_USERNAME:
-            user.username = f'user_{user.id}'
-            user.save()
-
         if settings.ENABLE_USER_ACTIVATION:
             code = get_random_string(20)
+            webID = form.cleaned_data['webID']
 
             act = Activation()
             act.code = code
             act.user = user
+            act.webID = webID
             act.save()
 
             send_activation_email(request, user.email, code)

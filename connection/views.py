@@ -17,6 +17,8 @@ except ImportError:
 
     user_model = User
 
+from accounts.models import Activation
+
 def get_connection_context_object_name():
     return getattr(settings, "CONNECTION_CONTEXT_OBJECT_NAME", "user")
 
@@ -35,27 +37,29 @@ def connection_add_connection(
 ):
     """ Create a ConnectionRequest """
 
-    users= User.objects.exclude(username=request.user).order_by('username')
+    users = User.objects.exclude(username=request.user)
     ctx = {}
     ctx['users'] = users
     if request.method == "POST":
-        username = request.POST['username']
+        username_or_WebId = request.POST['username_or_WebId']
         try:
-            to_user = User.objects.get(username=username)
+            to_user = Activation.objects.get(webID=username_or_WebId)
         except ObjectDoesNotExist as e:
-            ctx["errors"] = ["%s" % e]
-            return render(request, template_name, ctx )
-        else:
-            to_user = user_model.objects.get(pk=to_user.pk)
-            from_user = request.user
             try:
-                Contact.objects.add_connection(from_user, to_user)
-            except AlreadyExistsError as e:
+                to_user = User.objects.get(username=username_or_WebId)
+            except ObjectDoesNotExist as e:
                 ctx["errors"] = ["%s" % e]
                 return render(request, template_name, ctx )
+        to_user = User.objects.get(pk=to_user.pk)
+        from_user = request.user
+        try:
+            Contact.objects.add_connection(from_user, to_user)
+        except AlreadyExistsError as e:
+            ctx["errors"] = ["%s" % e]
+            return render(request, template_name, ctx )
 
-            else:
-                return redirect("connection:connection_requests_sent")
+        else:
+            return redirect("connection:connection_requests_sent")
     return render(request, template_name, ctx)
 
 @login_required
@@ -103,7 +107,7 @@ def connection_request_list(
     connection_requests = ConnectionRequest.objects.filter(rejected__isnull=True)
     for q in connection_requests:
         q.mark_viewed()
-        
+
     return render(request, template_name, {"requests": connection_requests})
 
 

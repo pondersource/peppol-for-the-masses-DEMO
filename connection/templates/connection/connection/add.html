@@ -3,7 +3,11 @@
 
 {% block content %}
 {% if messages %}
-
+<ul class="messages">
+    {% for message in messages %}
+    <li >{{ message }}</li>
+    {% endfor %}
+</ul>
 {% endif %}
 <head>
   <title>AutoComplete</title>
@@ -23,12 +27,12 @@
 {% load i18n %}
 
 {% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}
-<form method="post" style="display:flex;flex-direction:row" >
+<br><form method="post" style="display:flex;flex-direction:row" >
   {% csrf_token %}
 
   <body>
-  <h3>Search</h3>
-  <input type="text" id="tags" name="username"">
+  <div>Username or WebId</div>
+  <input type="text" id="tags" name="username_or_WebId">
   <script>
   $( function() {
     var availableTags = [
@@ -43,6 +47,6 @@
   </script>
   <input class="btn btn-success" type="submit" value="Add connection" style="color:white;background-color:green;">
   </body>
-</form>
+</form></br>
 
 {% endblock content %}

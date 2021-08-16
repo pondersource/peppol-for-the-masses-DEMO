@@ -152,6 +152,10 @@ class ConnectionRequest(models.Model):
         connection_request_canceled.send(sender=self)
         bust_cache("requests", self.to_user.pk)
         bust_cache("sent_requests", self.from_user.pk)
+
+        bust_cache("requests", self.from_user.pk)
+        bust_cache("sent_requests", self.to_user.pk)
+        
         return True
 
     def mark_viewed(self):
@@ -389,7 +393,7 @@ class Contact(models.Model):
 
     is_supplier = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=False)
-    
+
     objects = ConnectionManager()
 
     class Meta:
