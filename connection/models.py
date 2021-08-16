@@ -387,6 +387,9 @@ class Contact(models.Model):
     )
     created = models.DateTimeField(default=timezone.now)
 
+    is_supplier = models.BooleanField(default=False)
+    is_customer = models.BooleanField(default=False)
+    
     objects = ConnectionManager()
 
     class Meta:
