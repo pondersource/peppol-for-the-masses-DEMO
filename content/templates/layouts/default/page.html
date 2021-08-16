@@ -1,5 +1,7 @@
 {% load static %}
 {% load i18n %}
+{% load connectiontags %}
+{% load inbox %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +17,9 @@
 	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 	<link href="style.css" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+
+	<script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+
 
   <script>
     $(document).ready(function () {
@@ -35,6 +39,7 @@
   #sidebar {
       min-width: 250px;
       max-width: 250px;
+
   }
 
   #sidebar.active {
@@ -44,6 +49,7 @@
     min-width: 250px;
     max-width: 250px;
     min-height: 100vh;
+
 }
 a[data-toggle="collapse"] {
     position: relative;
@@ -126,10 +132,10 @@ ul ul a {
   </style>
 </head>
 <body>
-
+{% inbox_count as unread_messages %}
 
 <!--- Two Column Section -->
-<div class="container-fluid padding" 
+<div class="container-fluid padding"
 		data-aos-offset="200"
 		data-aos-delay="50"
 		data-aos-duration="1000">
@@ -145,20 +151,28 @@ ul ul a {
                       <li class="active">
                       </li>
                       <li>
-                          <a href="/">.   About us</a>
+                          <a href="/">.   About us <i class="fa fa-coffee"></i></a>
                       </li>
                       <li>
-			
+
 											{% if request.user.is_authenticated %}
 												</li>
 												<li>
-														<a href="{% url 'accounts:profile' user.id %}"">.   Profile</a>
+														<a href="{% url 'accounts:profile' user.id %}"">.   Profile <i class="fas fa-user"></i></a>
 												</li>
 												<li>
-	                      <a href="#MessageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Messages</a>
-	                      <ul class="collapse list-unstyled" id="MessageSubmenu">
+												{% if unread_messages %}
+	                      <a href="#MessageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Messages  <i class="fas fa-comment" style="color:#23FF19;"></i></a>
+												{% else %}
+												<a href="#MessageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Messages <i class="fas fa-comment"></i></a>
+												{% endif %}
+											  <ul class="collapse list-unstyled" id="MessageSubmenu">
 	                          <li>
-	                              <a href="{% url 'django_messages:messages_inbox' %} " >Suppliers</a>
+															{% if unread_messages %}
+	                             <a href="{% url 'django_messages:messages_inbox' %} " >Suppliers  <i class="fas fa-bell" style="color:#23FF19;"></i></a>
+															 {% else %}
+															 <a href="{% url 'django_messages:messages_inbox' %} " >Suppliers</a>
+															 {% endif %}
 	                          </li>
 	                          <li>
 	                              <a href="{% url 'django_messages:messages_outbox' %} ">Costumers</a>
@@ -171,21 +185,24 @@ ul ul a {
 	                          </li>
 	                      </ul>
 
-	                      <a href="#NetworkSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Network</a>
-	                      <ul class="collapse list-unstyled" id="NetworkSubmenu">
+												{% if requests_count %}
+	                      <a href="#NetworkSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Network <i class="fas fa-users"style="color:#23FF19;"></i></a>
+												{% else %}
+												<a href="#NetworkSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Network <i class="fas fa-users"></i></a>
+												{% endif %}
+												<ul class="collapse list-unstyled" id="NetworkSubmenu">
 
-	                        <a href="#RequestsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Requests</a>
-	                        <ul class="collapse list-unstyled" id="RequestsSubmenu">
 	                          <li>
-	                              <a href="{% url 'connection:connection_request_list' %}"">Received Requests </a>
+															{% if requests_count %}
+	                              <a href="{% url 'connection:connection_request_list' %}"">Received Requests  <i class="fas fa-user-plus"style="color:#23FF19;"></i> {{requests_count}} </a>
+															{% else %}
+																<a href="{% url 'connection:connection_request_list' %}"">Received Requests </a>
+															{% endif %}
 	                          </li>
 	                          <li>
 	                              <a href="{% url 'connection:connection_requests_sent' %}">Sent Requests</a>
 	                          </li>
-	                          <li>
-	                              <a href="{% url 'connection:connection_requests_rejected' %}">Rejected Requests</a>
-	                          </li>
-	                        </ul>
+
 
 	                        <li>
 	                            <a href="{% url 'connection:connection_view_connections' user.username %}">My Network</a>
@@ -196,14 +213,7 @@ ul ul a {
 	                        </li>
 
 	                      </ul>
-												<a href="#SettingsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.  Settings</a>
-												<ul class="collapse list-unstyled" id="SettingsSubmenu">
-													<li>
-														 <a href="{% url 'account' %}">Account </a>
-													</li>
-
-												 </ul>
-	                      <a href="{% url 'accounts:log_out' %}">.   Log out</a>
+	                      <a href="{% url 'accounts:log_out' %}">.   Log out <i class="fas fa-sign-out-alt"></i></a>
 	                  </li>
 									{% else %}
 									<li >
@@ -214,7 +224,7 @@ ul ul a {
                   </li>
 									{% endif %}
 									<li >
-											<a  href="{% url 'change_language' %}">.   Change language</a>
+											<a  href="{% url 'change_language' %}">.   Change language <i class="fa fa-language" ></i></a>
 									</li>
               </ul>
           </nav>

@@ -18,23 +18,6 @@ def connections(user):
     """
     return {"connections": Contact.objects.connections(user)}
 
-
-@register.inclusion_tag("connection/templatetags/followers.html")
-def followers(user):
-    """
-    Simple tag to grab all followers
-    """
-    return {"followers": Follow.objects.followers(user)}
-
-
-@register.inclusion_tag("connection/templatetags/following.html")
-def following(user):
-    """
-    Simple tag to grab all users who follow the given user
-    """
-    return {"following": Follow.objects.following(user)}
-
-
 @register.inclusion_tag("connection/templatetags/blockers.html")
 def blockers(user):
     """
@@ -52,27 +35,27 @@ def blocking(user):
 
 
 @register.inclusion_tag("connection/templatetags/connection_requests.html")
-def connection_requests(user):
+def connections_requests(user):
     """
     Inclusion tag to display connection requests
     """
-    return {"connection_requests": Contact.objects.requests(user)}
+    return {"connections_requests": Contact.objects.requests(user)}
 
 
-@register.inclusion_tag("connection/templatetags/connection_request_count.html")
-def connection_request_count(user):
+@register.inclusion_tag("connection/templatetags/connections_request_count.html")
+def connections_request_count(user):
     """
     Inclusion tag to display the count of unread connection requests
     """
-    return {"connection_request_count": Contact.objects.unread_request_count(user)}
+    return {"connections_request_count": Contact.objects.unread_request_count(user)}
 
 
-@register.inclusion_tag("connection/templatetags/connection_count.html")
-def connection_count(user):
+@register.inclusion_tag("connection/templatetags/connections_count.html")
+def connections_count(user):
     """
     Inclusion tag to display the total count of connections for the given user
     """
-    return {"connection_count": len(Contact.objects.connections(user))}
+    return {"connections_count": len(Contact.objects.connections(user))}
 
 
 @register.inclusion_tag("connection/templatetags/connection_rejected_count.html")

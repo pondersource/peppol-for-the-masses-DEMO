@@ -16,6 +16,9 @@
  <link href=
 "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
      rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 
 {% if messages %}
@@ -26,13 +29,6 @@
 </ul>
 {% endif %}
 
-
-
-{% for user in users %}
-    {{user}}
-{% endfor %}
-
-
 <h1>{% trans "Compose Message"%}</h1>
 <form action="" method="post" enctype="multipart/form-data">
 {% csrf_token %}
@@ -41,8 +37,8 @@
   <script>
   $( function() {
     var availableTags = [
-        {% for user in users %}
-            "{{user.username}}",
+        {% for user in priority %}
+            "{{user}}",
         {% endfor %}
     ];
     $( "#tags" ).autocomplete({

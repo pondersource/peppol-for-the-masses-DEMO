@@ -26,11 +26,7 @@ def get_connection_context_object_list_name():
 
 def view_connections(request, username, template_name="connection/connection/user_list.html"):
     """ View the connections of a user """
-    #user = get_object_or_404(user_model, username=username)
-    connections = Contact.objects.connections(request.user)
-
-    return render(request,template_name,{"connections": connections,},
-    )
+    return render(request,template_name,)
 
 
 @login_required
@@ -103,10 +99,11 @@ def connection_request_list(
     request, template_name="connection/connection/requests_list.html"
 ):
     """ View unread and read connection requests """
-    connection_requests = Contact.objects.requests(request.user)
     # This shows all connection requests in the database
-    # connection_requests = ConnectionRequest.objects.filter(rejected__isnull=True)
-
+    connection_requests = ConnectionRequest.objects.filter(rejected__isnull=True)
+    for q in connection_requests:
+        q.mark_viewed()
+        
     return render(request, template_name, {"requests": connection_requests})
 
 

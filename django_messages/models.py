@@ -64,7 +64,7 @@ class Message(models.Model):
     sender_deleted_at = models.DateTimeField(_("Sender deleted at"), null=True, blank=True)
     recipient_deleted_at = models.DateTimeField(_("Recipient deleted at"), null=True, blank=True)
     invoice = models.FileField(upload_to=None, max_length=254)
-    
+
     objects = MessageManager()
 
     def new(self):
@@ -101,7 +101,10 @@ def inbox_count_for(user):
     returns the number of unread messages for the given user but does not
     mark them seen
     """
-    return Message.objects.filter(recipient=user, read_at__isnull=True, recipient_deleted_at__isnull=True).count()
+    unread_messages = Message.objects.filter(recipient=user, read_at__isnull=True, recipient_deleted_at__isnull=True).count()
+    if unread_messages == 0:
+        return None
+    return unread_messages
 
 # fallback for email notification if django-notification could not be found
 if "pinax.notifications" not in settings.INSTALLED_APPS and getattr(settings, 'DJANGO_MESSAGES_NOTIFY', True):
