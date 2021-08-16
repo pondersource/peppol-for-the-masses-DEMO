@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<a class="navbar-brand" href="{% url 'accounts:change_password' %}">{% trans 'Update password' %}</a>
-<a class="navbar-brand" href="{% url 'accounts:change_profile' %}">{% trans 'Update profile' %}</a>
-<a class="navbar-brand" href="{% url 'accounts:change_email' %}">{% trans 'Update email' %}</a>
-<a class="navbar-brand" href="{% url 'accounts:delete' user.email %}">{% trans 'Delete account' %}</a>
+<a class="navbar-brand" style="color:blue;" href="{% url 'accounts:change_password' %}">{% trans 'Update password' %}</a>
+<a class="navbar-brand" style="color:blue;" href="{% url 'accounts:change_profile' %}">{% trans 'Update profile' %}</a>
+<a class="navbar-brand" style="color:blue;" href="{% url 'accounts:change_email' %}">{% trans 'Update email' %}</a>
+<a class="navbar-brand" style="color:blue;" href="{% url 'accounts:delete' user.email %}">{% trans 'Delete account' %}</a>

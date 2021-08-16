@@ -88,15 +88,16 @@ def compose(request, recipient=None, form_class=ComposeForm,
     """
 
 
-    connections_list = Contact.objects.connections(request.user)
+    connections = Contact.objects.connections(request.user)
 
-    connections_list.append(request.user.username)
-    no_connections_objects = User.objects.exclude(username__in=connections_list)
+    priority = connections
+    priority.append(request.user.username)
+    no_connections_objects = User.objects.exclude(username__in=priority)
 
     for c in no_connections_objects:
-        connections_list.append(c.username)
+        priority.append(c.username)
 
-    users = connections_list
+    ctx = {}
 
     if request.method == "POST":
         sender = request.user
@@ -120,9 +121,9 @@ def compose(request, recipient=None, form_class=ComposeForm,
     else:
         form = form_class(initial={"subject": request.GET.get("subject", "")})
 
-    return render(request, template_name, {
-        'users': users,'form': form,
-    })
+    ctx['priority'] = priority
+    ctx['form'] = form
+    return render(request, template_name,ctx)
 
 @login_required
 def reply(request, message_id, form_class=ComposeForm,

@@ -3,13 +3,25 @@
 
 {% block content %}
 
-
 {% if request.user.is_authenticated %}
 
   <h2 style="color:green;">Profile info:</h2>
-  <h5>Username:<a style="color:purple;">{{ user.username }}</a> </h5>
-  <h5>Email: <a style="color:purple;">{{ user.email }}</a></h5>
-  <h5>WebId: <a style="color:purple;">https://demo.pondersource.net/~{{ user.username }}#id</a></h5>
+  <table style="width:100%">
+    <tr>
+      <th>Userame:</th>
+      <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+      <th>Email:</th>
+      <td>{{ user.email }}</td>
+    </tr>
+    <tr>
+      <th>WebId:</th>
+      <td>https://demo.pondersource.net/~{{ user.username }}#id</td>
+    </tr>
+  </table>
+
+  {% include 'accounts/profile/options.html'%}
 
 {% endif %}
 
