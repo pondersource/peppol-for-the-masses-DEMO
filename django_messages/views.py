@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404 , redirect
 from django.template import RequestContext
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -15,11 +15,12 @@ from django_messages.models import Message
 from django_messages.urls import *
 from django_messages.forms import ComposeForm
 from django_messages.utils import format_quote, get_user_model, get_username_field
-from connection.models import Contact
+from connection.models import Contact, ConnectionRequest
 from peppol.peppol_lib.Sender import *
 from django.core.exceptions import ObjectDoesNotExist
+from connection.exceptions import AlreadyExistsError
 from accounts.models import Activation
-from connection.models import bust_cache
+from connection.models import bust_cache, cache_key
 User = get_user_model()
 
 if "pinax.notifications" in settings.INSTALLED_APPS and getattr(settings, 'DJANGO_MESSAGES_NOTIFY', True):
@@ -36,12 +37,12 @@ def inbox(request, template_name='django_messages/inbox.html'):
     """
     message_list = Message.objects.inbox_for(request.user)
     connections = Contact.objects.connections(request.user)
-    suppliers = Contact.objects.filter(is_supplier=True)
+    suppliers = Contact.objects.suppliers(request.user)
 
     return render(request, template_name, {
         'message_list': message_list,
         'connections': connections,
-        'supplier' : suppliers,
+        'suppliers':suppliers,
     })
 
 @login_required
@@ -253,7 +254,7 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
     If the user is the recipient and the message is unread
     ``read_at`` is set to the current datetime.
     If the user is the recipient a reply form will be added to the
-    tenplate context, otherwise 'reply_form' will be None.
+    tenplate ctx, otherwise 'reply_form' will be None.
     """
 
     user = request.user
@@ -268,26 +269,27 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
         message.save()
 
 
-    context = {'message': message, 'reply_form': None , 'connections': connections, }
+    ctx = {'message': message, 'reply_form': None , 'connections': connections, }
     if message.recipient == user:
         form = form_class(initial={
             'body': quote_helper(message.sender, message.body),
             'subject': subject_template % {'subject': message.subject},
             'recipient': [message.sender,]
             })
-        context['reply_form'] = form
-    if request.method == "POST":
-        accept = request.POST['accept']
+        ctx['reply_form'] = form
+
+    if request.method == "GET":
+        accept = request.GET.get('accept', False)
         if accept:
-            # add a new connection
-            Contact.objects.create(from_user=message.sender, to_user=message.recipient)
-            Contact.objects.create(from_user=message.recipient, to_user=message.sender)
-            bust_cache("connections", message.recipient)
-            bust_cache("connections", message.sender)
 
-            # set flag for supplier
-            Contact.objects.filter(from_user=message.sender).update(is_supplier='True')
+            # if users are not connected, connect them
+            try:
+                Contact.objects.add_connection(message.sender, message.recipient).accept()
+            except AlreadyExistsError:
+                pass
+            # add user to suppliers
+            Contact.objects.add_supplier(message.recipient)
 
-        return render(request, template_name, context)
+            return redirect('django_messages:messages_detail', message_id=message_id)
 
-    return render(request, template_name, context)
+    return render(request, template_name, ctx)

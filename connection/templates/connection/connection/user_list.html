@@ -3,7 +3,7 @@
 {% block content %}
 {% load connectiontags %}
 
-<h1>My Network ( {% connections_count request.user %})</h1>
+<h1>My Network ( {% connections_count request.user %}) <i style="color:green;" class="fas fa-users"> </i></h1>
 {% connections request.user %}
 
 {% endblock %}

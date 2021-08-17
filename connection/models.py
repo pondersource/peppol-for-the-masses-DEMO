@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from connection.exceptions import AlreadyExistsError, AlreadyContactsError
+from connection.exceptions import AlreadyExistsError
 from connection.signals import (
     block_created,
     block_removed,
@@ -29,24 +29,26 @@ from connection.signals import (
 AUTH_USER_MODEL = getattr(settings, "AUTH_USER_MODEL", "auth.User")
 
 CACHE_TYPES = {
-    "connections": "f-%s",
+    "connections": "c-%s",
+    "suppliers": "s-%s",
     "followers": "fo-%s",
     "following": "fl-%s",
     "blocks": "b-%s",
     "blocked": "bo-%s",
     "blocking": "bd-%s",
-    "requests": "fr-%s",
-    "sent_requests": "sfr-%s",
-    "unread_requests": "fru-%s",
-    "unread_request_count": "fruc-%s",
-    "read_requests": "frr-%s",
-    "rejected_requests": "frj-%s",
-    "unrejected_requests": "frur-%s",
-    "unrejected_request_count": "frurc-%s",
+    "requests": "cr-%s",
+    "sent_requests": "scr-%s",
+    "unread_requests": "cru-%s",
+    "unread_request_count": "cruc-%s",
+    "read_requests": "crr-%s",
+    "rejected_requests": "crj-%s",
+    "unrejected_requests": "crur-%s",
+    "unrejected_request_count": "crurc-%s",
 }
 
 BUST_CACHES = {
     "connections": ["connections"],
+    "suppliers": ["suppliers"],
     "followers": ["followers"],
     "blocks": ["blocks"],
     "blocked": ["blocked"],
@@ -135,6 +137,7 @@ class ConnectionRequest(models.Model):
         # Bust connections cache - new connections added
         bust_cache("connections", self.to_user.pk)
         bust_cache("connections", self.from_user.pk)
+
         return True
 
     def reject(self):
@@ -155,7 +158,7 @@ class ConnectionRequest(models.Model):
 
         bust_cache("requests", self.from_user.pk)
         bust_cache("sent_requests", self.to_user.pk)
-        
+
         return True
 
     def mark_viewed(self):
@@ -184,6 +187,22 @@ class ConnectionManager(models.Manager):
             cache.set(key, connections)
 
         return connections
+
+    def suppliers(self, user):
+        """ Return a list of all suppliers """
+        key = cache_key("suppliers", user.pk)
+        suppliers = cache.get(key)
+
+        if suppliers is None:
+            qs = (
+                Contact.objects.select_related("from_user", "to_user")
+                .filter(to_user=user)
+                .all()
+            )
+            suppliers = [u.from_user for u in qs]
+            cache.set(key, suppliers)
+
+        return suppliers
 
     def requests(self, user):
         """ Return a list of connection requests """
@@ -345,6 +364,9 @@ class ConnectionManager(models.Manager):
 
         return request
 
+    def add_supplier(self, to_user):
+        bust_cache("suppliers", to_user.pk)
+        return
 
     def remove_connection(self, from_user, to_user):
         """ Destroy a connection relationship """
@@ -361,6 +383,8 @@ class ConnectionManager(models.Manager):
                 bust_cache("connections", from_user.pk)
                 bust_cache("sent_requests", to_user.pk)
                 bust_cache("sent_requests", from_user.pk)
+                bust_cache("suppliers", from_user.pk)
+
                 return True
             else:
                 return False
@@ -390,9 +414,6 @@ class Contact(models.Model):
         AUTH_USER_MODEL, models.CASCADE, related_name="_unused_connection_relation"
     )
     created = models.DateTimeField(default=timezone.now)
-
-    is_supplier = models.BooleanField(default=False)
-    is_customer = models.BooleanField(default=False)
 
     objects = ConnectionManager()
 

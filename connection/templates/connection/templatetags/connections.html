@@ -1,13 +1,13 @@
 
 <ul>
   <table style="width:100%">
+    {% for f in connections %}
     <tr>
-      {% for f in connections %}
       <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }} </a></td>
     </tr>
       <td><form method="post"  action="{% url 'connection:connection_remove' f.username %}">
             {% csrf_token %}
-            <input class="btn" type="submit" value="Remove" style="color:white;background-color:red;" />
+            <input class="btn" type="submit" value="Remove" style="color:white;background-color:grey;border: 2px solid grey;" />
           </form></td>
   </table>
 
