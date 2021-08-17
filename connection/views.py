@@ -208,3 +208,11 @@ def supplier_remove(request, supplier_to_remove):
     remover = request.user
     Contact.objects.remove_supplier(remover,supplier_to_remove)
     return redirect("connection:connection_view_connections" , username=remover.username)
+
+@login_required
+def costumer_remove(request, costumer_to_remove):
+    """ Remove a costumer"""
+    costumer_to_remove = user_model.objects.get(username=costumer_to_remove)
+    remover = request.user
+    Contact.objects.remove_supplier(remover,costumer_to_remove)
+    return redirect("connection:connection_view_connections" , username=remover.username)

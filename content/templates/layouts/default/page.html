@@ -169,16 +169,16 @@ ul ul a {
 											  <ul class="collapse list-unstyled" id="MessageSubmenu">
 	                          <li>
 															{% if unread_messages %}
-	                             <a href="{% url 'django_messages:messages_inbox' %} " >Suppliers  <i class="fas fa-bell" style="color:#23FF19;"></i></a>
+	                             <a href="{% url 'django_messages:messages_box' %} " >Messages  <i class="fas fa-bell" style="color:#23FF19;"></i></a>
 															 {% else %}
-															 <a href="{% url 'django_messages:messages_inbox' %} " >Suppliers</a>
+															 <a href="{% url 'django_messages:messages_box' %} " >Messages</a>
 															 {% endif %}
 	                          </li>
 	                          <li>
 	                              <a href="{% url 'django_messages:messages_outbox' %} ">Costumers</a>
 	                          </li>
 														<li>
-																<a href="{% url 'django_messages:messages_box' %} ">Messages</a>
+																<a href="{% url 'django_messages:messages_inbox' %} ">Suppliers</a>
 														</li>
 	                          <li>
 	                              <a href="{% url 'django_messages:messages_compose' %} ">Compose Message</a>

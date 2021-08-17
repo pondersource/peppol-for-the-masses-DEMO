@@ -25,6 +25,7 @@ from connection.signals import (
     connection_request_rejected,
     connection_request_viewed,
     supplier_removed,
+    costumer_removed,
 )
 
 AUTH_USER_MODEL = getattr(settings, "AUTH_USER_MODEL", "auth.User")
@@ -32,6 +33,7 @@ AUTH_USER_MODEL = getattr(settings, "AUTH_USER_MODEL", "auth.User")
 CACHE_TYPES = {
     "connections": "c-%s",
     "suppliers": "s-%s",
+    "costumers": "cos-%s",
     "followers": "fo-%s",
     "following": "fl-%s",
     "blocks": "b-%s",
@@ -50,6 +52,7 @@ CACHE_TYPES = {
 BUST_CACHES = {
     "connections": ["connections"],
     "suppliers": ["suppliers"],
+    "costumers": ["costumers"],
     "followers": ["followers"],
     "blocks": ["blocks"],
     "blocked": ["blocked"],
@@ -204,6 +207,22 @@ class ConnectionManager(models.Manager):
             cache.set(key, suppliers)
 
         return suppliers
+
+    def costumers(self, user):
+        """ Return a list of all costumers """
+        key = cache_key("costumers", user.pk)
+        costumers = cache.get(key)
+
+        if costumers is None:
+            qs = (
+                Contact.objects.select_related("from_user", "to_user")
+                .filter(to_user=user)
+                .all()
+            )
+            costumers = [u.from_user for u in qs]
+            cache.set(key, costumers)
+
+        return costumers
 
     def requests(self, user):
         """ Return a list of connection requests """
@@ -369,6 +388,11 @@ class ConnectionManager(models.Manager):
         bust_cache("suppliers", to_user.pk)
         return
 
+    def add_costumer(self, to_user):
+        bust_cache("costumers", to_user.pk)
+        return
+
+    # TO FIX
     def remove_supplier(self ,from_user, to_user):
         """ Remove a supplier """
         try:
@@ -380,6 +404,23 @@ class ConnectionManager(models.Manager):
                 )
                 #qs.delete()
                 #bust_cache("suppliers", from_user.pk)
+                return True
+            else:
+                return False
+        except Contact.DoesNotExist:
+            return False
+    # TO FIX
+    def remove_costumer(self ,from_user, to_user):
+        """ Remove a costumer """
+        try:
+            qs = Contact.objects.filter(Q(to_user=to_user, from_user=from_user) | Q(to_user=from_user, from_user=to_user))
+            distinct_qs = qs.distinct().all()
+            if distinct_qs:
+                costumer_removed.send(
+                    sender=distinct_qs[0], from_user=from_user, to_user=to_user
+                )
+                #qs.delete()
+                #bust_cache("costumers", from_user.pk)
                 return True
             else:
                 return False

@@ -58,6 +58,8 @@
           <input class="btn btn-success" type="checkbox" id="accept" name="accept">
           {% if message.xml_type == 'invoice' %}
           <label for="accept">Do you trust {{ message.sender }} as a supplier?</label>
+          {% else %}
+          <div>missing Q</div>
           {% endif %}
         </div>
         <div>

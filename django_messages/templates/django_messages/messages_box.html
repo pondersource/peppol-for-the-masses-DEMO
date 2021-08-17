@@ -9,7 +9,7 @@
 <a style="color:orange;"> Unknown <i class="fas fa-user"></i></a>
 
 
-<h1> {% trans "Suppliers" %}</h1>
+<h1> {% trans "Messages  TO FIX " %}</h1>
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -24,7 +24,8 @@
 
   <table style="width:100%">
     <tr>
-      <th>Suppliers</th>
+      <th>Sender</th>
+      <th>Recipient</th>
       <th>Subject</th>
       <th>Received</th>
       <th></th>
@@ -34,7 +35,11 @@
     <tr>
       <td>
         {% if message.sender not in suppliers %}
+          {% if message.sender in connections%}
           <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i></a>
+          {% else %}
+          <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i></a>
+          {% endif %}
       </td>
       <td>
         {% if message.new %}<strong>{% endif %}
