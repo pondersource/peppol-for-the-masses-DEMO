@@ -4,28 +4,36 @@
 {% load connectiontags %}
 
 <h1>My Network ( {% connections_count request.user %}) <i style="color:green;" class="fas fa-users"> </i></h1>
+{% for f in connections %}
 
-<ul>
-  <table style="width:100%">
-    {% for f in connections %}
-    <tr>
-      {% if f in suppliers %}
+<table style="width:100%">
+  <tr>
+    <th>{% if f in suppliers %}
       <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }} <i class="fas fa-check"></a></td>
       {% else %}
       <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }} </td>
-        {% endif %}
-    </tr>
-      <td><form method="post"  action="{% url 'connection:connection_remove' f.username %}">
-            {% csrf_token %}
-            <input class="btn" type="submit" value="Remove" style="color:white;background-color:grey;border: 2px solid grey;" />
-          </form></td>
-  </table>
+      {% endif %}
 
-{% empty %}
- </ul>
+    <th>
+      <form method="post"  action="{% url 'connection:connection_remove' f.username %}">
+        {% csrf_token %}
+        <input class="btn" type="submit" value="Remove" style="color:white;background-color:grey;border: 2px solid grey;" />
+    </form>
+    </th>
+
+    {% if f in suppliers %}
+    <th>
+      <form method="post"  action="{% url 'connection:supplier_remove' f.username %}">
+        {% csrf_token %}
+        <input class="btn" type="submit" value="Untrust" style="color:white;background-color:grey;border: 2px solid grey;" />
+      </form>
+    </th>
+    {% endif %}
+  </tr>
+
+</table>
+ {% empty %}
  <div>It's quiet out here..:(</div>
 {% endfor %}
-</ul>
-
 
 {% endblock %}

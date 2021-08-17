@@ -284,6 +284,9 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
     if request.method == "GET":
         accept = request.GET.get('accept', False)
         if accept:
+            
+            # add user to suppliers
+            Contact.objects.add_supplier(message.recipient)
 
             # if users are not connected, connect them
             if Contact.objects.are_connections(message.sender, message.recipient):
@@ -295,8 +298,6 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
                     Contact.objects.add_connection(message.sender, message.recipient).accept()
                 except AlreadyExistsError:
                     pass
-            # add user to suppliers
-            Contact.objects.add_supplier(message.recipient)
 
             return redirect('django_messages:messages_detail', message_id=message_id)
 

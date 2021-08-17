@@ -13,6 +13,7 @@ from connection.views import (
     connection_request_list_rejected,
     connection_requests_sent,
     view_connections,
+    supplier_remove,
 )
 
 app_name = 'connection'
@@ -57,6 +58,11 @@ urlpatterns = [
         r"^connection/remove/(?P<connection_to_remove>[\w-]+)/$",
         view=connection_remove,
         name="connection_remove",
+    ),
+    re_path(
+        r"^supplier/remove/(?P<supplier_to_remove>[\w-]+)/$",
+        view=supplier_remove,
+        name="supplier_remove",
     ),
     re_path(
         r"^blockers/(?P<username>[\w-]+)/$",

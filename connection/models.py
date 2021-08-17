@@ -24,6 +24,7 @@ from connection.signals import (
     connection_request_created,
     connection_request_rejected,
     connection_request_viewed,
+    supplier_removed,
 )
 
 AUTH_USER_MODEL = getattr(settings, "AUTH_USER_MODEL", "auth.User")
@@ -371,10 +372,13 @@ class ConnectionManager(models.Manager):
     def remove_supplier(self ,from_user, to_user):
         """ Remove a supplier """
         try:
-            qs = Contact.objects.filter(Q(to_user=to_user, from_user=from_user) | Q(to_user=from_user, from_user=to_user))
+            qs = Contact.objects.filter(to_user=to_user, from_user=from_user)
             distinct_qs = qs.distinct().all()
             if distinct_qs:
-                qs.delete()
+                supplier_removed.send(
+                    sender=distinct_qs[0], from_user=from_user, to_user=to_user
+                )
+                #qs.delete()
                 bust_cache("suppliers", from_user.pk)
                 return True
             else:

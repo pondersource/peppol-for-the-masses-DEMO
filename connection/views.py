@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponseRedirect
 
 from connection.exceptions import AlreadyExistsError , ValidationError
 from django.core.exceptions import ObjectDoesNotExist
@@ -195,7 +196,15 @@ def block_remove(request, blocked_username):
 @login_required
 def connection_remove(request, connection_to_remove):
     """ Remove a connection"""
-    connection_to_remove= user_model.objects.get(username=connection_to_remove)
+    connection_to_remove = user_model.objects.get(username=connection_to_remove)
     remover = request.user
     Contact.objects.remove_connection(remover,connection_to_remove)
+    return redirect("connection:connection_view_connections" , username=remover.username)
+
+@login_required
+def supplier_remove(request, supplier_to_remove):
+    """ Remove a supplier"""
+    supplier_to_remove = user_model.objects.get(username=supplier_to_remove)
+    remover = request.user
+    Contact.objects.remove_supplier(remover,supplier_to_remove)
     return redirect("connection:connection_view_connections" , username=remover.username)

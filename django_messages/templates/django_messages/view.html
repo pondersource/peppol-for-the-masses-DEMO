@@ -44,11 +44,12 @@
 
         </td>
     </tr>
-
+      {% if message.invoice %}
       <tr>
       <th>Invoice:</th>
       <td><a href="{{message.invoice.url}}" download> Download File</a></td>
       </tr>
+      {% endif %}
       <br>
       {% if message.invoice and message.sender not in suppliers %}
       <form  action="" method="get">
