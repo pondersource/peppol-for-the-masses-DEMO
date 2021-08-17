@@ -54,6 +54,12 @@
   <table>
   {{ form.as_table }}
 </table>
+<b><label for="xml">Type of XML:</label></b>
+
+<select name="xml" id="xml">
+  <option value="invoice">Invoice</option>
+  <option value="purchase">Purchase order</option>
+</select>
   <input class="btn btn-success" type="submit" value={% trans "Send" %} &raquo; style="color:white;background-color:green;"/>
 </form>
 

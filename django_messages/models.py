@@ -64,6 +64,7 @@ class Message(models.Model):
     sender_deleted_at = models.DateTimeField(_("Sender deleted at"), null=True, blank=True)
     recipient_deleted_at = models.DateTimeField(_("Recipient deleted at"), null=True, blank=True)
     invoice = models.FileField(upload_to=None, max_length=254)
+    xml_type = models.CharField(max_length=20, null=True)
 
     objects = MessageManager()
 

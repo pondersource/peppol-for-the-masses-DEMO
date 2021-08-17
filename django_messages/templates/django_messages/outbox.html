@@ -3,6 +3,13 @@
 {% load connectiontags %}
 {% block content %}
 
+
+<a style="color:purple;"> Supplier <i class="fas fa-user"></i> <i class="fas fa-check"></i></a>
+<a style="color:#F7B9B7;"> Costumer <i class="fas fa-user"></i> <i class="fas fa-check"></i></a>
+<a style="color:green;"> Contact <i class="fas fa-user"></i></a>
+<a style="color:orange;"> Unknown <i class="fas fa-user"></i></a>
+
+
 <h1>{% trans "Costumers" %}</h1>
 {% if messages %}
 <ul class="messages">
@@ -26,11 +33,9 @@
 
     <tr>
       <td>
-        {% if message.sender in connections %}
-          <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i></a>
-        {% else %}
-          <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i></a>
-        {% endif %}
+        {% if message.sender in costumers %}
+          <a style="color:#F7B9B7;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i></a>
+
       </td>
 
       <td>
@@ -47,7 +52,7 @@
              <input class="btn btn-success"   type="submit" value="Delete" &raquo; style="color:white;background-color:grey;border: 2px solid grey; " />
           </form>
       </td>
-
+{% endif %}
 {% endfor %}
 </table>
 </table>

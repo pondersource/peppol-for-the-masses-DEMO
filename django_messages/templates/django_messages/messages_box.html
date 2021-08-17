@@ -33,8 +33,8 @@
 
     <tr>
       <td>
-        {% if message.sender in suppliers %}
-          <a style="color:purple;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i> <i class="fas fa-check"></i></a>
+        {% if message.sender not in suppliers %}
+          <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i></a>
       </td>
       <td>
         {% if message.new %}<strong>{% endif %}

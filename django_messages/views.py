@@ -61,6 +61,23 @@ def outbox(request, template_name='django_messages/outbox.html'):
         'message_list': message_list,
         'connections': connections,
     })
+@login_required
+
+def messages_box(request, template_name='django_messages/messages_box.html'):
+    """
+    Displays a list of sent messages by the current user.
+    Optional arguments:
+        ``template_name``: name of the template to use.
+    """
+    message_list = Message.objects.outbox_for(request.user)
+    connections = Contact.objects.connections(request.user)
+    suppliers = Contact.objects.suppliers(request.user)
+
+    return render(request, template_name, {
+        'message_list': message_list,
+        'connections': connections,
+        'suppliers':suppliers,
+    })
 
 @login_required
 def trash(request, template_name='django_messages/trash.html'):
@@ -115,6 +132,7 @@ def compose(request, recipient=None, form_class=ComposeForm,
         form = form_class(request.POST, request.FILES)
         recipient_username_or_webID = request.POST['recipient'].split()
         recipient_username_or_webID = recipient_username_or_webID[0]
+        xml_type = request.POST['xml']
 
         try:
             recipient = Activation.objects.get(webID=recipient_username_or_webID)
@@ -133,7 +151,7 @@ def compose(request, recipient=None, form_class=ComposeForm,
         else:
             if form.is_valid():
                 recipient = User.objects.get(pk=recipient.pk)
-                form.save(sender=request.user , recipient=recipient)
+                form.save(sender=request.user , recipient=recipient , xml_type=xml_type)
                 messages.info(request, _(u"Message successfully sent."))
                 if success_url is None:
                     success_url = reverse_lazy('django_messages:messages_outbox')
@@ -284,7 +302,7 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
     if request.method == "GET":
         accept = request.GET.get('accept', False)
         if accept:
-            
+
             # add user to suppliers
             Contact.objects.add_supplier(message.recipient)
 
