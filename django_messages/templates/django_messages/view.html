@@ -20,7 +20,11 @@
     <tr>
       <th>Sender:</th>
         <td>  {% if message.sender in connections %}
-            <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
+              {% if message.sender in suppliers %}
+                <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} <i class="fas fa-check"></i> </a>
+              {% else %}
+                <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }}</a>
+              {% endif %}
           {% else %}
             <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
           {% endif %}
@@ -40,12 +44,13 @@
 
         </td>
     </tr>
-    {% if message.invoice and message.sender not in connections %}
+
       <tr>
       <th>Invoice:</th>
       <td><a href="{{message.invoice.url}}" download> Download File</a></td>
       </tr>
       <br>
+      {% if message.invoice and message.sender not in suppliers %}
       <form  action="" method="get">
       {% csrf_token %}
         <div>

@@ -28,7 +28,12 @@ def get_connection_context_object_list_name():
 
 def view_connections(request, username, template_name="connection/connection/user_list.html"):
     """ View the connections of a user """
-    return render(request,template_name,)
+
+    connections = Contact.objects.connections(request.user)
+    suppliers = Contact.objects.suppliers(request.user)
+
+    ctx ={ 'connections' : connections , 'suppliers' : suppliers}
+    return render(request,template_name, ctx)
 
 
 @login_required
@@ -72,7 +77,6 @@ def connection_accept(request, connection_request_id):
     return redirect("connection:connection_view_connections", username=request.user.username)
 
 
-
 @login_required
 def connection_reject(request, connection_request_id):
     """ Reject a connection request """
@@ -81,8 +85,6 @@ def connection_reject(request, connection_request_id):
     )
     f_request.reject()
     return redirect("connection:connection_request_list")
-
-
 
 
 @login_required
@@ -180,27 +182,20 @@ def block_add(request, blocked_username, template_name="connection/block/add.htm
 
 
 @login_required
-def block_remove(
-    request, blocked_username, template_name="connection/block/remove.html"
-):
+def block_remove(request, blocked_username):
     """ Remove a following relationship """
-    if request.method == "POST":
-        blocked = user_model.objects.get(username=blocked_username)
-        blocker = request.user
-        Block.objects.remove_block(blocker, blocked)
-        return redirect("connection:connection_blocking", username=blocker.username)
+    #if request.method == "POST":
+    blocked = user_model.objects.get(username=blocked_username)
+    blocker = request.user
+    Block.objects.remove_block(blocker, blocked)
+    return redirect("connection:connection_blocking", username=blocker.username)
 
-    return render(request, template_name, {"blocked_username": blocked_username})
+    #return render(request, template_name, {"blocked_username": blocked_username})
+
 @login_required
-
-def connection_remove(
-    request, connection_to_remove, template_name="connection/connection/remove.html"
-):
-    """ Remove a following relationship """
-    if request.method == "POST":
-        connection_to_remove= user_model.objects.get(username=connection_to_remove)
-        remover = request.user
-        Contact.objects.remove_connection(remover,connection_to_remove)
-        return redirect("connection:connection_view_connections" , username=remover.username)
-
-    return render(request, template_name, {"connection username": connection_to_remove})
+def connection_remove(request, connection_to_remove):
+    """ Remove a connection"""
+    connection_to_remove= user_model.objects.get(username=connection_to_remove)
+    remover = request.user
+    Contact.objects.remove_connection(remover,connection_to_remove)
+    return redirect("connection:connection_view_connections" , username=remover.username)

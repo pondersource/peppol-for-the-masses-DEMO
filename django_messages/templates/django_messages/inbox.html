@@ -27,9 +27,11 @@
 
     <tr>
       <td>
-        {% if message.sender in connections %}
+        {% if message.sender in suppliers %}
           {% if message.sender in suppliers %}
           <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i> <i class="fas fa-check"></i></a>
+          {% else %}
+          <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i></a>
           {% endif %}
         {% else %}
           <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.sender }} <i class="fas fa-user"></i></a>

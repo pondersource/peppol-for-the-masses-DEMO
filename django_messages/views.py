@@ -21,6 +21,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from connection.exceptions import AlreadyExistsError
 from accounts.models import Activation
 from connection.models import bust_cache, cache_key
+from django.db.models import Q
+
 User = get_user_model()
 
 if "pinax.notifications" in settings.INSTALLED_APPS and getattr(settings, 'DJANGO_MESSAGES_NOTIFY', True):
@@ -260,6 +262,7 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
     user = request.user
     now = timezone.now()
     connections = Contact.objects.connections(request.user)
+    suppliers = Contact.objects.suppliers(request.user)
     message = get_object_or_404(Message, id=message_id)
 
     if (message.sender != user) and (message.recipient != user):
@@ -269,7 +272,7 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
         message.save()
 
 
-    ctx = {'message': message, 'reply_form': None , 'connections': connections, }
+    ctx = {'message': message, 'reply_form': None , 'connections': connections, 'suppliers': suppliers}
     if message.recipient == user:
         form = form_class(initial={
             'body': quote_helper(message.sender, message.body),
@@ -283,10 +286,15 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
         if accept:
 
             # if users are not connected, connect them
-            try:
-                Contact.objects.add_connection(message.sender, message.recipient).accept()
-            except AlreadyExistsError:
+            if Contact.objects.are_connections(message.sender, message.recipient):
                 pass
+            elif ConnectionRequest.objects.filter(Q(to_user=message.recipient, from_user=message.sender) | Q(to_user=message.sender, from_user=message.recipient)).exists():
+                ConnectionRequest.objects.get(Q(to_user=message.recipient, from_user=message.sender) | Q(to_user=message.sender, from_user=message.recipient)).accept()
+            else:
+                try:
+                    Contact.objects.add_connection(message.sender, message.recipient).accept()
+                except AlreadyExistsError:
+                    pass
             # add user to suppliers
             Contact.objects.add_supplier(message.recipient)
 
