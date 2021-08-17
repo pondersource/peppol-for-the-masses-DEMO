@@ -1,17 +1,16 @@
+
 <ul>
-{% for f in connections %}
-   {% if f.first_name or f.last_name %}
-   <li>{{ f.username }} </li>
-   {% else %}
-   <li><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }} </a>
+  <table style="width:100%">
+    <tr>
+      {% for f in connections %}
+      <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }} </a></td>
+    </tr>
+      <td><form method="post"  action="{% url 'connection:connection_remove' f.username %}">
+            {% csrf_token %}
+            <input class="btn" type="submit" value="Remove" style="color:white;background-color:red;" />
+          </form></td>
+  </table>
 
-
-     <form method="post"  action="{% url 'connection:connection_remove' f.username %}">
-       {% csrf_token %}
-       <input class="btn btn-success" type="submit" value="Remove" style="color:white;background-color:red;" />
-     </form>
-   </li>
-   {% endif %}
 {% empty %}
  </ul>
  <div>It's quiet out here..:(</div>

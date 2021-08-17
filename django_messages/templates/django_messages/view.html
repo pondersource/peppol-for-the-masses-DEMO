@@ -40,6 +40,25 @@
 
         </td>
     </tr>
+    {% if message.invoice and message.sender not in connections %}
+      <tr>
+      <th>Invoice:</th>
+      <td><a href="{{message.invoice.url}}" download> Download File</a></td>
+      </tr>
+      <br>
+      <form  action="" method="post">
+      {% csrf_token %}
+  <div>
+    <input class="btn btn-success" type="checkbox" id="accept" name="accept">
+    <label for="accept">Do you trust {{ message.sender }} as a supplier?</label>
+  </div>
+  <div>
+    <button class="btn btn-success" type="submit">Submit</button>
+  </div>
+</form>
+    {% endif %}
+
+    <br>
     <tr>
       {% ifequal message.recipient.pk user.pk %}
       <a  style="color:blue;" href="{% url 'django_messages:messages_reply' message.id %}">{% trans "Reply" %}</a>
@@ -63,12 +82,7 @@
       </form>
     </tr>
     {% endif %}
-    <tr>
-      {% if message.invoice %}
-        <th>Invoice:</th>
-        <td><a href="{{message.invoice.url}}" download> Download File</a></td>
-      {% endif %}
-    </tr>
+
     {% endcomment %}
   </table>
 

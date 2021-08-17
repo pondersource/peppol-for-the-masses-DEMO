@@ -19,7 +19,7 @@ from connection.models import Contact
 from peppol.peppol_lib.Sender import *
 from django.core.exceptions import ObjectDoesNotExist
 from accounts.models import Activation
-
+from connection.models import bust_cache
 User = get_user_model()
 
 if "pinax.notifications" in settings.INSTALLED_APPS and getattr(settings, 'DJANGO_MESSAGES_NOTIFY', True):
@@ -36,10 +36,12 @@ def inbox(request, template_name='django_messages/inbox.html'):
     """
     message_list = Message.objects.inbox_for(request.user)
     connections = Contact.objects.connections(request.user)
+    suppliers = Contact.objects.filter(is_supplier=True)
 
     return render(request, template_name, {
         'message_list': message_list,
         'connections': connections,
+        'supplier' : suppliers,
     })
 
 @login_required
@@ -253,17 +255,20 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
     If the user is the recipient a reply form will be added to the
     tenplate context, otherwise 'reply_form' will be None.
     """
+
     user = request.user
     now = timezone.now()
     connections = Contact.objects.connections(request.user)
     message = get_object_or_404(Message, id=message_id)
+
     if (message.sender != user) and (message.recipient != user):
         raise Http404
     if message.read_at is None and message.recipient == user:
         message.read_at = now
         message.save()
 
-    context = {'message': message, 'reply_form': None , 'connections': connections,}
+
+    context = {'message': message, 'reply_form': None , 'connections': connections, }
     if message.recipient == user:
         form = form_class(initial={
             'body': quote_helper(message.sender, message.body),
@@ -271,4 +276,18 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
             'recipient': [message.sender,]
             })
         context['reply_form'] = form
+    if request.method == "POST":
+        accept = request.POST['accept']
+        if accept:
+            # add a new connection
+            Contact.objects.create(from_user=message.sender, to_user=message.recipient)
+            Contact.objects.create(from_user=message.recipient, to_user=message.sender)
+            bust_cache("connections", message.recipient)
+            bust_cache("connections", message.sender)
+
+            # set flag for supplier
+            Contact.objects.filter(from_user=message.sender).update(is_supplier='True')
+
+        return render(request, template_name, context)
+
     return render(request, template_name, context)

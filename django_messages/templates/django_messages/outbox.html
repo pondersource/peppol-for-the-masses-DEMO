@@ -34,11 +34,9 @@
       </td>
 
       <td>
-        {% if message.new %}<strong>{% endif %}
       {% if message.replied %}<em>{% endif %}
       <a style="color:blue;" href="{% url 'django_messages:messages_detail' message.id %}">{{ message.subject }}</a>
       {% if message.replied %}</em>{% endif %}
-      {% if message.new %}</strong>{% endif %}
       </td>
 
       <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
