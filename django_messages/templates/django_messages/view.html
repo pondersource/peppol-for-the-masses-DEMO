@@ -10,23 +10,20 @@
 
   <table style="width:100%">
 
-
     <tr>
       <th>Subject:</th>
       <td><strong>{{ message.subject }}</strong></td>
     </tr>
-
-
     <tr>
       <th>Sender:</th>
-        <td>{% if message.sender in connections %}
-                {% if message.sender in suppliers %}
-                  <a style="color:purple;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} <i class="fas fa-check"></i> </a>
+        <td>{% if message.recipient in connections %}
+                {% if message.recipient in suppliers %}
+                  <a style="color:purple;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }} <i class="fas fa-check"></i> </a>
                 {% else %}
-                  <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }}</a>
+                  <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }}</a>
                 {% endif %}
             {% else %}
-              <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
+              <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }} </a>
             {% endif %}
         </td>
     </tr>
@@ -45,27 +42,29 @@
         </td>
     </tr>
       {% if message.invoice %}
-      <tr>
-      <th>Invoice:</th>
-      <td><a href="{{message.invoice.url}}" download> Download File</a></td>
-      </tr>
-      {% endif %}
+        <tr>
+        {% if message.xml_type == 'invoice' %}
+          <th>Invoice:</th>
+        {% else %}
+            <th>Purchase order:</th>
+        {% endif %}
+        <td><a href="{{message.invoice.url}}" download> Download File</a></td>
+        </tr>
       <br>
-      {% if message.invoice and message.sender not in suppliers%}
-      <form  action="" method="get">
+      {% if message.recipient not in suppliers %}
+      <form  action="" method="post">
       {% csrf_token %}
         <div>
           <input class="btn btn-success" type="checkbox" id="accept" name="accept">
           {% if message.xml_type == 'invoice' %}
           <label for="accept">Do you trust {{ message.sender }} as a supplier?</label>
-          {% else %}
-          <div>missing Q</div>
           {% endif %}
         </div>
         <div>
           <button class="btn btn-success" type="submit">Submit</button>
         </div>
       </form>
+      {% endif %}
     {% endif %}
 
     <br>

@@ -3,13 +3,16 @@
 {% block content %}
 {% load connectiontags %}
 
+<a style="color:purple;"> Supplier <i class="fas fa-check"></i></a>
+<a style="color:#F7B9B7;"> Costumer <i class="fas fa-check"></i></a>
+
 <h1>My Network ( {% connections_count request.user %}) <i style="color:green;" class="fas fa-users"> </i></h1>
 {% for f in connections %}
 
 <table style="width:100%">
   <tr>
     <th>{% if f in suppliers %}
-      <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }} <i class="fas fa-check"></a></td>
+      <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }}<a style="color:purple;"  <i class="fas fa-check"></a></td>
       {% else %}
       <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }} </td>
       {% endif %}

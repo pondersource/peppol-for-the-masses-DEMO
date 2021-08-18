@@ -33,7 +33,7 @@ def view_connections(request, username, template_name="connection/connection/use
     connections = Contact.objects.connections(request.user)
     suppliers = Contact.objects.suppliers(request.user)
 
-    ctx ={ 'connections' : connections , 'suppliers' : suppliers}
+    ctx ={ 'connections' : connections , 'suppliers' : suppliers }
     return render(request,template_name, ctx)
 
 

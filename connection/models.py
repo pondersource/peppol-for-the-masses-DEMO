@@ -384,12 +384,12 @@ class ConnectionManager(models.Manager):
 
         return request
 
-    def add_supplier(self, to_user):
-        bust_cache("suppliers", to_user.pk)
+    def add_supplier(self, supplier_user):
+        bust_cache("suppliers", supplier_user.pk)
         return
 
-    def add_costumer(self, to_user):
-        bust_cache("costumers", to_user.pk)
+    def add_costumer(self, costumer_user):
+        bust_cache("costumers", costumer_user.pk)
         return
 
     # TO FIX
@@ -442,7 +442,6 @@ class ConnectionManager(models.Manager):
                 bust_cache("connections", from_user.pk)
                 bust_cache("sent_requests", to_user.pk)
                 bust_cache("sent_requests", from_user.pk)
-                bust_cache("suppliers", from_user.pk)
 
                 return True
             else:

@@ -57,9 +57,13 @@ def suppliers(request, template_name='django_messages/suppliers.html'):
     message_list = Message.objects.suppliers_for(request.user)
     suppliers = Contact.objects.suppliers(request.user)
 
+    suppliers_messages = []
+    for x in message_list:
+        if x.recipient in suppliers:
+            suppliers_messages.append(x)
+
     return render(request, template_name, {
-        'message_list': message_list,
-        'suppliers':suppliers,
+        'suppliers_messages':suppliers_messages,
     })
 
 @login_required
@@ -72,9 +76,13 @@ def costumers(request, template_name='django_messages/costumers.html'):
     message_list = Message.objects.costumers_for(request.user)
     costumers = Contact.objects.costumers(request.user)
 
+    costumers_messages = []
+    for x in message_list:
+        if x.sender in costumers:
+            costumer_messages.append(x)
+
     return render(request, template_name, {
-        'message_list': message_list,
-        'costumers':costumers,
+        'costumers_messages': costumers_messages,
     })
 
 @login_required
@@ -103,14 +111,12 @@ def messages_box(request, template_name='django_messages/messages_box.html'):
 
     simple_messages = []
     for x in message_list:
-        if x.sender not in suppliers:
+        if x.recipient not in suppliers:
             simple_messages.append(x)
 
     return render(request, template_name, {
         'simple_messages': simple_messages,
         'connections': connections,
-        'message_list': message_list,
-
     })
 
 @login_required
@@ -323,7 +329,7 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
         message.read_at = now
         message.save()
 
-    ctx = {'message': message, 'reply_form': None , 'connections': connections, 'suppliers': suppliers}
+    ctx = {'message': message, 'reply_form': None , 'connections': connections , 'suppliers': suppliers}
     if message.recipient == user:
         form = form_class(initial={
             'body': quote_helper(message.sender, message.body),
@@ -332,12 +338,11 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
             })
         ctx['reply_form'] = form
 
-    if request.method == "GET":
-        accept = request.GET.get('accept', False)
+    if request.method == "POST":
+        accept = request.POST['accept']
         if accept:
-
             # add user to suppliers
-            Contact.objects.add_supplier(message.recipient)
+            Contact.objects.add_supplier(message.sender)
 
             # if users are not connected, connect them
             if Contact.objects.are_connections(message.sender, message.recipient):

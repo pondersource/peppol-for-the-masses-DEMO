@@ -19,9 +19,8 @@ class MessageManager(models.Manager):
         """
         Returns all messages from suppliers.
         """
-        suppliers = suppliers = Contact.objects.suppliers(request.user)
+        suppliers = Contact.objects.suppliers(user)
         return self.filter(
-            sender__in=suppliers,
             recipient_deleted_at__isnull=True,
             sender_deleted_at__isnull=True,
         )
@@ -29,9 +28,8 @@ class MessageManager(models.Manager):
         """
         Returns all messages from costumers.
         """
-        costumers = suppliers = Contact.objects.costumers(request.user)
+        costumers = Contact.objects.costumers(user)
         return self.filter(
-            __in=costumers,
             recipient_deleted_at__isnull=True,
             sender_deleted_at__isnull=True,
         )
