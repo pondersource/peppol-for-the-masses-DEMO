@@ -19,9 +19,18 @@ urlpatterns = [
     re_path(r'^outbox/$',
             outbox,
             name='messages_outbox'),
+
     re_path(r'^messages_box/$',
             messages_box,
             name='messages_box'),
+
+    re_path(r'^suppliers/$',
+            suppliers,
+            name='suppliers'),
+            
+    re_path(r'^costumers/$',
+            costumers,
+            name='costumers'),
 
     re_path(r'^compose/$',
             compose,

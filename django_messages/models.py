@@ -8,12 +8,33 @@ from django.db.models import signals
 from django.utils import timezone
 from six import python_2_unicode_compatible
 from django.utils.translation import gettext_lazy as _
+from connection.models import Contact
 
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 
 class MessageManager(models.Manager):
 
+    def suppliers_for(self, user):
+        """
+        Returns all messages from suppliers.
+        """
+        suppliers = suppliers = Contact.objects.suppliers(request.user)
+        return self.filter(
+            sender__in=suppliers,
+            recipient_deleted_at__isnull=True,
+            sender_deleted_at__isnull=True,
+        )
+    def costumers_for(self, user):
+        """
+        Returns all messages from costumers.
+        """
+        costumers = suppliers = Contact.objects.costumers(request.user)
+        return self.filter(
+            __in=costumers,
+            recipient_deleted_at__isnull=True,
+            sender_deleted_at__isnull=True,
+        )
     def inbox_for(self, user):
         """
         Returns all messages that were received by the given user and are not
@@ -23,7 +44,6 @@ class MessageManager(models.Manager):
             recipient=user,
             recipient_deleted_at__isnull=True,
         )
-
     def outbox_for(self, user):
         """
         Returns all messages that were sent by the given user and are not
@@ -32,6 +52,15 @@ class MessageManager(models.Manager):
         return self.filter(
             sender=user,
             sender_deleted_at__isnull=True,
+        )
+
+    def messages_for(self, user):
+        """
+        Returns all messages are not marked as deleted.
+        """
+        return self.filter(
+            sender_deleted_at__isnull=True,
+            recipient_deleted_at__isnull=True,
         )
 
     def trash_for(self, user):
@@ -70,15 +99,15 @@ class Message(models.Model):
 
     def new(self):
         """returns whether the recipient has read the message or not"""
-        if self.read_at is not None:
-            return False
-        return True
+        if self.read_at is None:
+            return True
+        return False
 
     def replied(self):
         """returns whether the recipient has written a reply to this message"""
-        if self.replied_at is not None:
-            return True
-        return False
+        if self.replied_at is None:
+            return False
+        return True
 
     def __str__(self):
         return self.subject

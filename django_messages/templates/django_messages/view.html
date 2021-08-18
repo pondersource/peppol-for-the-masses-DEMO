@@ -51,7 +51,7 @@
       </tr>
       {% endif %}
       <br>
-      {% if message.invoice and message.sender not in suppliers and message.sender not in costumers %}
+      {% if message.invoice and message.sender not in suppliers%}
       <form  action="" method="get">
       {% csrf_token %}
         <div>

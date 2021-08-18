@@ -48,6 +48,36 @@ def inbox(request, template_name='django_messages/inbox.html'):
     })
 
 @login_required
+def suppliers(request, template_name='django_messages/suppliers.html'):
+    """
+    Displays a list of received messages for the current user.
+    Optional Arguments:
+        ``template_name``: name of the template to use.
+    """
+    message_list = Message.objects.suppliers_for(request.user)
+    suppliers = Contact.objects.suppliers(request.user)
+
+    return render(request, template_name, {
+        'message_list': message_list,
+        'suppliers':suppliers,
+    })
+
+@login_required
+def costumers(request, template_name='django_messages/costumers.html'):
+    """
+    Displays a list of received messages for the current user.
+    Optional Arguments:
+        ``template_name``: name of the template to use.
+    """
+    message_list = Message.objects.costumers_for(request.user)
+    costumers = Contact.objects.costumers(request.user)
+
+    return render(request, template_name, {
+        'message_list': message_list,
+        'costumers':costumers,
+    })
+
+@login_required
 def outbox(request, template_name='django_messages/outbox.html'):
     """
     Displays a list of sent messages by the current user.
@@ -65,18 +95,22 @@ def outbox(request, template_name='django_messages/outbox.html'):
 
 def messages_box(request, template_name='django_messages/messages_box.html'):
     """
-    Displays a list of sent messages by the current user.
-    Optional arguments:
-        ``template_name``: name of the template to use.
+    Displays a list of all messages from simple Connections( no suppliers or costumers ) or Unknown
     """
-    message_list = Message.objects.outbox_for(request.user)
-    connections = Contact.objects.connections(request.user)
+    message_list = Message.objects.messages_for(request.user)
     suppliers = Contact.objects.suppliers(request.user)
+    connections = Contact.objects.connections(request.user)
+
+    simple_messages = []
+    for x in message_list:
+        if x.sender not in suppliers:
+            simple_messages.append(x)
 
     return render(request, template_name, {
-        'message_list': message_list,
+        'simple_messages': simple_messages,
         'connections': connections,
-        'suppliers':suppliers,
+        'message_list': message_list,
+
     })
 
 @login_required
@@ -288,7 +322,6 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
     if message.read_at is None and message.recipient == user:
         message.read_at = now
         message.save()
-
 
     ctx = {'message': message, 'reply_form': None , 'connections': connections, 'suppliers': suppliers}
     if message.recipient == user:
