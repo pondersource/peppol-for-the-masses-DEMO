@@ -78,9 +78,9 @@
       {% if message.xml %}
         <tr>
         {% if message.xml_type == 'invoice' %}
-          <th>Invoice:</th>
+          <th>Invoice: <i style="color:Mediumslateblue;" class="fas fa-file"></i></th>
         {% elif message.xml_type == 'purchase' %}
-            <th>Purchase order:</th>
+            <th>Purchase order: <i style="color:#30BAA1;" class="fas fa-file"></i></th>
         {% endif %}
         <td><a href="{{message.invoice.url}}" download> Download File</a></td>
         </tr>

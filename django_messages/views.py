@@ -71,6 +71,34 @@ def outbox(request, template_name='django_messages/outbox.html'):
     return render(request, template_name, ctx)
 
 @login_required
+def costumers(request, template_name='django_messages/costumers.html'):
+    """
+    Displays a list of messages with costumers
+    """
+    message_list = Message.objects.outbox_for(request.user)
+    costumers = Contact.objects.costumers(request.user)
+
+    ctx ={}
+    ctx['message_list'] = message_list
+    ctx['costumers'] = costumers
+
+    return render(request, template_name, ctx)
+
+@login_required
+def suppliers(request, template_name='django_messages/suppliers.html'):
+    """
+    Displays a list of messages with suppliers
+    """
+    message_list = Message.objects.outbox_for(request.user)
+    suppliers = Contact.objects.suppliers(request.user)
+
+    ctx ={}
+    ctx['message_list'] = message_list
+    ctx['suppliers'] = suppliers
+
+    return render(request, template_name, ctx)
+
+@login_required
 def trash(request, template_name='django_messages/trash.html'):
     """
     Displays a list of deleted messages.

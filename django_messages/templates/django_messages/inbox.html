@@ -9,6 +9,8 @@
 <a style="color:#F7B9B7;"> Costumer <i class="fas fa-user"></i> </a>
 <a style="color:green;"> Contact <i class="fas fa-user"></i></a>
 <a style="color:orange;"> Unknown <i class="fas fa-user"></i></a>
+<a style="color:Mediumslateblue;"> Invoice <i class="fas fa-file"></i> </a>
+<a style="color:#30BAA1;"> Purchase order <i class="fas fa-file"></i> </a>
 
 
 <h1>{% trans "Inbox" %}</h1>
@@ -32,7 +34,6 @@
       <th></th>
     </tr>
     {% for message in message_list %}
-
     <tr>
       <td>
         {% if message.sender in connections %}
@@ -44,12 +45,19 @@
             <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }}<a style="color:purple;"  <i class="fas fa-user"></a></a>
           {% else %}
             <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }}</a>
-          {% endif %}      </td>
-          {% elif message.sender == user %}
-            <a href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
-          {% else %}
-            <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
           {% endif %}
+        {% elif message.sender == user %}
+          <a href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
+        {% else %}
+          <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
+        {% endif %}
+
+          {% if message.xml_type == 'invoice'%}
+            <i style="color:Mediumslateblue;" class="fas fa-file"></i>
+          {% elif message.xml_type == 'purchase'%}
+            <i style="color:#30BAA1;" class="fas fa-file"></i>
+          {% endif %}
+        </td>
       <td>
         {% if message.new %}<strong>{% endif %}
         {% if message.replied %}<em>{% endif %}

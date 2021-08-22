@@ -1,0 +1,71 @@
+{% extends 'main/messages.html' %}
+{% load i18n %}
+{% load connectiontags %}
+{% load static %}
+
+{% block content %}
+
+<a style="color:Mediumslateblue;"> Invoice <i class="fas fa-file"></i> </a>
+<a style="color:#30BAA1;"> Purchase order <i class="fas fa-file"></i> </a>
+
+<h1>{% trans "Costumers" %}</h1>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li >{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if message_list %}
+
+<table class="messages">
+
+  <table style="width:100%">
+    <tr>
+      <th>Costumer</th>
+      <th>Subject </th>
+      <th>Received</th>
+      <th></th>
+    </tr>
+    {% for message in message_list %}
+      {% if message.recipient in costumers %}
+
+      <tr>
+        <td>
+          {% if message.xml_type == 'invoice'%}
+            <i style="color:Mediumslateblue;" class="fas fa-file"></i> <a  style="color:purple;" href="{% url 'accounts:profile' message.recipient.id %}">{{ message.recipient }} </a>
+          {% elif message.xml_type == 'purchase'%}
+            <i style="color:#30BAA1;" class="fas fa-file"></i> <a  style="color:purple;" href="{% url 'accounts:profile' message.recipient.id %}">{{ message.recipient }} </a>
+          {% else %}
+            <a  style="color:purple;" href="{% url 'accounts:profile' message.recipient.id %}">{{ message.recipient }} </a>
+          {% endif %}
+        <td>
+          {% if message.new %}<strong>{% endif %}
+          {% if message.replied %}<em>{% endif %}
+          <a style="color:blue;" href="{% url 'django_messages:messages_detail' message.id %}">{{ message.subject }}</a>
+          {% if message.replied %}</em>{% endif %}
+          {% if message.new %}</strong>{% endif %}</td>
+
+
+        <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+
+        <td>
+            <form method="post"  action="{% url 'django_messages:messages_delete' message.id %}">
+               {% csrf_token %}
+               <input class="btn btn-success"   type="submit" value="Delete" &raquo; style="color:white;background-color:grey;border: 2px solid grey;" />
+            </form>
+        </td>
+        <td>
+          {% if message.peppol_classic %}
+          <div><img src="{% static 'img/peppol.png' %}"></div>
+          {% endif %}
+        </td>
+      {% endif %}
+    {% endfor %}
+</table>
+</table>
+{% else %}
+<p>{% trans "No messages." %}</p>
+{% endif %}
+{% endblock %}

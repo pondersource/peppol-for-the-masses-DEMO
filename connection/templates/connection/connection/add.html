@@ -29,10 +29,11 @@
 {% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}
 <br><form method="post" style="display:flex;flex-direction:row" >
   {% csrf_token %}
-
   <body>
-  <div>Username or WebId</div>
-  <input type="text" id="tags" name="username_or_WebID_or_peppolID">
+  <div>Search</div>
+  <input type="text" id="tags" name="username_or_WebID_or_peppolID" placeholder="Username-WebID-PeppolID">
+
+
   <script>
   $( function() {
     var availableTags = [

@@ -20,6 +20,14 @@ urlpatterns = [
             outbox,
             name='messages_outbox'),
 
+    re_path(r'^costumers/$',
+            costumers,
+            name='messages_costumers'),
+
+    re_path(r'^suppliers/$',
+            suppliers,
+            name='messages_suppliers'),
+
     re_path(r'^compose/$',
             compose,
             name='messages_compose'),

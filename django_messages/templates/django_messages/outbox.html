@@ -9,6 +9,9 @@
 <a style="color:#F7B9B7;"> Costumer <i class="fas fa-user"></i> </a>
 <a style="color:green;"> Contact <i class="fas fa-user"></i></a>
 <a style="color:orange;"> Unknown <i class="fas fa-user"></i></a>
+<a style="color:Mediumslateblue;"> Invoice <i class="fas fa-file"></i> </a>
+<a style="color:#30BAA1;"> Purchase order <i class="fas fa-file"></i> </a>
+
 
 
 <h1>{% trans "Outbox" %}</h1>
@@ -35,6 +38,7 @@
     <tr>
       <td>
         {% if message.recipient in connections %}
+
           {% if message.recipient in suppliers and message.recipient in costumers %}
             <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }} <a style="color:#F7B9B7;"  <i class="fas fa-user"></a><a style="color:purple;"  <i class="fas fa-user"></a></a>
           {% elif message.recipient in costumers %}
@@ -43,12 +47,21 @@
             <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }} <a style="color:purple;"  <i class="fas fa-user"></a> </a>
           {% else %}
             <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }}</a>
-          {% endif %}      </td>
+          {% endif %}
+
         {% elif message.recipient == user %}
           <a href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }} </a>
         {% else %}
           <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}"> {{ message.recipient }} <i class="fas fa-user"></i></a>
-      {% endif %}
+        {% endif %}
+
+        {% if message.xml_type == 'invoice'%}
+          <i style="color:Mediumslateblue;" class="fas fa-file"></i>
+        {% elif message.xml_type == 'purchase'%}
+          <i style="color:#30BAA1;" class="fas fa-file"></i>
+        {% endif %}
+
+       </td>
       <td>
       {% if message.replied %}<em>{% endif %}
       <a style="color:blue;" href="{% url 'django_messages:messages_detail' message.id %}">{{ message.subject }}</a>
@@ -69,7 +82,7 @@
           </form>
       </td>
 
-{% endfor %}
+    {% endfor %}
 </table>
 </table>
 {% else %}
