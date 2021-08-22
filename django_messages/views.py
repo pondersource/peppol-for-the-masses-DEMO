@@ -40,50 +40,15 @@ def inbox(request, template_name='django_messages/inbox.html'):
     message_list = Message.objects.inbox_for(request.user)
     connections = Contact.objects.connections(request.user)
     suppliers = Contact.objects.suppliers(request.user)
-
-    return render(request, template_name, {
-        'message_list': message_list,
-        'connections': connections,
-        'suppliers':suppliers,
-    })
-
-@login_required
-def suppliers(request, template_name='django_messages/suppliers.html'):
-    """
-    Displays a list of received messages for the current user.
-    Optional Arguments:
-        ``template_name``: name of the template to use.
-    """
-    message_list = Message.objects.suppliers_for(request.user)
-    suppliers = Contact.objects.suppliers(request.user)
-
-    suppliers_messages = []
-    for x in message_list:
-        if x.recipient in suppliers:
-            suppliers_messages.append(x)
-
-    return render(request, template_name, {
-        'suppliers_messages':suppliers_messages,
-    })
-
-@login_required
-def costumers(request, template_name='django_messages/costumers.html'):
-    """
-    Displays a list of received messages for the current user.
-    Optional Arguments:
-        ``template_name``: name of the template to use.
-    """
-    message_list = Message.objects.costumers_for(request.user)
     costumers = Contact.objects.costumers(request.user)
 
-    costumers_messages = []
-    for x in message_list:
-        if x.sender in costumers:
-            costumer_messages.append(x)
+    ctx ={}
+    ctx['message_list'] = message_list
+    ctx['connections'] = connections
+    ctx['suppliers'] = suppliers
+    ctx['costumers'] = costumers
 
-    return render(request, template_name, {
-        'costumers_messages': costumers_messages,
-    })
+    return render(request, template_name, ctx)
 
 @login_required
 def outbox(request, template_name='django_messages/outbox.html'):
@@ -94,30 +59,16 @@ def outbox(request, template_name='django_messages/outbox.html'):
     """
     message_list = Message.objects.outbox_for(request.user)
     connections = Contact.objects.connections(request.user)
-
-    return render(request, template_name, {
-        'message_list': message_list,
-        'connections': connections,
-    })
-@login_required
-
-def messages_box(request, template_name='django_messages/messages_box.html'):
-    """
-    Displays a list of all messages from simple Connections( no suppliers or costumers ) or Unknown
-    """
-    message_list = Message.objects.messages_for(request.user)
+    costumers = Contact.objects.costumers(request.user)
     suppliers = Contact.objects.suppliers(request.user)
-    connections = Contact.objects.connections(request.user)
 
-    simple_messages = []
-    for x in message_list:
-        if x.recipient not in suppliers:
-            simple_messages.append(x)
+    ctx ={}
+    ctx['message_list'] = message_list
+    ctx['connections'] = connections
+    ctx['suppliers'] = suppliers
+    ctx['costumers'] = costumers
 
-    return render(request, template_name, {
-        'simple_messages': simple_messages,
-        'connections': connections,
-    })
+    return render(request, template_name, ctx)
 
 @login_required
 def trash(request, template_name='django_messages/trash.html'):
@@ -170,20 +121,27 @@ def compose(request, recipient=None, form_class=ComposeForm,
     if request.method == "POST":
         sender = request.user
         form = form_class(request.POST, request.FILES)
-        recipient_username_or_webID = request.POST['recipient'].split()
-        recipient_username_or_webID = recipient_username_or_webID[0]
+        recipient_username_or_webID_or_PeppolID = request.POST['recipient'].split()
+        recipient_UWP = recipient_username_or_webID_or_PeppolID[0]
         xml_type = request.POST['xml']
+        peppol_classic = request.POST.get('peppol')
 
         try:
-            recipient = Activation.objects.get(webID=recipient_username_or_webID)
+            recipient = Activation.objects.get(webID=recipient_UWP)
             recipient_username = recipient.user.username
-        except ObjectDoesNotExist as e:
+            recipient = User.objects.get(username=recipient_username)
+        except ObjectDoesNotExist:
             try:
-                recipient = User.objects.get(username=recipient_username_or_webID)
-                recipient_username = recipient.username
-            except ObjectDoesNotExist as e:
-                ctx["errors"] = ["%s" % e]
-                return render(request, template_name, ctx )
+                recipient = Activation.objects.get(peppolID=recipient_UWP)
+                recipient_username = recipient.user.username
+                recipient = User.objects.get(username=recipient_username)
+            except ObjectDoesNotExist:
+                try:
+                    recipient = User.objects.get(username=recipient_username_or_webID)
+                    recipient_username = recipient.username
+                except ObjectDoesNotExist as e:
+                    ctx["errors"] = ["%s" % e]
+                    return render(request, template_name, ctx )
 
         if  sender.username == recipient_username:
             messages.info(request, _(u"Why are you talking to yourself?"))
@@ -191,12 +149,13 @@ def compose(request, recipient=None, form_class=ComposeForm,
         else:
             if form.is_valid():
                 recipient = User.objects.get(pk=recipient.pk)
-                form.save(sender=request.user , recipient=recipient , xml_type=xml_type)
+                form.save(sender=request.user , recipient=recipient , xml_type=xml_type, peppol_classic = peppol_classic)
                 messages.info(request, _(u"Message successfully sent."))
                 if success_url is None:
                     success_url = reverse_lazy('django_messages:messages_outbox')
                 if 'next' in request.GET:
                     success_url = request.GET['next']
+
                 return HttpResponseRedirect(success_url)
     else:
         form = form_class(initial={"subject": request.GET.get("subject", "")})
@@ -321,6 +280,8 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
     now = timezone.now()
     connections = Contact.objects.connections(request.user)
     suppliers = Contact.objects.suppliers(request.user)
+    costumers = Contact.objects.costumers(request.user)
+
     message = get_object_or_404(Message, id=message_id)
 
     if (message.sender != user) and (message.recipient != user):
@@ -329,7 +290,8 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
         message.read_at = now
         message.save()
 
-    ctx = {'message': message, 'reply_form': None , 'connections': connections , 'suppliers': suppliers}
+    ctx = {'message': message, 'reply_form': None , 'connections': connections , 'suppliers' : suppliers , 'costumers' : costumers }
+
     if message.recipient == user:
         form = form_class(initial={
             'body': quote_helper(message.sender, message.body),
@@ -337,24 +299,46 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
             'recipient': [message.sender,]
             })
         ctx['reply_form'] = form
+    if 'POST':
+        accept = request.POST.get('accept')
+        username = request.POST.get('username')
 
-    if request.method == "POST":
-        accept = request.POST['accept']
+        # Get Contact
+        try:
+            partner = User.objects.get(username = username)
+            contact = Contact.objects.get(to_user = partner , from_user = request.user )
+            reverse_contact = Contact.objects.get(to_user = request.user , from_user = partner )
+        except ObjectDoesNotExist as e:
+            ctx["errors"] = ["%s" % e]
+            return render(request, template_name, ctx)
+
+        # accept User as a supplier
         if accept:
-            # add user to suppliers
-            Contact.objects.add_supplier(message.sender)
-
             # if users are not connected, connect them
-            if Contact.objects.are_connections(message.sender, message.recipient):
+            if Contact.objects.are_connections(request.user, partner):
                 pass
-            elif ConnectionRequest.objects.filter(Q(to_user=message.recipient, from_user=message.sender) | Q(to_user=message.sender, from_user=message.recipient)).exists():
-                ConnectionRequest.objects.get(Q(to_user=message.recipient, from_user=message.sender) | Q(to_user=message.sender, from_user=message.recipient)).accept()
+            elif ConnectionRequest.objects.filter(Q(to_user=request.user, from_user = partner) | Q(to_user= partner, from_user=request.user)).exists():
+                ConnectionRequest.objects.get(Q(to_user=request.user, from_user= partner) | Q(to_user= partner, from_user=request.user)).accept()
             else:
                 try:
-                    Contact.objects.add_connection(message.sender, message.recipient).accept()
+                    Contact.objects.add_connection( partner, request.user).accept()
                 except AlreadyExistsError:
                     pass
 
-            return redirect('django_messages:messages_detail', message_id=message_id)
+            if message.xml_type == 'invoice':
+                contact.is_supplier = True
+                reverse_contact.is_costumer = True
+
+            elif message.xml_type == 'purchase':
+                contact.is_costumer = True
+                reverse_contact.is_supplier = True
+
+        contact.save()
+        reverse_contact.save()
+        return redirect('django_messages:messages_detail', message_id=message.id )
 
     return render(request, template_name, ctx)
+
+def review(request, message_id, template_name = 'django_messages/review.html'):
+
+    return render(request, template_name, )

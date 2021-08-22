@@ -8,3 +8,4 @@ class Activation(models.Model):
     code        = models.CharField(max_length=20, unique=True)
     email       = models.EmailField(blank=True)
     webID       = models.URLField(blank=True)
+    peppolID    = models.TextField(blank=True, null=True )

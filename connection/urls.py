@@ -61,16 +61,6 @@ urlpatterns = [
         name="connection_remove",
     ),
     re_path(
-        r"^supplier/remove/(?P<supplier_to_remove>[\w-]+)/$",
-        view=supplier_remove,
-        name="supplier_remove",
-    ),
-    re_path(
-        r"^costumer/remove/(?P<costumer_to_remove>[\w-]+)/$",
-        view=costumer_remove,
-        name="costumer_remove",
-    ),
-    re_path(
         r"^blockers/(?P<username>[\w-]+)/$",
         view=blockers,
         name="connection_blockers",
@@ -93,4 +83,16 @@ urlpatterns = [
     re_path(r"^sent_requests/$",
     view=connection_requests_sent,
     name="connection_requests_sent"),
+
+    re_path(
+        r"^supplier/remove/(?P<supplier_to_remove>[\w-]+)/$",
+        view=supplier_remove,
+        name="supplier_remove",
+    ),
+
+    re_path(
+        r"^costumer/remove/(?P<costumer_to_remove>[\w-]+)/$",
+        view=costumer_remove,
+        name="costumer_remove",
+    ),
 ]

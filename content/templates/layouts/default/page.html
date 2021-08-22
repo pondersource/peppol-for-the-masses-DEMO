@@ -31,103 +31,103 @@
     });
   </script>
   <style>
-    .wrapper {
-      display: flex;
-      align-items: stretch;
-  }
+		.wrapper {
+			display: flex;
+			align-items: stretch;
+	}
 
-  #sidebar {
-      min-width: 250px;
-      max-width: 250px;
+	#sidebar {
+			min-width: 250px;
+			max-width: 250px;
 
-  }
+	}
 
-  #sidebar.active {
-      margin-left: -250px;
-  }
-  #sidebar {
-    min-width: 250px;
-    max-width: 250px;
-    min-height: 100vh;
+	#sidebar.active {
+			margin-left: -250px;
+	}
+	#sidebar {
+		min-width: 250px;
+		max-width: 250px;
+		min-height: 100vh;
 
 }
 a[data-toggle="collapse"] {
-    position: relative;
+		position: relative;
 }
 
 .dropdown-toggle::after {
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
+		display: block;
+		position: absolute;
+		top: 50%;
+		right: 20px;
+		transform: translateY(-50%);
 }
 @media (max-width: 768px) {
-    #sidebar {
-        margin-left: -250px;
-    }
-    #sidebar.active {
-        margin-left: 0;
-    }
+		#sidebar {
+				margin-left: -250px;
+		}
+		#sidebar.active {
+				margin-left: 0;
+		}
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    background: #fafafa;
+		font-family: 'Poppins', sans-serif;
+		background: #fafafa;
 }
 
 p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.1em;
-    font-weight: 300;
-    line-height: 1.7em;
-    color: #999;
+		font-family: 'Poppins', sans-serif;
+		font-size: 1.1em;
+		font-weight: 300;
+		line-height: 1.7em;
+		color: #999;
 }
 
 a, a:hover, a:focus {
-    color: inherit;
-    text-decoration: none;
-    transition: all 0.3s;
+		color: inherit;
+		text-decoration: none;
+		transition: all 0.3s;
 }
 
 #sidebar {
-    /* don't forget to add all the previously mentioned styles here too */
-    background-image: linear-gradient(#14557b,#7fcec5);
-    color: #fff;
-    transition: all 0.3s;
+		/* don't forget to add all the previously mentioned styles here too */
+		background-image: linear-gradient(#14557b,#7fcec5);
+		color: #fff;
+		transition: all 0.3s;
 }
 
 #sidebar .sidebar-header {
-    padding: 20px;
-    background-image: linear-gradient(#14557b,#7fcec5);
+		padding: 20px;
+		background-image: linear-gradient(#14557b,#7fcec5);
 }
 
 #sidebar ul.components {
-    padding: 20px 0;
-    border-bottom: 1px solid #47748b;
+		padding: 20px 0;
+		border-bottom: 1px solid #47748b;
 }
 
 #sidebar ul p {
-    color: #fff;
-    padding: 10px;
+		color: #fff;
+		padding: 10px;
 }
 
 #sidebar ul li a {
-    padding: 10px;
-    font-size: 1.1em;
-    display: block;
+		padding: 10px;
+		font-size: 1.1em;
+		display: block;
 }
 #sidebar ul li a:hover {
-    background-image: linear-gradient(#14557b,#7fcec5);
+		background-image: linear-gradient(#14557b,#7fcec5);
 }
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
-    background-image: linear-gradient(#14557b,#7fcec5);
+		background-image: linear-gradient(#14557b,#7fcec5);
 }
 ul ul a {
-    font-size: 0.9em !important;
-    padding-left: 30px !important;
-    background: #2F4F4F;
+		font-size: 0.9em !important;
+		padding-left: 30px !important;
+		background: #2F4F4F;
 }
   </style>
 </head>
@@ -158,30 +158,34 @@ ul ul a {
 											{% if request.user.is_authenticated %}
 												</li>
 												<li>
-														<a href="{% url 'accounts:profile' user.id %}"">.   Profile <i class="fas fa-user"></i></a>
+														<a href="{% url 'accounts:profile' user.id %}"">.   {{ user.username}} <i class="fas fa-user"></i></a>
 												</li>
 												<li>
 												{% if unread_messages %}
-	                      <a href="#MessageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Messages  <i class="fas fa-comment" style="color:#23FF19;"></i></a>
+	                      <a href="#MessageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Messages  <i class="fas fa-comment" style="color:#23FF19;"></i> {{unread_messages}}</a>
 												{% else %}
 												<a href="#MessageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Messages <i class="fas fa-comment"></i></a>
 												{% endif %}
 											  <ul class="collapse list-unstyled" id="MessageSubmenu">
 	                          <li>
 															{% if unread_messages %}
-	                             <a href="{% url 'django_messages:messages_box' %} " >Messages  <i class="fas fa-bell" style="color:#23FF19;"></i></a>
+	                             <strong><a href="{% url 'django_messages:messages_inbox' %} " >Inbox  <i class="fas fa-bell" style="color:#23FF19;"></i></a></strong>
 															 {% else %}
-															 <a href="{% url 'django_messages:messages_box' %} " >Messages</a>
+															 <a href="{% url 'django_messages:messages_inbox' %} " >Inbox</a>
 															 {% endif %}
 	                          </li>
-	                          <li>
-	                              <a href="{% url 'django_messages:costumers' %} ">Costumers</a>
-	                          </li>
 														<li>
-																<a href="{% url 'django_messages:suppliers' %} ">Suppliers</a>
-														</li>
+			 												<a href="{% url 'django_messages:messages_outbox' %} " >Outbox</a>
+			 										 </li>
+													 <li>
+														 <a href="#" >Costumers</a>
+													</li>
+													<li>
+														<a href="#" >Suppliers</a>
+												 </li>
+
 	                          <li>
-	                              <a href="{% url 'django_messages:messages_compose' %} ">Compose Message</a>
+	                              <a href="{% url 'django_messages:messages_compose' %} ">Compose</a>
 	                          </li>
 	                          <li>
 	                              <a href="{% url 'django_messages:messages_trash' %} " >Trash</a>
@@ -206,7 +210,7 @@ ul ul a {
 	                              <a href="{% url 'connection:connection_requests_sent' %}">Sent Requests</a>
 	                          </li>
 	                        <li>
-	                            <a href="{% url 'connection:connection_view_connections' user.username %}">My Network</a>
+	                            <a href="{% url 'connection:connection_view_connections' user.username %}">My Network </a>
 	                        </li>
 
 	                        <li>
@@ -214,7 +218,15 @@ ul ul a {
 	                        </li>
 
 	                      </ul>
-	                      <a href="{% url 'accounts:log_out' %}">.   Log out <i class="fas fa-sign-out-alt"></i></a>
+												<a href="#AccountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Settings <i class="fas fa-cogs"></i></a>
+
+												<ul class="collapse list-unstyled" id="AccountSubmenu">
+
+														<li>
+															<a href="{% url 'accounts:log_out' %}">Sign out <i class="fas fa-sign-out-alt"></i></a>
+														</li>
+
+												</ul>
 	                  </li>
 									{% else %}
 									<li >

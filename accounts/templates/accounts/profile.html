@@ -5,10 +5,15 @@
 
 {% if request.user.is_authenticated %}
 
-  <h1>{% trans "Profile" %}</h1>
+  <h1 style="text-align:left;float:left;">{% trans "Profile" %}</h1>
+    {% if profile.peppolID %}
+    <h2 style="text-align:right;float:right;color:blue;">Verified User <i class="fas fa-check"></i></h2>
+    <hr style="clear:both;"/>
+  {% endif %}
+
   <table style="width:100%">
     <tr>
-      <th>Userame:</th>
+      <th>Userame: </th>
       <td>{{ profile.user.username }}</td>
     </tr>
     <tr>
@@ -16,8 +21,12 @@
       <td>{{ profile.user.email }}</td>
     </tr>
     <tr>
-      <th>WebId:</th>
+      <th>Web ID:</th>
       <td>{{ profile.webID }}</td>
+    </tr>
+    <tr>
+      <th>Peppol ID:</th>
+      <td>{{ profile.peppolID }}</td>
     </tr>
   </table>
 

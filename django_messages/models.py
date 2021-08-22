@@ -15,24 +15,7 @@ AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 class MessageManager(models.Manager):
 
-    def suppliers_for(self, user):
-        """
-        Returns all messages from suppliers.
-        """
-        suppliers = Contact.objects.suppliers(user)
-        return self.filter(
-            recipient_deleted_at__isnull=True,
-            sender_deleted_at__isnull=True,
-        )
-    def costumers_for(self, user):
-        """
-        Returns all messages from costumers.
-        """
-        costumers = Contact.objects.costumers(user)
-        return self.filter(
-            recipient_deleted_at__isnull=True,
-            sender_deleted_at__isnull=True,
-        )
+
     def inbox_for(self, user):
         """
         Returns all messages that were received by the given user and are not
@@ -50,15 +33,6 @@ class MessageManager(models.Manager):
         return self.filter(
             sender=user,
             sender_deleted_at__isnull=True,
-        )
-
-    def messages_for(self, user):
-        """
-        Returns all messages are not marked as deleted.
-        """
-        return self.filter(
-            sender_deleted_at__isnull=True,
-            recipient_deleted_at__isnull=True,
         )
 
     def trash_for(self, user):
@@ -90,8 +64,10 @@ class Message(models.Model):
     replied_at = models.DateTimeField(_("replied at"), null=True, blank=True)
     sender_deleted_at = models.DateTimeField(_("Sender deleted at"), null=True, blank=True)
     recipient_deleted_at = models.DateTimeField(_("Recipient deleted at"), null=True, blank=True)
-    invoice = models.FileField(upload_to=None, max_length=254)
+    xml = models.FileField(upload_to=None, max_length=254)
     xml_type = models.CharField(max_length=20, null=True)
+    peppol_classic = models.BooleanField(default=False)
+
 
     objects = MessageManager()
 

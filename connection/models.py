@@ -24,16 +24,12 @@ from connection.signals import (
     connection_request_created,
     connection_request_rejected,
     connection_request_viewed,
-    supplier_removed,
-    costumer_removed,
 )
 
 AUTH_USER_MODEL = getattr(settings, "AUTH_USER_MODEL", "auth.User")
 
 CACHE_TYPES = {
     "connections": "c-%s",
-    "suppliers": "s-%s",
-    "costumers": "cos-%s",
     "followers": "fo-%s",
     "following": "fl-%s",
     "blocks": "b-%s",
@@ -51,8 +47,6 @@ CACHE_TYPES = {
 
 BUST_CACHES = {
     "connections": ["connections"],
-    "suppliers": ["suppliers"],
-    "costumers": ["costumers"],
     "followers": ["followers"],
     "blocks": ["blocks"],
     "blocked": ["blocked"],
@@ -176,6 +170,23 @@ class ConnectionRequest(models.Model):
 class ConnectionManager(models.Manager):
     """ Connection manager """
 
+    def suppliers(self, from_user):
+
+        """ Return a list of all suppliers """
+        suppliers = Contact.objects.filter(from_user = from_user , is_supplier = True)
+        sup = []
+        for x in suppliers:
+            sup.append(x.to_user)
+        return sup
+
+    def costumers(self, from_user):
+        """ Return a list of all costumers """
+        costumers = Contact.objects.filter(from_user = from_user , is_costumer = True)
+        cos = []
+        for x in costumers:
+            cos.append(x.to_user)
+        return cos
+
     def connections(self, user):
         """ Return a list of all connections """
         key = cache_key("connections", user.pk)
@@ -192,37 +203,6 @@ class ConnectionManager(models.Manager):
 
         return connections
 
-    def suppliers(self, user):
-        """ Return a list of all suppliers """
-        key = cache_key("suppliers", user.pk)
-        suppliers = cache.get(key)
-
-        if suppliers is None:
-            qs = (
-                Contact.objects.select_related("from_user", "to_user")
-                .filter(to_user=user)
-                .all()
-            )
-            suppliers = [u.from_user for u in qs]
-            cache.set(key, suppliers)
-
-        return suppliers
-
-    def costumers(self, user):
-        """ Return a list of all costumers """
-        key = cache_key("costumers", user.pk)
-        costumers = cache.get(key)
-
-        if costumers is None:
-            qs = (
-                Contact.objects.select_related("from_user", "to_user")
-                .filter(to_user=user)
-                .all()
-            )
-            costumers = [u.from_user for u in qs]
-            cache.set(key, costumers)
-
-        return costumers
 
     def requests(self, user):
         """ Return a list of connection requests """
@@ -384,46 +364,24 @@ class ConnectionManager(models.Manager):
 
         return request
 
-    def add_supplier(self, supplier_user):
-        bust_cache("suppliers", supplier_user.pk)
-        return
-
-    def add_costumer(self, costumer_user):
-        bust_cache("costumers", costumer_user.pk)
-        return
-
-    # TO FIX
     def remove_supplier(self ,from_user, to_user):
         """ Remove a supplier """
+
         try:
-            qs = Contact.objects.filter(Q(to_user=to_user, from_user=from_user) | Q(to_user=from_user, from_user=to_user))
-            distinct_qs = qs.distinct().all()
-            if distinct_qs:
-                supplier_removed.send(
-                    sender=distinct_qs[0], from_user=from_user, to_user=to_user
-                )
-                #qs.delete()
-                #bust_cache("suppliers", from_user.pk)
-                return True
-            else:
-                return False
+            connection = Contact.objects.get(from_user=from_user, to_user=to_user)
+            connection.is_supplier = False
+            connection.save()
+            return True
         except Contact.DoesNotExist:
             return False
-    # TO FIX
+
     def remove_costumer(self ,from_user, to_user):
         """ Remove a costumer """
         try:
-            qs = Contact.objects.filter(Q(to_user=to_user, from_user=from_user) | Q(to_user=from_user, from_user=to_user))
-            distinct_qs = qs.distinct().all()
-            if distinct_qs:
-                costumer_removed.send(
-                    sender=distinct_qs[0], from_user=from_user, to_user=to_user
-                )
-                #qs.delete()
-                #bust_cache("costumers", from_user.pk)
-                return True
-            else:
-                return False
+            connection = Contact.objects.get(from_user=from_user, to_user=to_user)
+            connection.is_costumer = False
+            connection.save()
+            return True
         except Contact.DoesNotExist:
             return False
 
@@ -472,6 +430,12 @@ class Contact(models.Model):
         AUTH_USER_MODEL, models.CASCADE, related_name="_unused_connection_relation"
     )
     created = models.DateTimeField(default=timezone.now)
+
+    # to_user is supplier
+    is_supplier = models.BooleanField(default=False)
+
+    # to_user is costumer
+    is_costumer = models.BooleanField(default=False)
 
     objects = ConnectionManager()
 

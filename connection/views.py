@@ -32,8 +32,9 @@ def view_connections(request, username, template_name="connection/connection/use
 
     connections = Contact.objects.connections(request.user)
     suppliers = Contact.objects.suppliers(request.user)
+    costumers = Contact.objects.costumers(request.user)
 
-    ctx ={ 'connections' : connections , 'suppliers' : suppliers }
+    ctx ={ 'connections' : connections  , 'suppliers' : suppliers, 'costumers' : costumers }
     return render(request,template_name, ctx)
 
 
@@ -47,15 +48,18 @@ def connection_add_connection(
     ctx = {}
     ctx['users'] = users
     if request.method == "POST":
-        username_or_WebId = request.POST['username_or_WebId']
+        username_or_WebID_or_peppolID = request.POST['username_or_WebID_or_peppolID']
         try:
-            to_user = Activation.objects.get(webID=username_or_WebId)
-        except ObjectDoesNotExist as e:
+            to_user = Activation.objects.get(webID=username_or_WebID_or_peppolID)
+        except ObjectDoesNotExist:
             try:
-                to_user = User.objects.get(username=username_or_WebId)
-            except ObjectDoesNotExist as e:
-                ctx["errors"] = ["%s" % e]
-                return render(request, template_name, ctx )
+                to_user = Activation.objects.get(peppolID=username_or_WebID_or_peppolID)
+            except ObjectDoesNotExist:
+                try:
+                    to_user = User.objects.get(username=username_or_WebID_or_peppolID)
+                except ObjectDoesNotExist as e:
+                    ctx["errors"] = ["%s" % e]
+                    return render(request, template_name, ctx )
         to_user = User.objects.get(pk=to_user.pk)
         from_user = request.user
         try:
@@ -211,8 +215,8 @@ def supplier_remove(request, supplier_to_remove):
 
 @login_required
 def costumer_remove(request, costumer_to_remove):
-    """ Remove a costumer"""
+    """ Remove a supplier"""
     costumer_to_remove = user_model.objects.get(username=costumer_to_remove)
     remover = request.user
-    Contact.objects.remove_supplier(remover,costumer_to_remove)
+    Contact.objects.remove_costumer(remover,costumer_to_remove)
     return redirect("connection:connection_view_connections" , username=remover.username)

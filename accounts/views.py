@@ -138,11 +138,13 @@ class SignUpView(GuestOnlyView, FormView):
         if settings.ENABLE_USER_ACTIVATION:
             code = get_random_string(20)
             webID = form.cleaned_data['webID']
+            peppolID = form.cleaned_data['peppolID']
 
             act = Activation()
             act.code = code
             act.user = user
             act.webID = webID
+            act.peppolID = peppolID
             act.save()
 
             send_activation_email(request, user.email, code)

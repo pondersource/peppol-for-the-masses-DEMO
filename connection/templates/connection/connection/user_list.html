@@ -3,35 +3,48 @@
 {% block content %}
 {% load connectiontags %}
 
-<a style="color:purple;"> Supplier <i class="fas fa-check"></i></a>
-<a style="color:#F7B9B7;"> Costumer <i class="fas fa-check"></i></a>
+<a style="color:#F7B9B7;"> Costumer <i class="fas fa-user"></i></a>
+
+<a style="color:purple;"> Supplier <i class="fas fa-user"></i></a>
 
 <h1>My Network ( {% connections_count request.user %}) <i style="color:green;" class="fas fa-users"> </i></h1>
 {% for f in connections %}
 
 <table style="width:100%">
   <tr>
-    <th>{% if f in suppliers %}
-      <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }}<a style="color:purple;"  <i class="fas fa-check"></a></td>
+    <th>{% if f in suppliers and f in costumers%}
+      <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }}<a style="color:#F7B9B7;"  <i class="fas fa-user"></a><a style="color:purple;"  <i class="fas fa-user"></a></td>
+      {% elif f in costumers %}
+        <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }}<a style="color:#F7B9B7;"  <i class="fas fa-user"></a></td>
+      {% elif f in suppliers  %}
+      <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }}<a style="color:purple;"  <i class="fas fa-user"></a></td>
       {% else %}
       <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }} </td>
       {% endif %}
 
-    <th>
+    <td>
       <form method="post"  action="{% url 'connection:connection_remove' f.username %}">
         {% csrf_token %}
         <input class="btn" type="submit" value="Remove" style="color:white;background-color:grey;border: 2px solid grey;" />
     </form>
-    </th>
-
+    </td>
+    {% if f in costumers %}
+    <td>
+      <form method="post"  action="{% url 'connection:costumer_remove' f.username %}">
+        {% csrf_token %}
+        <input class="btn" type="submit" value="Remove as costumer" style="color:white;background-color:grey;border: 2px solid grey;" />
+      </form>
+    </td>
+    {% endif %}
     {% if f in suppliers %}
-    <th>
+    <td>
       <form method="post"  action="{% url 'connection:supplier_remove' f.username %}">
         {% csrf_token %}
-        <input class="btn" type="submit" value="Untrust" style="color:white;background-color:grey;border: 2px solid grey;" />
+        <input class="btn" type="submit" value="Remove as supplier" style="color:white;background-color:grey;border: 2px solid grey;" />
       </form>
-    </th>
+    </td>
     {% endif %}
+
   </tr>
 
 </table>

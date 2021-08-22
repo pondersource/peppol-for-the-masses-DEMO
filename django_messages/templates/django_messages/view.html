@@ -1,12 +1,21 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load connectiontags %}
+{% load static %}
 
 {% block content %}
 
-<h1>{% trans "View Message" %}</h1>
-<dl class="message-headers">
+<link href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" rel="stylesheet"/>
 
+<a style="color:purple;"> Supplier <i class="fas fa-user"></i> </a>
+<a style="color:#F7B9B7;"> Costumer <i class="fas fa-user"></i> </a>
+<a style="color:green;"> Contact <i class="fas fa-user"></i></a>
+<a style="color:orange;"> Unknown <i class="fas fa-user"></i></a>
+
+
+<h1>{% trans "View Message" %}</h1>
+
+<dl class="message-headers">
 
   <table style="width:100%">
 
@@ -16,18 +25,43 @@
     </tr>
     <tr>
       <th>Sender:</th>
-        <td>{% if message.recipient in connections %}
-                {% if message.recipient in suppliers %}
-                  <a style="color:purple;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }} <i class="fas fa-check"></i> </a>
+        <td>{% if message.sender in connections %}
+                {% if message.sender in suppliers and message.sender in costumers %}
+                <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} <a style="color:#F7B9B7;"  <i class="fas fa-user"></a><a style="color:purple;"  <i class="fas fa-user"></a></a>
+                {% elif message.sender in costumers %}
+                  <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }}<a style="color:#F7B9B7;"  <i class="fas fa-user"></a></a>
+                {% elif message.sender in suppliers %}
+                  <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }}<a style="color:purple;"  <i class="fas fa-user"></a></a>
                 {% else %}
-                  <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }}</a>
+                  <a style="color:green;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }}</a>
                 {% endif %}
+            {% elif message.sender == user %}
+              <a href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
             {% else %}
-              <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.recipient }} </a>
+              <a style="color:orange;" href="{% url 'accounts:profile' message.sender.id %}">{{ message.sender }} </a>
             {% endif %}
         </td>
     </tr>
 
+    <tr>
+      <th>recipient:</th>
+        <td>{% if message.recipient in connections %}
+                {% if message.recipient in suppliers and message.recipient in costumers %}
+                <a style="color:green;" href="{% url 'accounts:profile' message.recipient.id %}">{{ message.recipient }} <a style="color:#F7B9B7;"  <i class="fas fa-user"></a><a style="color:purple;"  <i class="fas fa-user"></a></a>
+                {% elif message.recipient in costumers %}
+                  <a style="color:green;" href="{% url 'accounts:profile' message.recipient.id %}">{{ message.recipient }}<a style="color:#F7B9B7;"  <i class="fas fa-user"></a></a>
+                {% elif message.recipient in suppliers %}
+                  <a style="color:green;" href="{% url 'accounts:profile' message.recipient.id %}">{{ message.recipient }}<a style="color:purple;"  <i class="fas fa-user"></a></a>
+                {% else %}
+                  <a style="color:green;" href="{% url 'accounts:profile' message.recipient.id %}">{{ message.recipient }}</a>
+                {% endif %}
+            {% elif message.recipient == user %}
+              <a href="{% url 'accounts:profile' message.recipient.id %}">{{ message.recipient }} </a>
+            {% else %}
+              <a style="color:orange;" href="{% url 'accounts:profile' message.recipient.id %}">{{ message.recipient }} </a>
+            {% endif %}
+        </td>
+    </tr>
 
     <tr>
       <th>Date:</th>
@@ -38,35 +72,60 @@
     <tr>
       <th>Message:</th>
         <td>{{ message.body|linebreaksbr }}
-
         </td>
     </tr>
-      {% if message.invoice %}
+
+      {% if message.xml %}
         <tr>
         {% if message.xml_type == 'invoice' %}
           <th>Invoice:</th>
-        {% else %}
+        {% elif message.xml_type == 'purchase' %}
             <th>Purchase order:</th>
         {% endif %}
         <td><a href="{{message.invoice.url}}" download> Download File</a></td>
         </tr>
       <br>
-      {% if message.recipient not in suppliers %}
-      <form  action="" method="post">
-      {% csrf_token %}
-        <div>
-          <input class="btn btn-success" type="checkbox" id="accept" name="accept">
-          {% if message.xml_type == 'invoice' %}
-          <label for="accept">Do you trust {{ message.sender }} as a supplier?</label>
-          {% endif %}
-        </div>
-        <div>
-          <button class="btn btn-success" type="submit">Submit</button>
-        </div>
-      </form>
+      {% if message.xml_type == 'invoice' %}
+        {% if message.sender not in suppliers and message.sender != user  %}
+
+        <form  action="" method="post">
+        {% csrf_token %}
+          <div>
+            <input class="btn btn-success" type="userbox" id="accept" name="accept">
+            <label for="accept">Do you trust {{ message.sender }} as a supplier?</label>
+          </div>
+          <div>
+            <button  class="btn btn-success" id='username' name='username' value={{ message.sender }}  type="submit">Submit</button>
+          </div>
+        </form>
+        {% endif %}
+
+
+      {% elif message.xml_type == 'purchase' %}
+        {% if message.sender not in costumers and message.sender != user  %}
+
+        <form  action="" method="post">
+        {% csrf_token %}
+          <div>
+            <input class="btn btn-success" type="userbox" id="accept" name="accept">
+            <label for="accept">Do you accept {{ message.sender }} as a costumer?</label>
+          </div>
+          <div>
+            <button  class="btn btn-success" id='username' name='username' value={{ message.sender }}  type="submit">Submit</button>
+          </div>
+        </form>
+        {% endif %}
       {% endif %}
     {% endif %}
+    <tr>
+      <th>Sent through:</th>
+        {% if message.peppol_classic %}
+        <td>Peppol Classic <img src="{% static 'img/peppol.png' %}"> </td>
 
+        {% else %}
+        <td>Peppol Direct</td>
+        {% endif %}
+    </tr>
     <br>
     <tr>
       {% ifequal message.recipient.pk user.pk %}

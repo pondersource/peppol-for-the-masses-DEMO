@@ -49,18 +49,19 @@ class ComposeForm(forms.Form):
 
     subject = forms.CharField( max_length=140)
     body = forms.CharField(widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}),label='Message')
-    invoice = forms.FileField(
+    xml = forms.FileField(
         label='XML Upload:',
         required=False,
         validators=[validate_file_extension]
     )
 
-    def save(self, sender, recipient, xml_type , parent_msg=None ,):
+    def save(self, sender, recipient, xml_type , peppol_classic, parent_msg=None ,):
         recipient = recipient
         xml_type = xml_type
         subject = self.cleaned_data['subject']
         body = self.cleaned_data['body']
-        invoice = self.cleaned_data['invoice']
+        xml = self.cleaned_data['xml']
+        peppol_classic = peppol_classic
         message_list = []
 
         msg = Message(
@@ -68,8 +69,9 @@ class ComposeForm(forms.Form):
             recipient = recipient,
             subject = subject,
             body = body,
-            invoice = invoice,
-            xml_type = xml_type
+            xml = xml,
+            xml_type = xml_type,
+            peppol_classic = peppol_classic,
         )
         try:
             Contact.objects.add_connection(sender, recipient)

@@ -34,7 +34,7 @@
 <form action="" method="post" enctype="multipart/form-data">
 {% csrf_token %}
 
-  <b>Recipient <input style="margin-left: 24px; type="text" id="tags" name="recipient""> </b>
+  <b>Recipient <input style="margin-left: 24px; type="text" id="tags" name="recipient" required> </b>
   <script>
   $( function() {
     var availableTags = [
@@ -54,11 +54,19 @@
   <table>
   {{ form.as_table }}
 </table>
-<b><label for="xml">Type of XML:</label></b>
+<b><label for="xml">Type:</label></b>
 
 <select name="xml" id="xml">
+  <option value="simple">Simple message</option>
   <option value="invoice">Invoice</option>
   <option value="purchase">Purchase order</option>
+</select>
+
+<b><label for="peppol">Send through:</label></b>
+
+<select name="peppol" id="peppol">
+  <option value=False>Peppol direct</option>
+  <option value=True>Peppol classic</option>
 </select>
 
   <input class="btn btn-success" type="submit" value={% trans "Send" %} &raquo; style="color:white;background-color:green;"/>

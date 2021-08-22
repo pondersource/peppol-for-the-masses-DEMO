@@ -20,18 +20,6 @@ urlpatterns = [
             outbox,
             name='messages_outbox'),
 
-    re_path(r'^messages_box/$',
-            messages_box,
-            name='messages_box'),
-
-    re_path(r'^suppliers/$',
-            suppliers,
-            name='suppliers'),
-            
-    re_path(r'^costumers/$',
-            costumers,
-            name='costumers'),
-
     re_path(r'^compose/$',
             compose,
             name='messages_compose'),
@@ -59,4 +47,9 @@ urlpatterns = [
     re_path(r'^trash/$',
             trash,
             name='messages_trash'),
+
+    re_path(r'^review/(?P<message_id>[\d]+)/$',
+            review,
+            name='messages_review'),
+
 ]
