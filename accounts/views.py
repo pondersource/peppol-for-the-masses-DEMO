@@ -115,12 +115,15 @@ class LogInView(GuestOnlyView, FormView):
         return redirect(settings.LOGIN_REDIRECT_URL)
 
 
+
 class SignUpView(GuestOnlyView, FormView):
     template_name = 'accounts/sign_up.html'
     form_class = SignUpForm
 
+
     def form_valid(self, form):
         request = self.request
+        generate_peppolID = request.POST.get('generate_peppolID')
         user = form.save(commit=False)
 
         if settings.DISABLE_USERNAME:
@@ -138,13 +141,16 @@ class SignUpView(GuestOnlyView, FormView):
         if settings.ENABLE_USER_ACTIVATION:
             code = get_random_string(20)
             webID = form.cleaned_data['webID']
-            peppolID = form.cleaned_data['peppolID']
 
             act = Activation()
             act.code = code
             act.user = user
             act.webID = webID
-            act.peppolID = peppolID
+
+            if generate_peppolID:
+                peppolID = get_random_string(20)
+                act.peppolID = peppolID
+
             act.save()
 
             send_activation_email(request, user.email, code)

@@ -135,7 +135,7 @@ USE_REMEMBER_ME = True
 RESTORE_PASSWORD_VIA_EMAIL_OR_USERNAME = False
 ENABLE_ACTIVATION_AFTER_EMAIL_CHANGE = True
 
-SIGN_UP_FIELDS = ['username', 'email', 'webID', 'peppolID', 'password1', 'password2']
+SIGN_UP_FIELDS = ['username', 'email', 'webID','password1', 'password2']
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 

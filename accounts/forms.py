@@ -114,7 +114,6 @@ class SignUpForm(UserCreationForm):
 
     email = forms.EmailField(label=_('Email'), help_text=_('Required. Enter an existing email address.'))
     webID = forms.URLField(label=_('webID'), help_text=_('Required. Enter an existing WebId address.'))
-    peppolID = forms.CharField(max_length=300,required=False)
 
     def clean_email(self):
         email = self.cleaned_data['email']

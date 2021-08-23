@@ -12,6 +12,9 @@
         {% csrf_token %}
         {% bootstrap_form form %}
 
+        <input class="btn btn-success" type="checkbox" id="generate_peppolID" name="generate_peppolID">
+        <label for="generate_peppolID">Do you want to generate a new Peppol ID?</label>
+
         <button class="btn btn-success">{% trans 'Create' %}</button>
     </form>
 

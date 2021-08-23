@@ -3,6 +3,14 @@
 
 {% block content %}
 
+{% if errors %}
+<ul class="messages">
+    {% for error in erros %}
+    <li >{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% if request.user.is_authenticated %}
 
   <h1 style="text-align:left;float:left;">{% trans "Profile" %}</h1>

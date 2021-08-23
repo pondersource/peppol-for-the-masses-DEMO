@@ -4,7 +4,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-
 def send_mail(to, template, context):
     html_content = render_to_string(f'accounts/emails/{template}.html', context)
     text_content = render_to_string(f'accounts/emails/{template}.txt', context)
