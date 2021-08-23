@@ -15,6 +15,14 @@
 
 <h1>{% trans "View Message" %}</h1>
 
+{% if messages %}
+<ul class="messages">
+    {% for error in erros %}
+    <li >{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <dl class="message-headers">
 
   <table style="width:100%">
@@ -76,47 +84,47 @@
     </tr>
 
       {% if message.xml %}
-        <tr>
-        {% if message.xml_type == 'invoice' %}
-          <th>Invoice: <i style="color:Mediumslateblue;" class="fas fa-file"></i></th>
-        {% elif message.xml_type == 'purchase' %}
-            <th>Purchase order: <i style="color:#30BAA1;" class="fas fa-file"></i></th>
+          <tr>
+          {% if message.xml_type == 'invoice' %}
+            <th>Invoice: <i style="color:Mediumslateblue;" class="fas fa-file"></i></th>
+          {% elif message.xml_type == 'purchase' %}
+              <th>Purchase order: <i style="color:#30BAA1;" class="fas fa-file"></i></th>
+          {% endif %}
+          <td><a href="{{message.invoice.url}}" download> Download File</a></td>
+          </tr>
+          <br>
+          {% if message.xml_type == 'invoice' %}
+            {% if message.sender not in suppliers and message.sender != user  %}
+
+            <form  action="" method="post">
+            {% csrf_token %}
+              <div>
+                <input class="btn btn-success" type="checkbox" id="accept" name="accept">
+                <label for="accept">Do you trust {{ message.sender }} as a supplier?</label>
+              </div>
+              <div>
+                <button  class="btn btn-success" id='username' name='username' value={{ message.sender }} type="submit">Submit</button>
+              </div>
+            </form>
+            {% endif %}
+          {% endif %}
+
+
+          {% elif message.xml_type == 'purchase' %}
+            {% if message.sender not in costumers and message.sender != user  %}
+
+            <form  action="" method="post">
+            {% csrf_token %}
+              <div>
+                <input class="btn btn-success" type="checkbox" id="accept" name="accept">
+                <label for="accept">Do you accept {{ message.sender }} as a costumer?</label>
+              </div>
+              <div>
+                <button  class="btn btn-success" id='username' name='username' value={{ message.sender }} type="submit">Submit</button>
+              </div>
+            </form>
+            {% endif %}
         {% endif %}
-        <td><a href="{{message.invoice.url}}" download> Download File</a></td>
-        </tr>
-      <br>
-      {% if message.xml_type == 'invoice' %}
-        {% if message.sender not in suppliers and message.sender != user  %}
-
-        <form  action="" method="post">
-        {% csrf_token %}
-          <div>
-            <input class="btn btn-success" type="userbox" id="accept" name="accept">
-            <label for="accept">Do you trust {{ message.sender }} as a supplier?</label>
-          </div>
-          <div>
-            <button  class="btn btn-success" id='username' name='username' value={{ message.sender }}  type="submit">Submit</button>
-          </div>
-        </form>
-        {% endif %}
-
-
-      {% elif message.xml_type == 'purchase' %}
-        {% if message.sender not in costumers and message.sender != user  %}
-
-        <form  action="" method="post">
-        {% csrf_token %}
-          <div>
-            <input class="btn btn-success" type="userbox" id="accept" name="accept">
-            <label for="accept">Do you accept {{ message.sender }} as a costumer?</label>
-          </div>
-          <div>
-            <button  class="btn btn-success" id='username' name='username' value={{ message.sender }}  type="submit">Submit</button>
-          </div>
-        </form>
-        {% endif %}
-      {% endif %}
-    {% endif %}
     <tr>
       <th>Sent through:</th>
         {% if message.peppol_classic %}

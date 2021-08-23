@@ -165,7 +165,7 @@ def compose(request, recipient=None, form_class=ComposeForm,
                 recipient = User.objects.get(username=recipient_username)
             except ObjectDoesNotExist:
                 try:
-                    recipient = User.objects.get(username=recipient_username_or_webID)
+                    recipient = User.objects.get(username=recipient_UWP)
                     recipient_username = recipient.username
                 except ObjectDoesNotExist as e:
                     ctx["errors"] = ["%s" % e]
@@ -327,22 +327,22 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
             'recipient': [message.sender,]
             })
         ctx['reply_form'] = form
-    if 'POST':
+
+    if request.method == "POST":
+
         accept = request.POST.get('accept')
         username = request.POST.get('username')
-
+        accept = True
         # Get Contact
-        try:
-            partner = User.objects.get(username = username)
-            contact = Contact.objects.get(to_user = partner , from_user = request.user )
-            reverse_contact = Contact.objects.get(to_user = request.user , from_user = partner )
-        except ObjectDoesNotExist as e:
-            ctx["errors"] = ["%s" % e]
-            return render(request, template_name, ctx)
 
-        # accept User as a supplier
         if accept:
-            # if users are not connected, connect them
+            try:
+                partner = User.objects.get(username = username)
+            except ObjectDoesNotExist as e:
+                ctx["erros"] = ["%s" % e]
+                return render(request, template_name, ctx)
+
+        # if users are not connected, connect them
             if Contact.objects.are_connections(request.user, partner):
                 pass
             elif ConnectionRequest.objects.filter(Q(to_user=request.user, from_user = partner) | Q(to_user= partner, from_user=request.user)).exists():
@@ -352,6 +352,9 @@ def view(request, message_id, form_class=ComposeForm, quote_helper=format_quote,
                     Contact.objects.add_connection( partner, request.user).accept()
                 except AlreadyExistsError:
                     pass
+
+            contact = Contact.objects.get(to_user = partner , from_user = request.user )
+            reverse_contact = Contact.objects.get(to_user = request.user , from_user = partner )
 
             if message.xml_type == 'invoice':
                 contact.is_supplier = True
