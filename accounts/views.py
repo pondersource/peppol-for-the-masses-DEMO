@@ -133,8 +133,7 @@ class SignUpView(GuestOnlyView, FormView):
             user.username = form.cleaned_data['username']
 
         if settings.ENABLE_USER_ACTIVATION:
-            #user.is_active = False
-            user.is_active = True
+            user.is_active = False
 
         user.save()
 
@@ -174,9 +173,9 @@ class ActivateView(View):
         act = get_object_or_404(Activation, code=code)
 
         # Activate profile
-        user = act.user
-        user.is_active = True
-        user.save()
+        # user = act.user
+        # user.is_active = True
+        # user.save()
 
         # Remove the activation record
     #    act.delete()
@@ -200,9 +199,9 @@ class ResendActivationCodeView(GuestOnlyView, FormView):
         user = form.user_cache
 
         activation = user.activation_set.first()
-        activation.delete()
+        #activation.delete()
 
-        code = get_random_string(20)
+        code = get_random_string(21)
 
         act = Activation()
         act.code = code
@@ -309,7 +308,7 @@ class ChangeEmailActivateView(View):
         user.save()
 
         # Remove the activation record
-        act.delete()
+        #act.delete()
 
         messages.success(request, _('You have successfully changed your email!'))
 
