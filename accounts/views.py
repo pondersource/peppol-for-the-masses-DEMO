@@ -118,7 +118,7 @@ class LogInView(GuestOnlyView, FormView):
 
 class SignUpView(GuestOnlyView, FormView):
     template_name = 'accounts/sign_up.html'
-    form_class = SignUpForm
+    #form_class = SignUpForm
 
 
     def form_valid(self, form):
