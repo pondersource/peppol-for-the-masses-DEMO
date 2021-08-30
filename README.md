@@ -5,7 +5,7 @@
 
 # Peppol-python-Demo
 
-A Django-based Website that you can see imidiately how it is working on our [Pondersource Demo](https://demo-pondersource-net.herokuapp.com) or you can download the code and run it on your local machine like this:
+A Django-based Demo Website that you can find here:[Pondersource Demo](https://demo-pondersource-net.herokuapp.com) or you can download the code and run it on your local machine like this:
 
 # Open terminal (recommended: use a virtual environment)
 
@@ -36,13 +36,13 @@ $ python manage.py runserver
 
 Each Contact represents a trusted company or person, with whom you can exchange messages.
 
-- [ ] See your contacts 
-- [ ] Send contact requests
+- [x] See your contacts 
+- [x] Send contact requests
 - [ ] See the requests you have sent
-- [ ] Receive contact requests ( Accept/Decline ) 
+- [x] Receive contact requests ( Accept/Decline ) 
 - [ ] Block a WebID from sending you messages
 - [ ] Unblock a WebID 
-- [ ] Display notifications when you have a new message/contact request
+- [x] Display notifications when you have a new message/contact request
 
 * ## Accounts
 
@@ -64,10 +64,12 @@ Each account is a user who signed up at [pondersource Demo](https://demo-ponders
 
 Each Message is a [XML](https://www.w3schools.com/xml/xml_whatis.asp) file.
 
-- [ ] Inbox
-- [ ] Outbox
-- [ ] Compose a new message
-- [ ] Trash
+- [x] Inbox
+- [x] Outbox
+- [x] Suppliers
+- [x] Costumers
+- [x] Compose a new message
+- [x] Trash
 
 * ## SOAP_client 
 
