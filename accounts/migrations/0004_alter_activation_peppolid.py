@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='activation',
             name='peppolID',
-            field=models.CharField(blank=True, default='', max_length=20, unique=True),
+            field=models.CharField(blank=True, max_length=20),
         ),
     ]
