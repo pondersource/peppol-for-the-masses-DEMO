@@ -21,7 +21,7 @@ CONTENT_DIR = os.path.join(BASE_DIR, 'content')
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'NhfTvayqggTBPswCXXhWaN69HuglgZIkM')
 
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = []
 
 SITE_ID = 1

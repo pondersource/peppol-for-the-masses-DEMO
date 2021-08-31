@@ -172,10 +172,10 @@ class ActivateView(View):
     def get(request, code):
         act = get_object_or_404(Activation, code=code)
 
-        # Activate profile
-        # user = act.user
-        # user.is_active = True
-        # user.save()
+        #Activate profile
+        user = act.user
+        user.is_active = True
+        user.save()
 
         # Remove the activation record
     #    act.delete()
