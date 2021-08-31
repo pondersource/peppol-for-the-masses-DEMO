@@ -177,9 +177,6 @@ class ActivateView(View):
         user.is_active = True
         user.save()
 
-        # Remove the activation record
-    #    act.delete()
-
         messages.success(request, _('You have successfully activated your account!'))
 
         return redirect('accounts:log_in')
