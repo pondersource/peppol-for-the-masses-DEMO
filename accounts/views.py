@@ -152,17 +152,18 @@ class SignUpView(GuestOnlyView, FormView):
 
         if settings.ENABLE_USER_ACTIVATION:
             code = get_random_string(20)
-            webID = form.cleaned_data['webID']
 
             act = Activation()
             act.code = code
             act.user = user
-            act.webID = webID
+
 
             if generate_peppolID:
                 peppolID = get_random_string(20)
                 act.peppolID = peppolID
 
+            webID = 'https://demo-pondersource-net.herokuapp.com/'+user.username
+            act.webID = webID
             act.save()
 
             send_activation_email(request, user.email, code)
