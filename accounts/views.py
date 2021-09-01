@@ -61,10 +61,13 @@ def getProfileDetails(request,id,template_name="accounts/profile.html"):
 
     try:
         profile = get_object_or_404(Activation, id=id)
+        print("activation")
     except:
         try:
             profile = get_object_or_404(user_model, id=id)
+            print("user model")
         except ObjectDoesNotExist:
+            print("nada")
             template_name =  'main/index.html'
 
     return  render(request,template_name, {"profile": profile})
