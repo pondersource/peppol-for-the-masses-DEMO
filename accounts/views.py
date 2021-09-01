@@ -20,6 +20,7 @@ from django.views.generic import View, FormView
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 
 from .utils import (
     send_activation_email, send_reset_password_email, send_forgotten_username_email, send_activation_change_email,
@@ -57,7 +58,15 @@ def delete(request, email ,template_name = "accounts/delete.html"):
     return render(request, template_name)
 
 def getProfileDetails(request,id,template_name="accounts/profile.html"):
-    profile = get_object_or_404(Activation, id=id)
+
+    try:
+        profile = get_object_or_404(Activation, id=id)
+    except:
+        try:
+            profile = get_object_or_404(user_model, id=id)
+        except ObjectDoesNotExist:
+            template_name =  'main/index.html'
+
     return  render(request,template_name, {"profile": profile})
 
 class GuestOnlyView(View):
