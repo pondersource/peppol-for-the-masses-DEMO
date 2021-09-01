@@ -21,7 +21,7 @@ CONTENT_DIR = os.path.join(BASE_DIR, 'content')
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'NhfTvayqggTBPswCXXhWaN69HuglgZIkM')
 
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = []
 
 SITE_ID = 1
@@ -85,12 +85,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
-if DEBUG:
-  EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+if SEND_EMAIL:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
   #EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
   #EMAIL_FILE_PATH = os.path.join(CONTENT_DIR, 'tmp/emails')
 else:
-  EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+  EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 DEFAULT_FROM_EMAIL = 'demo@pondersource.com'
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
