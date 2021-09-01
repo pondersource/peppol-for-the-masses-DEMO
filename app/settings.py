@@ -10,6 +10,8 @@ CLIENT_ID = os.getenv('QBO_CLIENT_ID')
 CLIENT_SECRET = os.getenv('QBO_CLIENT_SECRET')
 REDIRECT_URI = os.getenv('QBO_REDIRECT_URI') # http://localhost:8000/app/callback'
 ENVIRONMENT = os.getenv('QBO_ENVIRONMENT')
+SEND_EMAIL = os.getenv('SEND_EMAIL')
+
 QBO_BASE_SANDBOX = 'https://sandbox-quickbooks.api.intuit.com'
 QBO_BASE_PROD = 'https://quickbooks.api.intuit.com'
 # End Quickbooks
@@ -22,6 +24,7 @@ CONTENT_DIR = os.path.join(BASE_DIR, 'content')
 SECRET_KEY = os.getenv('SECRET_KEY', 'NhfTvayqggTBPswCXXhWaN69HuglgZIkM')
 
 DEBUG = True
+
 ALLOWED_HOSTS = []
 
 SITE_ID = 1
