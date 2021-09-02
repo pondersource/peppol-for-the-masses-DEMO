@@ -93,6 +93,7 @@
           <td><a href="{{message.invoice.url}}" download> Download File</a></td>
           </tr>
           <br>
+
           {% if message.xml_type == 'invoice' %}
             {% if message.sender not in suppliers and message.sender != user  %}
 
@@ -107,8 +108,6 @@
               </div>
             </form>
             {% endif %}
-          {% endif %}
-
 
           {% elif message.xml_type == 'purchase' %}
             {% if message.sender not in costumers and message.sender != user  %}
@@ -124,6 +123,7 @@
               </div>
             </form>
             {% endif %}
+          {% endif %}
         {% endif %}
     <tr>
       <th>Sent through:</th>
