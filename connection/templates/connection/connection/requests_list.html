@@ -6,6 +6,7 @@
 
 <ul>
 {% for connection_request in requests %}
+    {% if connection_request.to_user == user %}
     <div><a  style="color:blue;"  href="{% url 'accounts:profile' connection_request.id %}"> {{ connection_request.from_user }}</a> wants you to be contacts!
         {% csrf_token %}
 
@@ -27,6 +28,7 @@
 
         </div>
     </div>
+    {% endif %}
 
 {% empty %}
 </ul>
