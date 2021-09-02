@@ -31,7 +31,7 @@
       <th></th>
     </tr>
     {% for message in message_list %}
-      {% if message.sender in suppliers %}
+      {% if message.sender in suppliers and message.recipient==user.username %}
       <tr>
         <td>
           {% if message.xml_type == 'invoice'%}

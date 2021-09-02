@@ -29,7 +29,7 @@
       <th></th>
     </tr>
     {% for message in message_list %}
-      {% if message.recipient in costumers %}
+      {% if message.recipient in costumers and message.sender==user.username %}
 
       <tr>
         <td>
