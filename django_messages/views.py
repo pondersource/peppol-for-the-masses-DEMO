@@ -75,7 +75,7 @@ def costumers(request, template_name='django_messages/costumers.html'):
     """
     Displays a list of messages with costumers
     """
-    message_list = Message.objects.outbox_for(request.user)
+    message_list = Message.objects.all_for(request.user)
     costumers = Contact.objects.costumers(request.user)
 
     ctx ={}
@@ -89,7 +89,7 @@ def suppliers(request, template_name='django_messages/suppliers.html'):
     """
     Displays a list of messages with suppliers
     """
-    message_list = Message.objects.outbox_for(request.user)
+    message_list = Message.objects.all_for(request.user)
     suppliers = Contact.objects.suppliers(request.user)
 
     ctx ={}

@@ -35,6 +35,12 @@ class MessageManager(models.Manager):
             sender_deleted_at__isnull=True,
         )
 
+    def all_for(self, user):
+        """
+        Returns all messages are not marked as deleted.
+        """
+        return self.all()
+
     def trash_for(self, user):
         """
         Returns all messages that were either received or sent by the given
