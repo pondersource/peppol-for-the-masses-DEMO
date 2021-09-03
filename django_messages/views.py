@@ -145,6 +145,7 @@ def compose(request, recipient=None, form_class=ComposeForm,
     for c in no_connections_objects:
         priority.append(c.username)
 
+    form = form_class(initial={"subject": request.GET.get("subject", "")})
     ctx['priority'] = priority
     if request.method == "POST":
         sender = request.user
@@ -156,6 +157,10 @@ def compose(request, recipient=None, form_class=ComposeForm,
 
         try:
             recipient = Activation.objects.get(webID=recipient_UWP)
+            if peppol_classic:
+                ctx['form'] = form_class(initial={"subject": request.GET.get("subject", "")})
+                messages.info(request, _(u"You can't send a new message to a WEebID through Peppol classic "))
+                return render(request, template_name, ctx)
             recipient_username = recipient.user.username
             recipient = User.objects.get(username=recipient_username)
         except ObjectDoesNotExist:
@@ -174,6 +179,7 @@ def compose(request, recipient=None, form_class=ComposeForm,
         if  sender.username == recipient_username:
             messages.info(request, _(u"Why are you talking to yourself?"))
             return render(request, template_name, ctx)
+
         else:
             if form.is_valid():
                 recipient = User.objects.get(pk=recipient.pk)
@@ -185,9 +191,6 @@ def compose(request, recipient=None, form_class=ComposeForm,
                     success_url = request.GET['next']
 
                 return HttpResponseRedirect(success_url)
-    else:
-        form = form_class(initial={"subject": request.GET.get("subject", "")})
-
     ctx['form'] = form
     return render(request, template_name,ctx)
 
