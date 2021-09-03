@@ -1,0 +1,21 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+
+{% block content %}
+
+<h1 style=color:purple;>Questions</h1>
+
+<p style=color:green; >~Every WebID and PeppolID is unique~</p>
+
+  <br><h2 style=color:blue; ' >1) How to verify the sender is the one I expected?<h2>
+    <div><strong>From webID</strong>
+      <p>If you expect to receive a new message from a specific website, you need to compare the domain name with WebID and make sure it is the same </p>
+    </div>
+    <div><strong>From PeppolID</strong>
+      <p>That means that it is a certified entity by a Peppol Access Point Provider, so you only need to verify if it is the same as the PeppolID you expected. </p>
+    </div>
+    <br><h2 style=color:blue; ' >2) New invoice I dind't expect?<h2>
+        <p>If you didn't expect to receive a new invoice you can reply and ask for more details about the request. </p>
+
+{% endblock %}

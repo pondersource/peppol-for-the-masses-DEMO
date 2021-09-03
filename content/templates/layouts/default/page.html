@@ -235,11 +235,6 @@ ul ul a {
 									<li >
                       <a  href="{% url 'accounts:log_in' %}">.   Log in <i class="fa fa-sign-in-alt" aria-hidden="true"></i></a>
                   </li>
-									{% endif %}
-
-									<li >
-											<a  href="{% url 'change_language' %}">.   Change language <i class="fa fa-language" ></i></a>
-									</li>
 									<li>
 										<a href="#HelpSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">.   Help <i class="fas fa-info"></i></a>
 										<ul class="collapse list-unstyled" id="HelpSubmenu">
@@ -248,6 +243,12 @@ ul ul a {
 												</li>
 										</ul>
 									</li>
+									{% endif %}
+
+									<li >
+											<a  href="{% url 'change_language' %}">.   Change language <i class="fa fa-language" ></i></a>
+									</li>
+
 
               </ul>
           </nav>
