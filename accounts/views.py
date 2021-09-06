@@ -162,7 +162,7 @@ class SignUpView(GuestOnlyView, FormView):
                 peppolID = get_random_string(20)
                 act.peppolID = peppolID
 
-            webID = 'https://demo-pondersource-net/'+user.username
+            webID = 'https://webshop.pondersource.net/'
             act.webID = webID
             act.save()
 
