@@ -21,8 +21,7 @@
       {% else %}
       <td><a style="color:green;" href="{% url 'accounts:profile' f.id %}">{{ f.username }} </td>
       {% endif %}
-  <tr/>
-  <tr>
+
     <td>
       <form method="post"  action="{% url 'connection:connection_remove' f.username %}">
         {% csrf_token %}
