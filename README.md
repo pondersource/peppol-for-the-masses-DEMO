@@ -1,13 +1,10 @@
 
-## :bulb: The idea
+## :bulb: In this project we implemented a [DEMO](https://demo-pondersource-net.herokuapp.com) to represent the Trust UI of [peppol-php](https://github.com/pondersource/peppol-python).
 
-## In this project we will represent the usage of the [open source  python implementation](https://github.com/pondersource/peppol-python) of [Peppol](https://peppol.eu/) and also we will extend the functionility with sending an invoice straight to its recipient, identified by a WebID URL.
 
-# Peppol-python-Demo
+### Try it by yourself 
 
-A Django-based Demo Website that you can find here:[Pondersource Demo](https://demo-pondersource-net.herokuapp.com) or you can download the code and run it on your local machine like this:
-
-# Open terminal (recommended: use a virtual environment)
+Ιt is recommended to use use a virtual environment
 
 ```console
 $ git clone https://github.com/pondersource/peppol-python-demo
@@ -18,7 +15,7 @@ $ python manage.py migrate
 $ python manage.py runserver
 ```
 
-## :wrench: How the [Pondersource Demo](https://demo-pondersource-net.herokuapp.com) works
+## :wrench: How the [Demo](https://demo-pondersource-net.herokuapp.com) works
 
 | Apps | Functionallity |
 | --- | --- | 
