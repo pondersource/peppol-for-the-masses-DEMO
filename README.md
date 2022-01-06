@@ -71,13 +71,6 @@ Each Message is a [XML](https://www.w3schools.com/xml/xml_whatis.asp) file.
 - [x] Compose a new message
 - [x] Trash
 
-* ## SOAP_client 
-
-For the SOAP client we will use the [Zeep](https://docs.python-zeep.org/en/master) library.
-
-* ## Quickbooks
-
-## :question: Open questions
 
 
 
